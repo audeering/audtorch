@@ -45,7 +45,7 @@ intersphinx_mapping = {
 }
 
 # Ignore package dependencies during building the docs
-autodoc_mock_imports = ['numpy']
+autodoc_mock_imports = ['numpy', 'librosa']
 
 # HTML --------------------------------------------------------------------
 
