@@ -44,6 +44,8 @@ intersphinx_mapping = {
     'torch': ('https://pytorch.org/docs/stable/', None),
 }
 
+# Ignore package dependencies during building the docs
+autodoc_mock_imports = ['numpy']
 
 # HTML --------------------------------------------------------------------
 
