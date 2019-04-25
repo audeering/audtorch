@@ -1,0 +1,141 @@
+Contributing
+============
+
+Everyone is invited to contribute to this project. Feel free to create a
+`pull request`_.
+If you find errors, omissions, inconsistencies or other things that need
+improvement, please create an issue_.
+
+.. _issue: https://github.com/audeering/audtorch/issues/new/
+.. _pull request: https://github.com/audeering/audtorch/compare/
+
+
+Development Installation
+------------------------
+
+Instead of pip-installing the latest release from PyPI_, you should get the
+newest development version from Github_::
+
+   git clone https://github.com/audeering/audtorch/
+   cd audtorch
+   # Create virtual environment, e.g.
+   # virtualenv --python=/usr/bin/python3 --no-site-packages _env
+   # source _env/bin/activate
+   python setup.py develop
+
+.. _PyPI: https://pypi.org/project/audtorch/
+.. _Github: https://github.com/audeering/audtorch/
+
+This way, your installation always stays up-to-date, even if you pull new
+changes from the Github_ repository.
+
+If you prefer, you can also replace the last command with::
+
+   pip install -r requirements.txt
+
+
+Pull requests
+-------------
+
+When creating anew pull request, please conside the following points:
+
+* Focus on a single topic as it is easier to review short pull requests
+* Ensure your code is readable and `PEP 8`_ compatible
+* Provide a test for proposed new functionality
+* Add a docstring, see the `Writing Documentation` remarks below
+* Choose a `meaningful commit messages`_
+
+.. _PEP 8: https://www.python.org/dev/peps/pep-0008/
+.. _meaningful commit messages: https://chris.beams.io/posts/git-commit/
+
+
+Writing Documentation
+---------------------
+
+The API documentation of audtorch_ is build automatically from the
+docstrings_ of its classes and functions.
+
+docstrings_ are written in reStructuredText_ as indicated by the ``r`` at
+its beginning and they are written using the `Google docstring convention`_.
+For a guide on when to use lower case or upper case letters and when to end an
+argument description with a point have a look at the existing examples.
+
+reStructuredText_ allows for easy inclusion of math in LaTeX syntax that will
+be dynamically rendered in the browser.
+
+The important part of the docstrings_ is the first line which holds a short
+summary of the functionality, that should not be longer than one line, written
+in imperative, and stops with a point. It is also considered good practice to
+include an usage example.
+
+After you are happy with your docstring, you have to include it into the main
+documentation under the ``docs/`` folder in the appropriate api file. E.g.
+``energy()`` is part of the ``utils`` module and the corresponding file in the
+documentation would be ``docs/api-utils.rst``, where it is included.
+
+.. _audtorch: https://audtorch.readthedocs.io/
+.. _docstrings: https://www.python.org/dev/peps/pep-0257/
+.. _reStructuredText:
+    http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
+.. _Google docstring convention:
+    https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html
+
+
+Building Documentation
+----------------------
+
+If you make changes to the documentation, you can re-create the HTML pages
+using Sphinx_.
+You can install it and a few other necessary packages with::
+
+    pip install -r doc/requirements.txt
+
+To create the HTML pages, use::
+
+    python setup.py build_sphinx
+
+The generated files will be available in the directory ``build/sphinx/html/``.
+
+It is also possible to automatically check if all links are still valid::
+
+    python setup.py build_sphinx -b linkcheck
+
+.. _Sphinx: http://sphinx-doc.org/
+
+
+Running Tests
+-------------
+
+You'll need pytest_ and a few dependencies for that.
+It can be installed with::
+
+   pip install -r tests/requirements.txt
+
+To execute the tests, simply run::
+
+   pytest
+
+.. _pytest: https://pytest.org/
+
+
+Creating a New Release
+----------------------
+
+New releases are made using the following steps:
+
+#. Update ``NEWS.rst``
+#. Commit those changes as "Release x.y.z"
+#. Create an (annotated) tag with ``git tag -a x.y.z``
+#. Clear the ``dist/`` directory
+#. Create a source distribution with ``python setup.py sdist``
+#. Create a wheel distribution with ``python setup.py bdist_wheel``
+#. Check that both files have the correct content
+#. Upload them to PyPI_ with twine_: ``python -m twine upload dist/*``
+#. Push the commit and the tag to Github and `add release notes`_ containing
+   the bullet points from ``NEWS.rst``
+#. Check that the new release was built correctly on `Read The Docs`_, and
+   select the new release as default version
+
+.. _twine: https://twine.readthedocs.io/
+.. _add release notes: https://github.com/audeering/audtorch/releases/
+.. _Read The Docs: https://readthedocs.org/projects/audtorch/builds/
