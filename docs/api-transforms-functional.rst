@@ -1,0 +1,63 @@
+audtorch.transforms.functional
+==============================
+
+The goal of the transform functionals is to provide functions that work
+independent on the dimensions of the input signal and can be used easily to
+create the actual transforms.
+
+.. Note::
+
+    All of the transforms work currently only with :py:obj:`numpy.array` as
+    inputs, not :py:obj:`torch.Tensor`.
+
+To run the examples execute the following commands first::
+
+    >>> import numpy as np
+    >>> from audtorch.transforms import functional as F
+
+.. automodule:: audtorch.transforms.functional
+
+crop
+----
+
+.. autofunction:: crop
+
+pad
+---
+
+.. autofunction:: pad
+
+replicate
+---------
+
+.. autofunction:: replicate
+
+downmix
+-------
+
+.. autofunction:: downmix
+
+upmix
+-----
+
+.. autofunction:: upmix
+
+additive_mix
+------------
+
+.. autofunction:: additive_mix
+
+normalize
+---------
+
+.. autofunction:: normalize
+
+stft
+----
+
+.. autofunction:: stft
+
+istft
+-----
+
+.. autofunction:: istft

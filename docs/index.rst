@@ -16,5 +16,6 @@
 .. toctree::
     :caption: API Documentation
 
+    api-transforms-functional
     api-utils
     genindex
