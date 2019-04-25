@@ -56,17 +56,31 @@ The API documentation of audtorch_ is build automatically from the
 docstrings_ of its classes and functions.
 
 docstrings_ are written in reStructuredText_ as indicated by the ``r`` at
-its beginning and they are written using the `Google docstring convention`_.
-For a guide on when to use lower case or upper case letters and when to end an
-argument description with a point have a look at the existing examples.
+its beginning and they are written using the `Google docstring convention`_
+with the following additions:
 
-reStructuredText_ allows for easy inclusion of math in LaTeX syntax that will
-be dynamically rendered in the browser.
+* Start argument description in lower case and end the last sentence without a
+  punctation.
+* If the argument is optional, its default value has to be indicated.
+* Description of attributes start as well in lower case and stop without
+  punctuation.
+* Attributes that can influence the behavior of the class should be described by
+  the word ``controls``.
+* Attributes that are supposed to be read only and provide only information
+  should be described by the word ``holds``.
+* Have a special section for class attributes.
+* Python variables should be set in single back tics in the description of the
+  docstring, e.g. ```True```. Only for some explicit statements like a list
+  of variables it might be look better to write them as code, e.g.
+  ```'mean'```.
 
 The important part of the docstrings_ is the first line which holds a short
 summary of the functionality, that should not be longer than one line, written
 in imperative, and stops with a point. It is also considered good practice to
 include an usage example.
+
+reStructuredText_ allows for easy inclusion of math in LaTeX syntax that will
+be dynamically rendered in the browser.
 
 After you are happy with your docstring, you have to include it into the main
 documentation under the ``docs/`` folder in the appropriate api file. E.g.
