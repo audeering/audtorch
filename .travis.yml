@@ -11,4 +11,4 @@ install:
   - pip install -r tests/requirements.txt
 script:
   - python -m pytest
-  - python -m sphinx docs/ docs/_build/ -b html
+  - python -m sphinx -W docs/ docs/_build/ -b html
