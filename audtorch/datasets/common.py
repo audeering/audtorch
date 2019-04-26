@@ -1,7 +1,10 @@
 import os
 from warnings import warn
 
-import resampy
+try:
+    import resampy
+except ImportError:
+    resampy = None
 from torch.utils.data import Dataset
 
 from .utils import (load, sampling_rate_after_transform)

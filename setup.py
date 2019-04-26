@@ -6,10 +6,8 @@ setup(
     use_scm_version=True,
     setup_requires=['setuptools_scm'],
     install_requires=[
-        'numpy',
-        'audiofile',
-        'resampy',
         'torch',
+        'numpy',
     ],
     author=('Andreas Triantafyllopoulos, '
             'Stephan Huber, '

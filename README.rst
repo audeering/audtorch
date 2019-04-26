@@ -30,6 +30,14 @@ audtorch_ is supported by Python 3.5 or higher. To install it run
 
     pip install audtorch
 
+In order to have as few dependencies as possible for the package not all
+packages that are needed for some functionalities are installed. If you want to
+install all dependencies run:
+
+.. code-block:: bash
+
+    pip install audiofile librosa
+
 .. _audtorch: https://audtorch.readthedocs.io
 .. _virtual environment: https://docs.python-guide.org/dev/virtualenvs
 

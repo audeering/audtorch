@@ -2,7 +2,10 @@ import subprocess
 from warnings import warn
 
 import numpy as np
-import audiofile as af
+try:
+    import audiofile as af
+except ImportError:
+    af = None
 
 
 def load(filename, duration=None, offset=0):
