@@ -10,6 +10,7 @@ setup(
         'audiofile',
         'resampy',
         'torch',
+        'pandas',
     ],
     author=('Andreas Triantafyllopoulos, '
             'Stephan Huber, '

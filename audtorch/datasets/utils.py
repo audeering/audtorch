@@ -100,7 +100,7 @@ def ensure_df_not_empty(df, labels=None):
 
 
 def files_and_labels_from_df(df, root='.', column_labels='label',
-                              column_filename='filename'):
+                             column_filename='filename'):
     r"""Extract list of files and labels from dataframe columns.
 
     Args:
@@ -113,8 +113,9 @@ def files_and_labels_from_df(df, root='.', column_labels='label',
             names. Default: `filename`
 
     Returns:
-        list of str: list of files
-        list of str or list of dicts: list of labels
+        tuple:
+            * list of str: list of files
+            * list of str or list of dicts: list of labels
 
     """
     if df is None:

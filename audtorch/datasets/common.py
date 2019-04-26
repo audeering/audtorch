@@ -1,6 +1,7 @@
 import os
 from warnings import warn
 
+import pandas as pd
 import resampy
 from torch.utils.data import Dataset
 
@@ -175,12 +176,14 @@ class PandasDataset(AudioDataset):
             the target. Default: `None`
 
     Example:
-        >>> df = pd.read_csv('~/data/train.csv')
-        >>> data = datasets.PandasDataset('~/data', df, 'age')
+        >>> data = datasets.PandasDataset(root='/data',
+        ...                               df=dataset_dataframe,
+        ...                               sampling_rate=44100,
+        ...                               column_labels='age')
         >>> print(data)
         Dataset AudioDataset
             Number of data points: 120
-            Root Location: /home/username/data
+            Root Location: /data
             Sampling Rate: 44100Hz
             Label: age
         >>> sig, target = data[0]
@@ -193,8 +196,8 @@ class PandasDataset(AudioDataset):
                  target_transform=None, download=False):
         files, labels = \
             files_and_labels_from_df(df, root=root,
-                                      column_labels=column_labels,
-                                      column_filename=column_filename)
+                                     column_labels=column_labels,
+                                     column_filename=column_filename)
         super().__init__(root, files, targets=labels,
                          sampling_rate=sampling_rate, transform=transform,
                          target_transform=target_transform, download=download)
@@ -246,11 +249,14 @@ class CsvDataset(PandasDataset):
             the target. Default: `None`
 
     Example:
-        >>> data = datasets.CsvDataset('~/data', 'train.csv', 'age')
+        >>> data = datasets.CsvDataset(root='/data',
+        ...                            csv_file='train.csv',
+        ...                            sampling_rate=44100,
+        ...                            column_labels='age')
         >>> print(data)
         Dataset AudioDataset
             Number of data points: 120
-            Root Location: /home/username/data
+            Root Location: /data
             Sampling Rate: 44100Hz
             Label: age
             CSV file: train.csv
