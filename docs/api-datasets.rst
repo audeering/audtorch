@@ -21,6 +21,18 @@ AudioDataset
 .. autoclass:: AudioDataset
     :members:
 
+PandasDataset
+~~~~~~~~~~~~~
+
+.. autoclass:: PandasDataset
+    :members:
+
+CsvDataset
+~~~~~~~~~~
+
+.. autoclass:: CsvDataset
+    :members:
+
 utils
 -----
 
@@ -35,3 +47,18 @@ sampling_rate_after_transform
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autofunction:: sampling_rate_after_transform
+
+ensure_df_columns_contain
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: ensure_df_columns_contain
+
+ensure_df_not_empty
+~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: ensure_df_not_empty
+
+files_and_labels_from_df
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: files_and_labels_from_df
