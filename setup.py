@@ -8,6 +8,8 @@ setup(
     install_requires=[
         'numpy',
         'audiofile',
+        'resampy',
+        'torch',
     ],
     author = ('Andreas Triantafyllopoulos, '
               'Stephan Huber, '
