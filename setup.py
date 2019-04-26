@@ -11,10 +11,10 @@ setup(
         'resampy',
         'torch',
     ],
-    author = ('Andreas Triantafyllopoulos, '
-              'Stephan Huber, '
-              'Johannes Wagner, '
-              'Hagen Wierstorf'),
+    author=('Andreas Triantafyllopoulos, '
+            'Stephan Huber, '
+            'Johannes Wagner, '
+            'Hagen Wierstorf'),
     author_email='atriant@audeering.com',
     description='Deep learning with PyTorch and audio',
     long_description=open('README.rst').read(),
