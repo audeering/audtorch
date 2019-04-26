@@ -1,3 +1,4 @@
+import os
 import subprocess
 from warnings import warn
 
@@ -66,3 +67,73 @@ def sampling_rate_after_transform(dataset):
         if hasattr(transform, 'output_sample_rate'):
             sampling_rate = transform.output_sample_rate
     return sampling_rate
+
+
+def ensure_df_columns_contain(df, labels):
+    r"""Raise error if list of labels are not in dataframe columns.
+
+    Args:
+        df (pandas.dataframe): data set.
+        labels (list of str): labels to be expected in `df.columns`.
+
+    """
+    if not set(labels) < set(df.columns):
+        raise RuntimeError('Only the following labels are allowed: {}'
+                           .format(', '.join(df.columns)))
+
+
+def ensure_df_not_empty(df, labels=None):
+    r"""Raise error if dataframe is empty.
+
+    Args:
+        df (pandas.dataframe): data set.
+        labels (list of str, optional): list of labels used to shrink data
+            set. Default: `None`
+
+    """
+    error_message = 'No valid data points found in data set'
+    if labels is not None:
+        error_message += (' for the selected labels: {}'
+                          .format(', '.join(labels)))
+    if len(df) == 0:
+        raise RuntimeError(error_message)
+
+
+def files_and_labels_from_df(df, root='.', column_labels='label',
+                              column_filename='filename'):
+    r"""Extract list of files and labels from dataframe columns.
+
+    Args:
+        df (pandas.DataFrame): data frame with filenames and labels. Relative
+            from `root`
+        root (str, optional): root directory of data set. Default: `.`
+        column_labels (str or list of str, optional): name of data frame
+            column(s) containing the desired labels. Default: `label`
+        column_filename (str, optional): name of column holding the file
+            names. Default: `filename`
+
+    Returns:
+        list of str: list of files
+        list of str or list of dicts: list of labels
+
+    """
+    if df is None:
+        return [], []
+    root = os.path.expanduser(root)
+    if isinstance(column_labels, str):
+        column_labels = [column_labels]
+    ensure_df_columns_contain(df, column_labels)
+    df = df[[column_filename] + column_labels]
+    # Drop empty entries
+    df = df.dropna().reset_index(drop=True)
+    ensure_df_not_empty(df, column_labels)
+    # Assign files and labels
+    files = df.pop(column_filename).tolist()
+    files = [os.path.join(root, f) for f in files]
+    if len(column_labels) == 1:
+        # list of strings
+        labels = df.values.T[0].tolist()
+    else:
+        # list of dicts
+        labels = df.to_dict('records')
+    return files, labels
