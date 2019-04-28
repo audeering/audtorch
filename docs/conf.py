@@ -45,7 +45,14 @@ intersphinx_mapping = {
 }
 
 # Ignore package dependencies during building the docs
-autodoc_mock_imports = ['numpy', 'librosa', 'resampy', 'torch', 'audiofile']
+autodoc_mock_imports = [
+    'audiofile',
+    'librosa',
+    'numpy',
+    'pandas',
+    'resampy',
+    'torch',
+]
 
 # HTML --------------------------------------------------------------------
 
