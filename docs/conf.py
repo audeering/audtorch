@@ -52,6 +52,7 @@ autodoc_mock_imports = [
     'pandas',
     'resampy',
     'torch',
+    'scipy',
 ]
 
 # HTML --------------------------------------------------------------------

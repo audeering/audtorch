@@ -17,6 +17,7 @@
     :caption: API Documentation
 
     api-datasets
+    api-transforms
     api-transforms-functional
     api-utils
     genindex
