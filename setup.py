@@ -11,6 +11,7 @@ setup(
         'resampy',
         'torch',
         'pandas',
+        'tqdm',
     ],
     author=('Andreas Triantafyllopoulos, '
             'Stephan Huber, '

@@ -1,7 +1,10 @@
 import os
 import subprocess
 from warnings import warn
+import urllib
+import tarfile
 
+from tqdm import tqdm
 import numpy as np
 import audiofile as af
 
@@ -40,6 +43,74 @@ def load(filename, duration=None, offset=0):
     except subprocess.CalledProcessError:
         warn('ffmpeg conversion failed for: {}'.format(filename), UserWarning)
     return signal, sampling_rate
+
+
+def download_url(url, root, filename=None, md5=None):
+    r"""Download a file from an url to a specified directory.
+
+    Args:
+        url (str): URL to download file from
+        root (str): directory to place downloaded file in
+        filename (str, optional): name to save the file under.
+            If `None`, use basename of URL. Default: `None`
+        md5 (str, optional): MD5 checksum of the download.
+            If None, do not check. Default: `None`
+
+    Returns:
+       str: path to downloaded file
+
+    """
+    root = os.path.expanduser(root)
+    if not filename:
+        filename = os.path.basename(url)
+    filename = os.path.join(root, filename)
+
+    os.makedirs(root, exist_ok=True)
+
+    # downloads file
+    if os.path.isfile(filename):
+        print('Using downloaded file: ' + filename)
+    else:
+        bar_updater = _gen_bar_updater(tqdm(unit='B', unit_scale=True))
+        try:
+            print('Downloading ' + url + ' to ' + filename)
+            urllib.request.urlretrieve(url, filename, reporthook=bar_updater)
+        except OSError:
+            if url[:5] == 'https':
+                url = url.replace('https:', 'http:')
+                print('Failed download. Trying https -> http instead.'
+                      ' Downloading ' + url + ' to ' + filename)
+                urllib.request.urlretrieve(url, filename,
+                                           reporthook=bar_updater)
+    return os.path.expanduser(filename)
+
+
+def extract_archive(filename, out_path=None, remove_finished=False):
+    r"""Extract archive.
+
+    Currently `tar.gz` and `tar` archives are supported.
+
+    Args:
+        filename (str): path to archive
+        out_path (str, optional): extract archive in this folder.
+            Default: folder where archive is located in
+        remove_finished (bool, optional): if `True` remove archive after
+            extraction. Default: `False`
+
+    """
+    print('Extracting {}'.format(filename))
+    if out_path is None:
+        out_path = os.path.dirname(filename)
+    if filename.endswith('tar.gz'):
+        tar = tarfile.open(filename, 'r:gz')
+    elif filename.endswith('tar'):
+        tar = tarfile.open(filename, 'r:')
+    else:
+        raise RuntimeError('Archive format not supported.')
+    tar.extractall(path=out_path)
+    tar.close()
+    if remove_finished:
+        os.unlink(filename)
 
 
 def sampling_rate_after_transform(dataset):
@@ -138,3 +209,13 @@ def files_and_labels_from_df(df, root='.', column_labels='label',
         # list of dicts
         labels = df.to_dict('records')
     return files, labels
+
+
+def _gen_bar_updater(pbar):
+    def bar_update(count, block_size, total_size):
+        if pbar.total is None and total_size:
+            pbar.total = total_size
+        progress_bytes = count * block_size
+        pbar.update(progress_bytes - pbar.n)
+
+    return bar_update

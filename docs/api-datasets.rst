@@ -10,6 +10,7 @@ To run the examples execute the following commands first::
 
 .. automodule:: audtorch.datasets
 
+
 Common
 ------
 
@@ -34,6 +35,7 @@ CsvDataset
 .. autoclass:: CsvDataset
     :members:
 
+
 Noise
 -----
 
@@ -45,6 +47,7 @@ WhiteNoise
 .. autoclass:: WhiteNoise
     :members:
 
+
 utils
 -----
 
@@ -54,6 +57,16 @@ load
 ~~~~
 
 .. autofunction:: load
+
+download_url
+~~~~~~~~~~~~
+
+.. autofunction:: download_url
+
+extract_archive
+~~~~~~~~~~~~~~~
+
+.. autofunction:: extract_archive
 
 sampling_rate_after_transform
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
