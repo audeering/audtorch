@@ -36,6 +36,16 @@ CsvDataset
     :members:
 
 
+Speech
+------
+
+MozillaCommonVoice
+~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: MozillaCommonVoice
+    :members:
+
+
 Noise
 -----
 
