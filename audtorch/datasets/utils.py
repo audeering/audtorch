@@ -152,8 +152,9 @@ def ensure_df_columns_contain(df, labels):
         labels (list of str): labels to be expected in `df.columns`
 
     """
-    if not set(labels) < set(df.columns):
-        raise RuntimeError('Only the following labels are allowed: {}'
+    ensure_df_not_empty(df)
+    if not set(labels) <= set(df.columns):
+        raise RuntimeError("Dataframe contains only these columns: '{}'"
                            .format(', '.join(df.columns)))
 
 
