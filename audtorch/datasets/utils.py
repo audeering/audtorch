@@ -30,6 +30,9 @@ def load(filename, duration=None, offset=0):
               `(channels, samples)`
             * **int**: sample rate of the audio file
 
+    Example:
+        >>> signal, sampling_rate = datasets.load('speech.wav')
+
     """
     signal = np.array([[]])  # empty signal of shape (1, 0)
     sampling_rate = None
@@ -130,6 +133,14 @@ def sampling_rate_after_transform(dataset):
     Returns:
         int: sampling rate in Hz after all transforms are applied
 
+    Example:
+        >>> t = transforms.Resample(input_sampling_rate=16000,
+        ...                         output_sampling_rate=8000)
+        >>> data = datasets.MozillaCommonVoice(root='/data/MCV',
+        ...                                    transform=t)
+        >>> datasets.sampling_rate_after_transform(data)
+        8000
+
     """
     sampling_rate = dataset.original_sampling_rate
     try:
@@ -151,6 +162,11 @@ def ensure_df_columns_contain(df, labels):
         df (pandas.dataframe): data frame
         labels (list of str): labels to be expected in `df.columns`
 
+    Example:
+        >>> df = pd.DataFrame(data=[(1, 2)], columns=['a', 'b'])
+        >>> datasets.ensure_df_columns_contain(df, ['a', 'c'])
+        RuntimeError: Dataframe contains only: 'a', 'b'
+
     """
     ensure_df_not_empty(df)
     if not set(labels) <= set(df.columns):
@@ -165,6 +181,11 @@ def ensure_df_not_empty(df, labels=None):
         df (pandas.dataframe): data frame
         labels (list of str, optional): list of labels used to shrink data
             set. Default: `None`
+
+    Example:
+        >>> df = pd.DataFrame()
+        >>> datasets.ensure_df_not_empty(df)
+        RuntimeError: No valid data points found in data set
 
     """
     error_message = 'No valid data points found in data set'
@@ -192,6 +213,13 @@ def files_and_labels_from_df(df, root='.', column_labels='label',
         tuple:
             * list of str: list of files
             * list of str or list of dicts: list of labels
+
+    Example:
+        >>> df = pd.DataFrame(data=[('speech.wav', 'speech')],
+        ...                   columns=['filename', 'label'])
+        >>> files, labels = datasets.files_and_labels_from_df(df)
+        >>> files[0], labels[0]
+        ('./speech.wav', 'speech')
 
     """
     if df is None:

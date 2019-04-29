@@ -6,7 +6,8 @@ Audio data sets.
 To run the examples execute the following commands first::
 
     >>> import sounddevice
-    >>> from audtorch import datasets
+    >>> import pandas as pd
+    >>> from audtorch import datasets, transforms
 
 .. automodule:: audtorch.datasets
 
