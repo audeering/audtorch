@@ -37,19 +37,20 @@ class AudioDataset(Dataset):
             the target. Default: `None`
 
     Example:
-        >>> files = ['speech.wav', 'noise.wav']
-        >>> targets = ['speech', 'noise']
-        >>> data = datasets.AudioDataset('/data', files, targets, sampling_rate=8000)
+        >>> data = datasets.AudioDataset(root='/data',
+        ...                              files=['speech.wav', 'noise.wav'],
+        ...                              targets=['speech', 'noise'],
+        ...                              sampling_rate=8000)
         >>> print(data)
         Dataset AudioDataset
             Number of data points: 2
             Root Location: /data
             Sampling Rate: 8000Hz
-        >>> sig, target = data[0]
+        >>> signal, target = data[0]
         >>> target
         'speech'
 
-    """  # noqa: E501
+    """
     def __init__(self, root, files, targets, sampling_rate, transform=None,
                  target_transform=None, download=False):
         self.root = os.path.expanduser(root)
@@ -186,7 +187,7 @@ class PandasDataset(AudioDataset):
             Root Location: /data
             Sampling Rate: 44100Hz
             Label: age
-        >>> sig, target = data[0]
+        >>> signal, target = data[0]
         >>> target
         'age'
 
@@ -260,7 +261,7 @@ class CsvDataset(PandasDataset):
             Sampling Rate: 44100Hz
             Label: age
             CSV file: train.csv
-        >>> sig, target = data[0]
+        >>> signal, target = data[0]
         >>> target
         'age'
 
