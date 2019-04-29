@@ -5,6 +5,7 @@ Audio data sets.
 
 To run the examples execute the following commands first::
 
+    >>> import sounddevice
     >>> from audtorch import datasets
 
 .. automodule:: audtorch.datasets
@@ -31,6 +32,17 @@ CsvDataset
 ~~~~~~~~~~
 
 .. autoclass:: CsvDataset
+    :members:
+
+Noise
+-----
+
+This section contains data sets that are primarily used as noise sources.
+
+WhiteNoise
+~~~~~~~~~~
+
+.. autoclass:: WhiteNoise
     :members:
 
 utils
