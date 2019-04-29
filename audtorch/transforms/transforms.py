@@ -667,14 +667,14 @@ class Resample(object):
         * ``'kaiser_fast'`` as implemented by resampy
         * ``'scipy'`` uses scipy for resampling
 
-    * :attr:`input_sample_rate` controls input sample rate in Hz
-    * :attr:`output_sample_rate` controls output sample rate in Hz
+    * :attr:`input_sampling_rate` controls input sample rate in Hz
+    * :attr:`output_sampling_rate` controls output sample rate in Hz
     * :attr:`method` controls the resample method
     * :attr:`axis` controls axis for resampling
 
     Args:
-        input_sample_rate (int): input sample rate in Hz
-        output_sample_rate (int): output sample rate in Hz
+        input_sampling_rate (int): input sample rate in Hz
+        output_sampling_rate (int): output sample rate in Hz
         method (str, optional): resample method. Default: `kaiser_best`
         axis (int, optional): axis for resampling. Default: `-1`
 
@@ -691,35 +691,35 @@ class Resample(object):
         >>> a = np.array([1, 2, 3, 4])
         >>> t = transforms.Resample(4, 2)
         >>> print(t)
-        Resample(input_sample_rate=4, output_sample_rate=2, method=kaiser_best, axis=-1)
+        Resample(input_sampling_rate=4, output_sampling_rate=2, method=kaiser_best, axis=-1)
         >>> t(a)
         array([0, 2])
 
     """  # noqa: E501
-    def __init__(self, input_sample_rate, output_sample_rate,
+    def __init__(self, input_sampling_rate, output_sampling_rate,
                  method='kaiser_best', axis=-1):
         super().__init__()
-        self.input_sample_rate = input_sample_rate
-        self.output_sample_rate = output_sample_rate
+        self.input_sampling_rate = input_sampling_rate
+        self.output_sampling_rate = output_sampling_rate
         self.method = method
         self.axis = axis
 
     def __call__(self, signal):
         if self.method == 'scipy':
             out_samples = int(signal.shape[self.axis]
-                              * self.output_sample_rate
-                              / float(self.input_sample_rate))
+                              * self.output_sampling_rate
+                              / float(self.input_sampling_rate))
             signal = scipy.signal.resample(signal, out_samples, axis=self.axis)
         else:
-            signal = resampy.resample(signal, self.input_sample_rate,
-                                      self.output_sample_rate,
+            signal = resampy.resample(signal, self.input_sampling_rate,
+                                      self.output_sampling_rate,
                                       method=self.method, axis=self.axis)
         return signal
 
     def __repr__(self):
-        options = ('input_sample_rate={0}, output_sample_rate={1}, '
+        options = ('input_sampling_rate={0}, output_sampling_rate={1}, '
                    'method={2}, axis={3}'
-                   .format(self.input_sample_rate, self.output_sample_rate,
+                   .format(self.input_sampling_rate, self.output_sampling_rate,
                            self.method, self.axis))
         return '{0}({1})'.format(self.__class__.__name__, options)
 

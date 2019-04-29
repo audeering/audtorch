@@ -46,7 +46,7 @@ def sampling_rate_after_transform(dataset):
     r"""Sampling rate of data set after all transforms are applied.
 
     A change of sampling rate by a transform is only recognized, if that
-    transform has the attribute :attr:`output_sample_rate`.
+    transform has the attribute :attr:`output_sampling_rate`.
 
     Args:
         dataset (torch.utils.data.Dataset): data set with `sampling_rate`
@@ -64,8 +64,8 @@ def sampling_rate_after_transform(dataset):
         # Single transform
         transforms = [dataset.transform]
     for transform in transforms:
-        if hasattr(transform, 'output_sample_rate'):
-            sampling_rate = transform.output_sample_rate
+        if hasattr(transform, 'output_sampling_rate'):
+            sampling_rate = transform.output_sampling_rate
     return sampling_rate
 
 
