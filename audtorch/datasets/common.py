@@ -204,7 +204,7 @@ class PandasDataset(AudioDataset):
         self.column_labels = column_labels
 
     def extra_repr(self):
-        fmt_str = '    Labels: {}\n'.format(', '.join(self.column_labels))
+        fmt_str = '    Labels: {}\n'.format(self.column_labels)
         return fmt_str
 
 
