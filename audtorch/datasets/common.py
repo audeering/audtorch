@@ -268,15 +268,20 @@ class CsvDataset(PandasDataset):
     def __init__(self, root, csv_file, sampling_rate, sep=',',
                  column_labels='label', column_filename='filename',
                  transform=None, target_transform=None, download=False):
-        csv_file = os.path.join(os.path.expanduser(root), csv_file)
-        if not os.path.isfile(csv_file):
-            raise FileNotFoundError('CSV file {} not found.'.format(csv_file))
-        df = pd.read_csv(csv_file, sep)
+        self.root = os.path.expanduser(root)
+        self.csv_file = os.path.join(self.root, csv_file)
+
+        if download:
+            self._download()
+
+        if not os.path.isfile(self.csv_file):
+            raise FileNotFoundError('CSV file {} not found.'
+                                    .format(self.csv_file))
+        df = pd.read_csv(self.csv_file, sep)
         super().__init__(root, df, sampling_rate,
                          column_labels=column_labels,
                          column_filename=column_filename, transform=transform,
-                         target_transform=target_transform, download=download)
-        self.csv_file = csv_file
+                         target_transform=target_transform)
 
     def extra_repr(self):
         fmt_str = super().extra_repr()
