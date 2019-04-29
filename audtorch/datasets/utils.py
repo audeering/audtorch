@@ -12,6 +12,10 @@ import audiofile as af
 def load(filename, duration=None, offset=0):
     r"""Load audio file.
 
+    If an error occurrs during loading as the file could not be found,
+    is empty, or has the wrong format an empty signal is returned and a warning
+    shown.
+
     Args:
         file (str or int or file-like object): file name of input audio file
         duration (float, optional): return only a specified duration in
@@ -144,8 +148,8 @@ def ensure_df_columns_contain(df, labels):
     r"""Raise error if list of labels are not in dataframe columns.
 
     Args:
-        df (pandas.dataframe): data set.
-        labels (list of str): labels to be expected in `df.columns`.
+        df (pandas.dataframe): data frame
+        labels (list of str): labels to be expected in `df.columns`
 
     """
     if not set(labels) < set(df.columns):
@@ -157,7 +161,7 @@ def ensure_df_not_empty(df, labels=None):
     r"""Raise error if dataframe is empty.
 
     Args:
-        df (pandas.dataframe): data set.
+        df (pandas.dataframe): data frame
         labels (list of str, optional): list of labels used to shrink data
             set. Default: `None`
 
