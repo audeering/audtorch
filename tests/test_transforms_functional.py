@@ -2,7 +2,6 @@ import pytest
 import numpy as np
 import librosa
 
-from context import audtorch  # noqa: F401
 import audtorch.transforms.functional as F
 
 

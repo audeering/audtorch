@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 
-from context import audtorch as at
+import audtorch as at
 
 
 xfail = pytest.mark.xfail
