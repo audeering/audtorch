@@ -68,6 +68,7 @@ class MozillaCommonVoice(CsvDataset):
         >>> sounddevice.play(signal.transpose(), data.sampling_rate)
 
     """  # noqa: E501
+
     url = ('https://common-voice-data-download.s3.amazonaws.com/'
            'cv_corpus_v1.tar.gz')
 

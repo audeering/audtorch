@@ -51,6 +51,7 @@ class AudioDataset(Dataset):
         'speech'
 
     """
+
     def __init__(self, root, files, targets, sampling_rate, *, transform=None,
                  target_transform=None, download=False):
         self.root = os.path.expanduser(root)
@@ -192,6 +193,7 @@ class PandasDataset(AudioDataset):
         'age'
 
     """
+
     def __init__(self, root, df, sampling_rate, *, column_labels='label',
                  column_filename='filename', transform=None,
                  target_transform=None, download=False):
@@ -266,6 +268,7 @@ class CsvDataset(PandasDataset):
         'age'
 
     """
+
     def __init__(self, root, csv_file, sampling_rate, *, sep=',',
                  column_labels='label', column_filename='filename',
                  transform=None, target_transform=None, download=False):

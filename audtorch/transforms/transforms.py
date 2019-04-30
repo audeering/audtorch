@@ -34,6 +34,7 @@ class Compose(object):
                [0, 4, 0]])
 
     """
+
     def __init__(self, transforms):
         self.transforms = transforms
 
@@ -87,6 +88,7 @@ class Crop(object):
                [4]])
 
     """
+
     def __init__(self, idx, *, axis=-1):
         super().__init__()
         self.idx = idx
@@ -143,6 +145,7 @@ class RandomCrop(object):
                [5, 6]])
 
     """
+
     def __init__(self, size, *, method='pad', axis=-1,
                  fix_randomization=False):
         super().__init__()
@@ -230,6 +233,7 @@ class Pad(object):
                [3, 4, 0]])
 
     """
+
     def __init__(self, padding, *, value=0, axis=-1):
         super().__init__()
         self.padding = padding
@@ -281,6 +285,7 @@ class RandomPad(object):
                [0, 3, 4]])
 
     """
+
     def __init__(self, padding, *, value=0, axis=-1, fix_randomization=False):
         super().__init__()
         self.padding = padding
@@ -342,6 +347,7 @@ class Replicate(object):
         array([[1, 2, 3, 1, 2, 3, 1, 2, 3]])
 
     """
+
     def __init__(self, repetitions, *, axis=-1):
         super().__init__()
         self.repetitions = repetitions
@@ -447,6 +453,7 @@ class Expand(object):
         array([[1, 2, 3, 0, 0, 0]])
 
     """
+
     def __init__(self, size, *, method='pad', axis=-1):
         super().__init__()
         self.size = size
@@ -507,6 +514,7 @@ class Downmix(object):
         array([[2, 3]])
 
     """
+
     def __init__(self, channels, *, method='mean', axis=-2):
         super().__init__()
         self.channels = channels
@@ -560,6 +568,7 @@ class Upmix(object):
                [2., 3.]])
 
     """
+
     def __init__(self, channels, *, method='mean', axis=-2):
         super().__init__()
         self.channels = channels
@@ -610,6 +619,7 @@ class Remix(object):
                [2., 3.]])
 
     """
+
     def __init__(self, channels, *, method='mean', axis=-2):
         super().__init__()
         self.channels = channels
@@ -652,6 +662,7 @@ class Normalize(object):
         array([0.25, 0.5 , 0.75, 1.  ])
 
     """
+
     def __init__(self, *, axis=-1):
         super().__init__()
         self.axis = axis
@@ -702,6 +713,7 @@ class Resample(object):
         array([0, 2])
 
     """  # noqa: E501
+
     def __init__(self, input_sampling_rate, output_sampling_rate, *,
                  method='kaiser_best', axis=-1):
         super().__init__()
@@ -770,6 +782,7 @@ class Spectrogram(object):
                [1., 3., 3.]], dtype=float32)
 
     """
+
     def __init__(self, window_size, hop_size, *, window='hann', axis=-1):
         super().__init__()
         self.window_size = window_size
@@ -841,6 +854,7 @@ class LogSpectrogram(object):
                [1.1920928e-07, 1.0986123e+00, 1.0986123e+00]], dtype=float32)
 
     """  # noqa: E501
+
     def __init__(self, window_size, hop_size, *, window='hann',
                  normalize=False, magnitude_boost=1e-7, axis=-1):
         super().__init__()
