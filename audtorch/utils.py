@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def to_tuple(input, tuple_len=2):
+def to_tuple(input, *, tuple_len=2):
     r"""Convert to tuple of given length.
 
     This utility function is used to convert single-value arguments to tuples

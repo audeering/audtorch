@@ -7,7 +7,7 @@ except ImportError:
 from .. import utils
 
 
-def crop(signal, idx, axis=-1):
+def crop(signal, idx, *, axis=-1):
     r"""Crop signal along an axis.
 
     Args:
@@ -46,7 +46,7 @@ def crop(signal, idx, axis=-1):
     return np.split(signal, idx, axis=axis)[1]
 
 
-def pad(signal, padding, value=0, axis=-1):
+def pad(signal, padding, *, value=0, axis=-1):
     r"""Pad signal along an axis.
 
     If padding is an integer it pads equally on the left and right of the
@@ -77,7 +77,7 @@ def pad(signal, padding, value=0, axis=-1):
     return np.pad(signal, pad, 'constant', constant_values=value)
 
 
-def replicate(signal, repetitions, axis=-1):
+def replicate(signal, repetitions, *, axis=-1):
     r"""Replicate signal along an axis.
 
     Args:
@@ -99,7 +99,7 @@ def replicate(signal, repetitions, axis=-1):
     return np.tile(signal, reps)
 
 
-def downmix(signal, channels, method='mean', axis=-2):
+def downmix(signal, channels, *, method='mean', axis=-2):
     r"""Downmix signal to the provided number of channels.
 
     The downmix is done by one of these methods:
@@ -141,7 +141,7 @@ def downmix(signal, channels, method='mean', axis=-2):
     return signal
 
 
-def upmix(signal, channels, method='mean', axis=-2):
+def upmix(signal, channels, *, method='mean', axis=-2):
     r"""Upmix signal to the provided number of channels.
 
     The upmix is achieved by adding the same signal in the additional channels.
@@ -224,7 +224,7 @@ def additive_mix(signal1, signal2, ratio):
     return signal1 + np.sqrt(scaling_factor) * signal2
 
 
-def normalize(signal, axis=None):
+def normalize(signal, *, axis=None):
     r"""Normalize signal.
 
     Ensure the maximum of the absolute value of the signal is 1.
@@ -256,7 +256,7 @@ def normalize(signal, axis=None):
     return signal / np.maximum(peak, 1e-7)
 
 
-def stft(signal, window_size, hop_size, window='hann', axis=-1):
+def stft(signal, window_size, hop_size, *, window='hann', axis=-1):
     r"""Short-term Fourier transform.
 
     The short-term Fourier transform (STFT) is calculated by using librosa.
@@ -301,7 +301,7 @@ def stft(signal, window_size, hop_size, window='hann', axis=-1):
     return spectrogram
 
 
-def istft(spectrogram, window_size, hop_size, window='hann', axis=-2):
+def istft(spectrogram, window_size, hop_size, *, window='hann', axis=-2):
     r"""Inverse short-term Fourier transform.
 
     The inverse short-term Fourier transform (iSTFT) is calculated by using
