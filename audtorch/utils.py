@@ -18,7 +18,7 @@ def to_tuple(input, *, tuple_len=2):
         tuple: tuple of desired length
 
     Example:
-        >>> utils.to_tuple(2)
+        >>> to_tuple(2)
         (2, 2)
 
     """
@@ -48,7 +48,7 @@ def energy(signal):
 
     Example:
         >>> a = np.array([[2, 2]])
-        >>> utils.energy(a)
+        >>> energy(a)
         8
 
     """
@@ -69,7 +69,7 @@ def power(signal):
 
     Example:
         >>> a = np.array([[2, 2]])
-        >>> utils.power(a)
+        >>> power(a)
         4.0
 
     """

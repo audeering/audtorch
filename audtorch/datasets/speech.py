@@ -3,6 +3,9 @@ from .utils import (download_url, extract_archive)
 from .common import CsvDataset
 
 
+__doctest_skip__ = ['*']
+
+
 class MozillaCommonVoice(CsvDataset):
     """Mozilla Common Voice speech data set.
 
@@ -54,7 +57,8 @@ class MozillaCommonVoice(CsvDataset):
         safe snapshot of the version you used.
 
     Example:
-        >>> data = datasets.MozillaCommonVoice('/data/MozillaCommonVoice/cv_corpus_v1')
+        >>> import sounddevice as sd
+        >>> data = MozillaCommonVoice('/data/MozillaCommonVoice/cv_corpus_v1')
         >>> print(data)
         Dataset MozillaCommonVoice
             Number of data points: 195776
@@ -65,7 +69,7 @@ class MozillaCommonVoice(CsvDataset):
         >>> signal, target = data[0]
         >>> target
         'learn to recognize omens and follow them the old king had said'
-        >>> sounddevice.play(signal.transpose(), data.sampling_rate)
+        >>> sd.play(signal.transpose(), data.sampling_rate)
 
     """  # noqa: E501
 

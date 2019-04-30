@@ -39,7 +39,8 @@ class WhiteNoise(Dataset):
         `1` as repeated calls of the same index return different signals.
 
     Example:
-        >>> data = datasets.WhiteNoise(duration=1, sampling_rate=44100)
+        >>> import sounddevice as sd
+        >>> data = WhiteNoise(duration=1, sampling_rate=44100)
         >>> print(data)
         Dataset WhiteNoise
             Number of data points: Inf
@@ -49,7 +50,7 @@ class WhiteNoise(Dataset):
         >>> signal, target = data[0]
         >>> target
         'white noise'
-        >>> sounddevice.play(signal.transpose(), data.sampling_rate)
+        >>> sd.play(signal.transpose(), data.sampling_rate)
 
     """
 

@@ -11,6 +11,7 @@ and work on the data before it will be returned.
 
 To run the examples execute the following commands first::
 
+    >>> import random
     >>> import numpy as np
     >>> from audtorch import transforms, datasets
 

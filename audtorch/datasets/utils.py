@@ -31,7 +31,7 @@ def load(filename, *, duration=None, offset=0):
             * **int**: sample rate of the audio file
 
     Example:
-        >>> signal, sampling_rate = datasets.load('speech.wav')
+        >>> signal, sampling_rate = load('speech.wav')  # doctest: +SKIP
 
     """
     signal = np.array([[]])  # empty signal of shape (1, 0)
@@ -134,11 +134,11 @@ def sampling_rate_after_transform(dataset):
         int: sampling rate in Hz after all transforms are applied
 
     Example:
+        >>> from audtorch import datasets, transforms
         >>> t = transforms.Resample(input_sampling_rate=16000,
         ...                         output_sampling_rate=8000)
-        >>> data = datasets.MozillaCommonVoice(root='/data/MCV',
-        ...                                    transform=t)
-        >>> datasets.sampling_rate_after_transform(data)
+        >>> data = datasets.WhiteNoise(sampling_rate=16000, transform=t)
+        >>> sampling_rate_after_transform(data)
         8000
 
     """
@@ -187,9 +187,11 @@ def ensure_df_columns_contain(df, labels):
         labels (list of str): labels to be expected in `df.columns`
 
     Example:
+        >>> import pandas as pd
         >>> df = pd.DataFrame(data=[(1, 2)], columns=['a', 'b'])
-        >>> datasets.ensure_df_columns_contain(df, ['a', 'c'])
-        RuntimeError: Dataframe contains only: 'a', 'b'
+        >>> ensure_df_columns_contain(df, ['a', 'c'])
+        Traceback (most recent call last):
+        RuntimeError: Dataframe contains only these columns: 'a, b'
 
     """
     ensure_df_not_empty(df)
@@ -207,8 +209,10 @@ def ensure_df_not_empty(df, labels=None):
             set. Default: `None`
 
     Example:
+        >>> import pandas as pd
         >>> df = pd.DataFrame()
-        >>> datasets.ensure_df_not_empty(df)
+        >>> ensure_df_not_empty(df)
+        Traceback (most recent call last):
         RuntimeError: No valid data points found in data set
 
     """
@@ -239,9 +243,10 @@ def files_and_labels_from_df(df, *, root='.', column_labels='label',
             * list of str or list of dicts: list of labels
 
     Example:
+        >>> import pandas as pd
         >>> df = pd.DataFrame(data=[('speech.wav', 'speech')],
         ...                   columns=['filename', 'label'])
-        >>> files, labels = datasets.files_and_labels_from_df(df)
+        >>> files, labels = files_and_labels_from_df(df)
         >>> files[0], labels[0]
         ('./speech.wav', 'speech')
 

@@ -23,7 +23,7 @@ class Compose(object):
 
     Example:
         >>> a = np.array([[1, 2], [3, 4]])
-        >>> t = transforms.Compose([transforms.Crop(-1), transforms.Pad(1)])
+        >>> t = Compose([Crop(-1), Pad(1)])
         >>> print(t)
         Compose(
             Crop(idx=-1, axis=-1)
@@ -80,7 +80,7 @@ class Crop(object):
 
     Example:
         >>> a = np.array([[1, 2], [3, 4]])
-        >>> t = transforms.Crop(1, axis=1)
+        >>> t = Crop(1, axis=1)
         >>> print(t)
         Crop(idx=1, axis=1)
         >>> t(a)
@@ -135,14 +135,14 @@ class RandomCrop(object):
           :math:`*` can be any additional number of dimensions.
 
     Example:
-        >>> np.random.seed(0)
+        >>> random.seed(0)
         >>> a = np.array([[1, 2, 3, 4], [5, 6, 7, 8]])
-        >>> t = transforms.RandomCrop(2)
+        >>> t = RandomCrop(2)
         >>> print(t)
         RandomCrop(size=2, method=pad, axis=-1)
         >>> t(a)
-        array([[1, 2],
-               [5, 6]])
+        array([[2, 3],
+               [6, 7]])
 
     """
 
@@ -225,7 +225,7 @@ class Pad(object):
 
     Example:
         >>> a = np.array([[1, 2], [3, 4]])
-        >>> t = transforms.Pad((0, 1))
+        >>> t = Pad((0, 1))
         >>> print(t)
         Pad(padding=(0, 1), value=0, axis=-1)
         >>> t(a)
@@ -275,9 +275,9 @@ class RandomPad(object):
           :math:`*` can be any additional number of dimensions.
 
     Example:
-        >>> np.random.seed(0)
+        >>> random.seed(0)
         >>> a = np.array([[1, 2], [3, 4]])
-        >>> t = transforms.RandomPad(1)
+        >>> t = RandomPad(1)
         >>> print(t)
         RandomPad(padding=1, value=0, axis=-1)
         >>> t(a)
@@ -340,7 +340,7 @@ class Replicate(object):
 
     Example:
         >>> a = np.array([[1, 2, 3]])
-        >>> t = transforms.Replicate(3)
+        >>> t = Replicate(3)
         >>> print(t)
         Replicate(repetitions=3, axis=-1)
         >>> t(a)
@@ -384,13 +384,13 @@ class RandomReplicate(object):
           :math:`*` can be any additional number of dimensions.
 
     Example:
-        >>> np.random.seed(0)
+        >>> random.seed(0)
         >>> a = np.array([1, 2, 3])
-        >>> t = transforms.RandomReplicate(max_repetitions=3)
+        >>> t = RandomReplicate(max_repetitions=3)
         >>> print(t)
         RandomReplicate(max_repetitions=3, repetitions=None, axis=-1)
         >>> t(a)
-        array([1, 2, 3, 1, 2, 3])
+        array([1, 2, 3, 1, 2, 3, 1, 2, 3])
 
     """
 
@@ -446,7 +446,7 @@ class Expand(object):
 
     Example:
         >>> a = np.array([[1, 2, 3]])
-        >>> t = transforms.Expand(6)
+        >>> t = Expand(6)
         >>> print(t)
         Expand(size=6, method=pad, axis=-1)
         >>> t(a)
@@ -507,7 +507,7 @@ class Downmix(object):
 
     Example:
         >>> a = np.array([[1, 2], [3, 4]])
-        >>> t = transforms.Downmix(1, axis=0)
+        >>> t = Downmix(1, axis=0)
         >>> print(t)
         Downmix(channels=1, method=mean, axis=0)
         >>> t(a)
@@ -559,7 +559,7 @@ class Upmix(object):
 
     Example:
         >>> a = np.array([[1, 2], [3, 4]])
-        >>> t = transforms.Upmix(3, axis=0)
+        >>> t = Upmix(3, axis=0)
         >>> print(t)
         Upmix(channels=3, method=mean, axis=0)
         >>> t(a)
@@ -610,7 +610,7 @@ class Remix(object):
 
     Example:
         >>> a = np.array([[1, 2], [3, 4]])
-        >>> t = transforms.Remix(3, axis=0)
+        >>> t = Remix(3, axis=0)
         >>> print(t)
         Remix(channels=3, axis=0)
         >>> t(a)
@@ -655,7 +655,7 @@ class Normalize(object):
 
     Example:
         >>> a = np.array([1, 2, 3, 4])
-        >>> t = transforms.Normalize()
+        >>> t = Normalize()
         >>> print(t)
         Normalize(axis=-1)
         >>> t(a)
@@ -706,7 +706,7 @@ class Resample(object):
 
     Example:
         >>> a = np.array([1, 2, 3, 4])
-        >>> t = transforms.Resample(4, 2)
+        >>> t = Resample(4, 2)
         >>> print(t)
         Resample(input_sampling_rate=4, output_sampling_rate=2, method=kaiser_best, axis=-1)
         >>> t(a)
@@ -774,7 +774,7 @@ class Spectrogram(object):
 
     Example:
         >>> a = np.array([1., 2., 3., 4.])
-        >>> t = transforms.Spectrogram(2, 2)
+        >>> t = Spectrogram(2, 2)
         >>> print(t)
         Spectrogram(window_size=2, hop_size=2, axis=-1)
         >>> t(a)
@@ -846,7 +846,7 @@ class LogSpectrogram(object):
 
     Example:
         >>> a = np.array([1., 2., 3., 4.])
-        >>> t = transforms.LogSpectrogram(2, 2)
+        >>> t = LogSpectrogram(2, 2)
         >>> print(t)
         LogSpectrogram(window_size=2, hop_size=2, magnitude_boost=1e-07, axis=-1, normalize=False)
         >>> t(a)
