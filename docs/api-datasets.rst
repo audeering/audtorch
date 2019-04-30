@@ -84,6 +84,11 @@ sampling_rate_after_transform
 
 .. autofunction:: sampling_rate_after_transform
 
+ensure_same_sampling_rate
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: ensure_same_sampling_rate
+
 ensure_df_columns_contain
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 

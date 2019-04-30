@@ -155,6 +155,30 @@ def sampling_rate_after_transform(dataset):
     return sampling_rate
 
 
+def ensure_same_sampling_rate(datasets):
+    r"""Raise error if provided data set differ in sampling rate.
+
+    All data sets that are checked need to have a `sampling_rate` attribute or
+    property.
+
+    Args:
+        datasets (list of torch.utils.data.Dataset): list of at least two audio
+            data sets.
+
+    """
+    for dataset in datasets:
+        if not hasattr(dataset, 'sampling_rate'):
+            raise RuntimeError("{} doesn't have a `sampling_rate` attribute."
+                               .format(dataset))
+    for n in range(1, len(datasets)):
+        if datasets[0].sampling_rate != datasets[n].sampling_rate:
+            error_msg = 'Sampling rates do not match:\n'
+            for dataset in datasets:
+                info = dataset.__repr__()
+                error_msg += '{}Hz from {}'.format(dataset.sampling_rate, info)
+            raise ValueError(error_msg)
+
+
 def ensure_df_columns_contain(df, labels):
     r"""Raise error if list of labels are not in dataframe columns.
 
