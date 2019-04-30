@@ -64,7 +64,7 @@ def test_pad(input, padding, value, axis, expected_output):
     (a11, 1, 0)])
 def test_replicate(input, repetitions, axis):
     expected_output = np.concatenate(tuple([input] * repetitions), axis)
-    t = transforms.Replicate(repetitions, axis)
+    t = transforms.Replicate(repetitions, axis=axis)
     assert np.array_equal(t(input), expected_output)
 
 
@@ -163,7 +163,7 @@ def test_randomcrop(input, size, axis):
     t = transforms.RandomCrop(size, axis=axis)
     t.fix_randomization = True
     assert np.array_equal(t(input), t(input))
-    assert np.array_equal(t(input), F.crop(input, t.idx, t.axis))
+    assert np.array_equal(t(input), F.crop(input, t.idx, axis=t.axis))
 
 
 @pytest.mark.parametrize('input,padding,value,axis', [
@@ -176,7 +176,8 @@ def test_randompad(input, padding, value, axis):
     t = transforms.RandomPad(padding, value=value, axis=axis)
     t.fix_randomization = True
     assert np.array_equal(t(input), t(input))
-    assert np.array_equal(t(input), F.pad(input, t.pad, t.value, t.axis))
+    expected_output = F.pad(input, t.pad, value=t.value, axis=t.axis)
+    assert np.array_equal(t(input), expected_output)
 
 
 @pytest.mark.parametrize('input,input_sample_rate,output_sample_rate,axis', [

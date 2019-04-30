@@ -61,7 +61,7 @@ def test_pad(input, padding, value, axis, expected_output):
     (a11, 1, 0)])
 def test_replicate(input, repetitions, axis):
     expected_output = np.concatenate(tuple([input] * repetitions), axis)
-    output = F.replicate(input, repetitions, axis)
+    output = F.replicate(input, repetitions, axis=axis)
     assert np.array_equal(output, expected_output)
 
 

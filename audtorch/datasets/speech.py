@@ -71,8 +71,9 @@ class MozillaCommonVoice(CsvDataset):
     url = ('https://common-voice-data-download.s3.amazonaws.com/'
            'cv_corpus_v1.tar.gz')
 
-    def __init__(self, root, csv_file='cv-valid-train.csv', label_type='text',
-                 transform=None, target_transform=None, download=False):
+    def __init__(self, root, *, csv_file='cv-valid-train.csv',
+                 label_type='text', transform=None, target_transform=None,
+                 download=False):
         super().__init__(root, csv_file, sampling_rate=48000, sep=',',
                          column_labels=label_type, column_filename='filename',
                          transform=transform,

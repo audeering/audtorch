@@ -9,7 +9,7 @@ import numpy as np
 import audiofile as af
 
 
-def load(filename, duration=None, offset=0):
+def load(filename, *, duration=None, offset=0):
     r"""Load audio file.
 
     If an error occurrs during loading as the file could not be found,
@@ -52,7 +52,7 @@ def load(filename, duration=None, offset=0):
     return signal, sampling_rate
 
 
-def download_url(url, root, filename=None, md5=None):
+def download_url(url, root, *, filename=None, md5=None):
     r"""Download a file from an url to a specified directory.
 
     Args:
@@ -92,7 +92,7 @@ def download_url(url, root, filename=None, md5=None):
     return os.path.expanduser(filename)
 
 
-def extract_archive(filename, out_path=None, remove_finished=False):
+def extract_archive(filename, *, out_path=None, remove_finished=False):
     r"""Extract archive.
 
     Currently `tar.gz` and `tar` archives are supported.
@@ -220,7 +220,7 @@ def ensure_df_not_empty(df, labels=None):
         raise RuntimeError(error_message)
 
 
-def files_and_labels_from_df(df, root='.', column_labels='label',
+def files_and_labels_from_df(df, *, root='.', column_labels='label',
                              column_filename='filename'):
     r"""Extract list of files and labels from dataframe columns.
 

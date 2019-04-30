@@ -87,13 +87,13 @@ class Crop(object):
                [4]])
 
     """
-    def __init__(self, idx, axis=-1):
+    def __init__(self, idx, *, axis=-1):
         super().__init__()
         self.idx = idx
         self.axis = axis
 
     def __call__(self, signal):
-        return F.crop(signal, self.idx, self.axis)
+        return F.crop(signal, self.idx, axis=self.axis)
 
     def __repr__(self):
         options = 'idx={0}, axis={1}'.format(self.idx, self.axis)
@@ -143,7 +143,8 @@ class RandomCrop(object):
                [5, 6]])
 
     """
-    def __init__(self, size, method='pad', axis=-1, fix_randomization=False):
+    def __init__(self, size, *, method='pad', axis=-1,
+                 fix_randomization=False):
         super().__init__()
         self.size = size
         self.axis = axis
@@ -229,14 +230,14 @@ class Pad(object):
                [3, 4, 0]])
 
     """
-    def __init__(self, padding, value=0, axis=-1):
+    def __init__(self, padding, *, value=0, axis=-1):
         super().__init__()
         self.padding = padding
         self.value = value
         self.axis = axis
 
     def __call__(self, signal):
-        return F.pad(signal, self.padding, self.value, self.axis)
+        return F.pad(signal, self.padding, value=self.value, axis=self.axis)
 
     def __repr__(self):
         options = ('padding={0}, value={1}, axis={2}'
@@ -280,7 +281,7 @@ class RandomPad(object):
                [0, 3, 4]])
 
     """
-    def __init__(self, padding, value=0, axis=-1, fix_randomization=False):
+    def __init__(self, padding, *, value=0, axis=-1, fix_randomization=False):
         super().__init__()
         self.padding = padding
         self.value = value
@@ -291,7 +292,7 @@ class RandomPad(object):
     def __call__(self, signal):
         if not self.pad or not self.fix_randomization:
             self.pad = self.random_split(self.padding)
-        return F.pad(signal, self.pad, self.value, self.axis)
+        return F.pad(signal, self.pad, value=self.value, axis=self.axis)
 
     def __repr__(self):
         options = ('padding={0}, value={1}, axis={2}'
@@ -341,13 +342,13 @@ class Replicate(object):
         array([[1, 2, 3, 1, 2, 3, 1, 2, 3]])
 
     """
-    def __init__(self, repetitions, axis=-1):
+    def __init__(self, repetitions, *, axis=-1):
         super().__init__()
         self.repetitions = repetitions
         self.axis = axis
 
     def __call__(self, signal):
-        return F.replicate(signal, self.repetitions, self.axis)
+        return F.replicate(signal, self.repetitions, axis=self.axis)
 
     def __repr__(self):
         options = ('repetitions={0}, axis={1}'
@@ -387,7 +388,8 @@ class RandomReplicate(object):
 
     """
 
-    def __init__(self, max_repetitions=100, axis=-1, fix_randomization=False):
+    def __init__(self, *, max_repetitions=100, axis=-1,
+                 fix_randomization=False):
         super().__init__()
         self.repetitions = None
         self.max_repetitions = max_repetitions
@@ -397,7 +399,7 @@ class RandomReplicate(object):
     def __call__(self, signal):
         if self.repetitions is None or not self.fix_randomization:
             self.repetitions = random.randint(0, self.max_repetitions)
-        return F.replicate(signal, self.repetitions, self.axis)
+        return F.replicate(signal, self.repetitions, axis=self.axis)
 
     def __repr__(self):
         options = ('max_repetitions={0}, repetitions={1}, axis={2}'
@@ -445,7 +447,7 @@ class Expand(object):
         array([[1, 2, 3, 0, 0, 0]])
 
     """
-    def __init__(self, size, method='pad', axis=-1):
+    def __init__(self, size, *, method='pad', axis=-1):
         super().__init__()
         self.size = size
         self.method = method
@@ -505,14 +507,15 @@ class Downmix(object):
         array([[2, 3]])
 
     """
-    def __init__(self, channels, method='mean', axis=-2):
+    def __init__(self, channels, *, method='mean', axis=-2):
         super().__init__()
         self.channels = channels
         self.method = method
         self.axis = axis
 
     def __call__(self, signal):
-        return F.downmix(signal, self.channels, self.method, self.axis)
+        return F.downmix(signal, self.channels, method=self.method,
+                         axis=self.axis)
 
     def __repr__(self):
         options = ('channels={0}, method={1}, axis={2}'
@@ -557,14 +560,15 @@ class Upmix(object):
                [2., 3.]])
 
     """
-    def __init__(self, channels, method='mean', axis=-2):
+    def __init__(self, channels, *, method='mean', axis=-2):
         super().__init__()
         self.channels = channels
         self.method = method
         self.axis = axis
 
     def __call__(self, signal):
-        return F.upmix(signal, self.channels, self.method, self.axis)
+        return F.upmix(signal, self.channels, method=self.method,
+                       axis=self.axis)
 
     def __repr__(self):
         options = ('channels={0}, method={1}, axis={2}'
@@ -606,16 +610,18 @@ class Remix(object):
                [2., 3.]])
 
     """
-    def __init__(self, channels, method='mean', axis=-2):
+    def __init__(self, channels, *, method='mean', axis=-2):
         super().__init__()
         self.channels = channels
         self.axis = axis
 
     def __call__(self, signal):
         if self.channels > np.atleast_2d(signal).shape[self.axis]:
-            signal = F.upmix(signal, self.channels, 'mean', self.axis)
+            signal = F.upmix(signal, self.channels, method='mean',
+                             axis=self.axis)
         elif self.channels < np.atleast_2d(signal).shape[self.axis]:
-            signal = F.downmix(signal, self.channels, 'mean', self.axis)
+            signal = F.downmix(signal, self.channels, method='mean',
+                               axis=self.axis)
         return signal
 
     def __repr__(self):
@@ -646,7 +652,7 @@ class Normalize(object):
         array([0.25, 0.5 , 0.75, 1.  ])
 
     """
-    def __init__(self, axis=-1):
+    def __init__(self, *, axis=-1):
         super().__init__()
         self.axis = axis
 
@@ -696,7 +702,7 @@ class Resample(object):
         array([0, 2])
 
     """  # noqa: E501
-    def __init__(self, input_sampling_rate, output_sampling_rate,
+    def __init__(self, input_sampling_rate, output_sampling_rate, *,
                  method='kaiser_best', axis=-1):
         super().__init__()
         self.input_sampling_rate = input_sampling_rate
@@ -764,7 +770,7 @@ class Spectrogram(object):
                [1., 3., 3.]], dtype=float32)
 
     """
-    def __init__(self, window_size, hop_size, window='hann', axis=-1):
+    def __init__(self, window_size, hop_size, *, window='hann', axis=-1):
         super().__init__()
         self.window_size = window_size
         self.hop_size = hop_size
@@ -835,8 +841,8 @@ class LogSpectrogram(object):
                [1.1920928e-07, 1.0986123e+00, 1.0986123e+00]], dtype=float32)
 
     """  # noqa: E501
-    def __init__(self, window_size, hop_size, window='hann', normalize=False,
-                 magnitude_boost=1e-7, axis=-1):
+    def __init__(self, window_size, hop_size, *, window='hann',
+                 normalize=False, magnitude_boost=1e-7, axis=-1):
         super().__init__()
         self.window_size = window_size
         self.hop_size = hop_size

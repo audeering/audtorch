@@ -51,7 +51,7 @@ class AudioDataset(Dataset):
         'speech'
 
     """
-    def __init__(self, root, files, targets, sampling_rate, transform=None,
+    def __init__(self, root, files, targets, sampling_rate, *, transform=None,
                  target_transform=None, download=False):
         self.root = os.path.expanduser(root)
         self.files = [os.path.join(self.root, f) for f in files]
@@ -192,7 +192,7 @@ class PandasDataset(AudioDataset):
         'age'
 
     """
-    def __init__(self, root, df, sampling_rate, column_labels='label',
+    def __init__(self, root, df, sampling_rate, *, column_labels='label',
                  column_filename='filename', transform=None,
                  target_transform=None, download=False):
         files, labels = \
@@ -266,7 +266,7 @@ class CsvDataset(PandasDataset):
         'age'
 
     """
-    def __init__(self, root, csv_file, sampling_rate, sep=',',
+    def __init__(self, root, csv_file, sampling_rate, *, sep=',',
                  column_labels='label', column_filename='filename',
                  transform=None, target_transform=None, download=False):
         self.root = os.path.expanduser(root)
