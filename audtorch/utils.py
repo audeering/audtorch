@@ -1,4 +1,36 @@
+from copy import deepcopy
+
 import numpy as np
+
+
+def flatten_list(nested_list):
+    """Flatten an arbitrarily nested list.
+
+    Implemented without  recursion to avoid stack overflows.
+    Returns a new list, the original list is unchanged.
+
+    Args:
+        nested_list (list): nested list
+
+    Returns:
+        list: flattened list
+
+    Example:
+        >>> flatten_list([1, 2, 3, [4], [], [[[[[[[[[5]]]]]]]]]])
+        [1, 2, 3, 4, 5]
+        >>> flatten_list([[1, 2], 3])
+        [1, 2, 3]
+
+    """
+    def _flat_generator(nested_list):
+        while nested_list:
+            sublist = nested_list.pop(0)
+            if isinstance(sublist, list):
+                nested_list = sublist + nested_list
+            else:
+                yield sublist
+    nested_list = deepcopy(nested_list)
+    return list(_flat_generator(nested_list))
 
 
 def to_tuple(input, *, tuple_len=2):
