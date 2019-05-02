@@ -9,6 +9,9 @@ from .utils import (load, sampling_rate_after_transform)
 from .utils import (files_and_labels_from_df)
 
 
+__doctest_skip__ = ['*']
+
+
 class AudioDataset(Dataset):
     r"""Basic audio signal data set.
 
@@ -37,10 +40,10 @@ class AudioDataset(Dataset):
             the target. Default: `None`
 
     Example:
-        >>> data = datasets.AudioDataset(root='/data',
-        ...                              files=['speech.wav', 'noise.wav'],
-        ...                              targets=['speech', 'noise'],
-        ...                              sampling_rate=8000)
+        >>> data = AudioDataset(root='/data',
+        ...                     files=['speech.wav', 'noise.wav'],
+        ...                     targets=['speech', 'noise'],
+        ...                     sampling_rate=8000)
         >>> print(data)
         Dataset AudioDataset
             Number of data points: 2
@@ -178,10 +181,10 @@ class PandasDataset(AudioDataset):
             the target. Default: `None`
 
     Example:
-        >>> data = datasets.PandasDataset(root='/data',
-        ...                               df=dataset_dataframe,
-        ...                               sampling_rate=44100,
-        ...                               column_labels='age')
+        >>> data = PandasDataset(root='/data',
+        ...                      df=dataset_dataframe,
+        ...                      sampling_rate=44100,
+        ...                      column_labels='age')
         >>> print(data)
         Dataset AudioDataset
             Number of data points: 120
@@ -252,10 +255,10 @@ class CsvDataset(PandasDataset):
             the target. Default: `None`
 
     Example:
-        >>> data = datasets.CsvDataset(root='/data',
-        ...                            csv_file='train.csv',
-        ...                            sampling_rate=44100,
-        ...                            column_labels='age')
+        >>> data = CsvDataset(root='/data',
+        ...                   csv_file='train.csv',
+        ...                   sampling_rate=44100,
+        ...                   column_labels='age')
         >>> print(data)
         Dataset AudioDataset
             Number of data points: 120
@@ -295,7 +298,7 @@ class CsvDataset(PandasDataset):
 
 
 def _include_repr(name, obj):
-    """Include __repr__ from other object as indented string.
+    r"""Include __repr__ from other object as indented string.
 
     Args:
         name (str): Name of the object to be documented, e.g. "Transform".

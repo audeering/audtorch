@@ -27,7 +27,7 @@ def crop(signal, idx, *, axis=-1):
 
     Example:
         >>> a = np.array([[1, 2], [3, 4]])
-        >>> F.crop(a, 1)
+        >>> crop(a, 1)
         array([[2],
                [4]])
 
@@ -64,7 +64,7 @@ def pad(signal, padding, *, value=0, axis=-1):
 
     Example:
         >>> a = np.array([[1, 2], [3, 4]])
-        >>> F.pad(a, (0, 1))
+        >>> pad(a, (0, 1))
         array([[1, 2, 0],
                [3, 4, 0]])
 
@@ -90,7 +90,7 @@ def replicate(signal, repetitions, *, axis=-1):
 
     Example:
         >>> a = np.array([1, 2, 3])
-        >>> F.replicate(a, 3)
+        >>> replicate(a, 3)
         array([1, 2, 3, 1, 2, 3, 1, 2, 3])
 
     """
@@ -119,7 +119,7 @@ def downmix(signal, channels, *, method='mean', axis=-2):
 
     Example:
         >>> a = np.array([[1, 2], [3, 4]])
-        >>> F.downmix(a, 1)
+        >>> downmix(a, 1)
         array([[2, 3]])
 
     """
@@ -162,7 +162,7 @@ def upmix(signal, channels, *, method='mean', axis=-2):
 
     Example:
         >>> a = np.array([[1, 2], [3, 4]])
-        >>> F.upmix(a, 3)
+        >>> upmix(a, 3)
         array([[1., 2.],
                [3., 4.],
                [2., 3.]])
@@ -205,7 +205,7 @@ def additive_mix(signal1, signal2, ratio):
 
     Example:
         >>> a = np.array([[1, 2], [3, 4]])
-        >>> F.additive_mix(a, a, -10 * np.log10(0.5 ** 2))
+        >>> additive_mix(a, a, -10 * np.log10(0.5 ** 2))
         array([[1.5, 3. ],
                [4.5, 6. ]])
 
@@ -244,7 +244,7 @@ def normalize(signal, *, axis=None):
 
     Example:
         >>> a = np.array([[1, 2], [3, 4]])
-        >>> F.normalize(a)
+        >>> normalize(a)
         array([[0.25, 0.5 ],
                [0.75, 1.  ]])
 
@@ -281,7 +281,7 @@ def stft(signal, window_size, hop_size, *, window='hann', axis=-1):
 
     Example:
         >>> a = np.array([1., 2., 3., 4.])
-        >>> F.stft(a, 2, 1)
+        >>> stft(a, 2, 1)
         array([[ 1.+0.j,  2.+0.j,  3.+0.j,  4.+0.j,  3.+0.j],
                [-1.+0.j, -2.+0.j, -3.+0.j, -4.+0.j, -3.+0.j]], dtype=complex64)
 
@@ -326,8 +326,8 @@ def istft(spectrogram, window_size, hop_size, *, window='hann', axis=-2):
 
     Example:
         >>> a = np.array([1., 2., 3., 4.])
-        >>> D = F.stft(a, 4, 1)
-        >>> F.istft(D, 4, 1)
+        >>> D = stft(a, 4, 1)
+        >>> istft(D, 4, 1)
         array([1., 2., 3., 4.], dtype=float32)
 
     """

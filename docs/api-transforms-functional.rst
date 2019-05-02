@@ -10,11 +10,6 @@ create the actual transforms.
     All of the transforms work currently only with :py:obj:`numpy.array` as
     inputs, not :py:obj:`torch.Tensor`.
 
-To run the examples execute the following commands first::
-
-    >>> import numpy as np
-    >>> from audtorch.transforms import functional as F
-
 .. automodule:: audtorch.transforms.functional
 
 crop

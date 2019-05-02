@@ -27,11 +27,11 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '**.ipynb_checkpoints']
 pygments_style = None
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon',  # support for Google-style docstrings
+    'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
-    'sphinx.ext.viewcode',
-    'sphinxcontrib.katex',
+    'sphinx.ext.napoleon',  # support for Google-style docstrings
     'sphinxcontrib.bibtex',
+    'sphinxcontrib.katex',
 ]
 
 napoleon_use_ivar = True  # List of class attributes
