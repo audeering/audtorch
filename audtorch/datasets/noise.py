@@ -5,6 +5,9 @@ from ..transforms import functional as F
 from .utils import sampling_rate_after_transform
 
 
+__doctest_skip__ = ['*']
+
+
 class WhiteNoise(Dataset):
     r"""White noise data set.
 
