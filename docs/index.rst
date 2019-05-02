@@ -16,6 +16,7 @@
 .. toctree::
     :caption: API Documentation
 
+    api-collate
     api-datasets
     api-transforms
     api-transforms-functional
