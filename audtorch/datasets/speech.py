@@ -1,5 +1,6 @@
-from .utils import (download_url, extract_archive)
+import os
 
+from .utils import (download_url, extract_archive)
 from .common import CsvDataset
 
 
@@ -79,10 +80,15 @@ class MozillaCommonVoice(CsvDataset):
     def __init__(self, root, *, csv_file='cv-valid-train.csv',
                  label_type='text', transform=None, target_transform=None,
                  download=False):
+
+        if download:
+            self.root = os.path.expanduser(root)
+            self._download()
+
         super().__init__(root, csv_file, sampling_rate=48000, sep=',',
                          column_labels=label_type, column_filename='filename',
                          transform=transform,
-                         target_transform=target_transform, download=download)
+                         target_transform=target_transform)
 
     def _download(self):
         if self._check_exists():

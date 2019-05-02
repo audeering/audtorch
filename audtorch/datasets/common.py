@@ -56,7 +56,7 @@ class AudioDataset(Dataset):
     """
 
     def __init__(self, root, files, targets, sampling_rate, *, transform=None,
-                 target_transform=None, download=False):
+                 target_transform=None):
         self.root = os.path.expanduser(root)
         self.files = [os.path.join(self.root, f) for f in files]
         self.targets = targets
@@ -65,9 +65,6 @@ class AudioDataset(Dataset):
         self.target_transform = target_transform
 
         assert len(files) == len(targets)
-
-        if download:
-            self._download()
 
         if not self._check_exists():
             raise RuntimeError('Dataset not found.')
@@ -102,11 +99,6 @@ class AudioDataset(Dataset):
     @property
     def sampling_rate(self):
         return sampling_rate_after_transform(self)
-
-    def _download(self):
-        if self._check_exists():
-            return
-        print('This data set provides no download functionality')
 
     def _check_exists(self):
         return os.path.exists(self.root)
@@ -199,14 +191,14 @@ class PandasDataset(AudioDataset):
 
     def __init__(self, root, df, sampling_rate, *, column_labels='label',
                  column_filename='filename', transform=None,
-                 target_transform=None, download=False):
+                 target_transform=None):
         files, labels = \
             files_and_labels_from_df(df, root=root,
                                      column_labels=column_labels,
                                      column_filename=column_filename)
         super().__init__(root, files, targets=labels,
                          sampling_rate=sampling_rate, transform=transform,
-                         target_transform=target_transform, download=download)
+                         target_transform=target_transform)
         self.column_labels = column_labels
 
     def extra_repr(self):
@@ -274,12 +266,9 @@ class CsvDataset(PandasDataset):
 
     def __init__(self, root, csv_file, sampling_rate, *, sep=',',
                  column_labels='label', column_filename='filename',
-                 transform=None, target_transform=None, download=False):
+                 transform=None, target_transform=None):
         self.root = os.path.expanduser(root)
         self.csv_file = os.path.join(self.root, csv_file)
-
-        if download:
-            self._download()
 
         if not os.path.isfile(self.csv_file):
             raise FileNotFoundError('CSV file {} not found.'
