@@ -1,5 +1,8 @@
 from copy import deepcopy
+import threading
+import queue
 
+from tqdm import tqdm
 import numpy as np
 
 
@@ -106,3 +109,84 @@ def power(signal):
 
     """
     return np.sum(np.abs(signal) ** 2) / signal.size
+
+
+def run_worker_threads(num_workers, task_fun, params, progress_bar=False):
+    r"""Run parallel tasks using worker threads.
+
+    Args:
+        num_workers (int): number of worker threads.
+        task_fun (Callable): task function with one or more
+            parameters, e.g. x, y, z, and optionally returning a value.
+        params (list of tuples): list of tuples holding parameters
+            for each task, e.g. [(x1, y1, z1), (x2, y2, z2), ...].
+        progress_bar (bool): show a progress bar. Default: False
+
+    Returns:
+        list: result values in order of `params`
+
+    Example:
+        >>> params = [(0.1,)] * 100
+        >>> run_worker_threads(5, time.sleep, params, progress_bar=True)
+        '100%|██████████| 100/100 [00:02<00:00, 49.69it/s]'
+
+    """
+    num_workers = max(0, num_workers)
+    n_tasks = len(params)
+    results = [None] * n_tasks
+
+    # do not use more workers as needed
+    num_workers = n_tasks if num_workers == 0 else min(num_workers, n_tasks)
+
+    # num_workers == 1 -> run sequentially
+    if num_workers == 1:
+        for index, param in enumerate(params):
+            results[index] = task_fun(*param)
+
+    # number_workers > 1 -> parallalize work
+    else:
+
+        # define worker thread
+        def _worker():
+            while True:
+                item = q.get()
+                if item is None:
+                    break
+                index, param = item
+                results[index] = task_fun(*param)
+                q.task_done()
+
+        # create queue, possibly with a progress bar
+        if progress_bar:
+            class QueueWithProgbar(queue.Queue):
+                def __init__(self, n_tasks, maxsize=0):
+                    super().__init__(maxsize)
+                    self.pbar = tqdm(total=n_tasks)
+                def task_done(self):
+                    super().task_done()
+                    self.pbar.update(1)
+            q = QueueWithProgbar(n_tasks)
+        else:
+            q = queue.Queue()
+
+        # fill queue
+        for index, param in enumerate(params):
+            q.put((index, param))
+
+        # start workers
+        threads = []
+        for i in range(num_workers):
+            t = threading.Thread(target=_worker)
+            t.start()
+            threads.append(t)
+
+        # block until all tasks are done
+        q.join()
+
+        # stop workers
+        for _ in range(num_workers):
+            q.put(None)
+        for t in threads:
+            t.join()
+
+    return results
