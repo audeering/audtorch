@@ -41,6 +41,19 @@ MozillaCommonVoice
     :members:
 
 
+Scene Analysis
+--------------
+
+This section contains data sets that can be primarily used for the analysis of
+acoustic scenes.
+
+AudioSet
+~~~~~~~~
+
+.. autoclass:: AudioSet
+    :members:
+
+
 Noise
 -----
 
