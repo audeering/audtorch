@@ -87,7 +87,7 @@ class Seq2Seq(Collation):
     Example:
         >>> # data format: FS = (feature dimension, sequence dimension)
         >>> batch = [[torch.zeros(161, 108), torch.zeros(10)],
-        >>>          [torch.zeros(161, 223), torch.zeros(12)]]
+        ...          [torch.zeros(161, 223), torch.zeros(12)]]
         >>> collate_fn = Seq2Seq([-1, -1], batch_first=None)
         >>> features = collate_fn(batch)[0]
         >>> list(features.shape)
