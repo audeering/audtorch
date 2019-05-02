@@ -20,7 +20,7 @@ expected_2 = [[2, 3, 4, 6], [2, 6, 3, 4], [6, 2, 3, 4]]
                          [(batch_1, sequence_dimensions_1, expected_1),
                           (batch_2, sequence_dimensions_2, expected_2)])
 @pytest.mark.parametrize("batch_first", [None, True, False])
-def test_seq_2_seq(batch, sequence_dimensions, expected, batch_first):
+def test_seq2seq(batch, sequence_dimensions, expected, batch_first):
 
     collation = collate.Seq2Seq(
         sequence_dimensions=sequence_dimensions,

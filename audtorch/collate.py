@@ -1,9 +1,3 @@
-r"""To run the examples execute the following commands first::
-
-    >>> import torch
-    >>> from audtorch import collate
-
-"""
 import torch
 from torch.nn.utils.rnn import pad_sequence
 
@@ -69,20 +63,17 @@ class Seq2Seq(Collation):
 
           - `features`:
 
-            - if :attr:`batch_first` is None: :math:`(N, *, S, *)`,
+            - :math:`(N, *, S, *)` if :attr:`batch_first` is `None`,
               i.e. the original input shape with :math:`N` prepended
               which is the batch size
-            - if :attr:`batch_first` == True: :math:`(N, S, *, *)`
-            - if :attr:`batch_first` == False: :math:`(S, N, *, *)`
+            - :math:`(N, S, *, *)` if :attr:`batch_first` is `True`
+            - :math:`(S, N, *, *)` if :attr:`batch_first` is `False`
 
           - `feats_lengths`: :math:`(N,)`
 
           - `targets`: analogous to `features`
 
           - `tgt_lengths`: analogous to `feats_lengths`
-
-    Note:
-        The order of :math:`*`-dimensions is kept.
 
     Example:
         >>> # data format: FS = (feature dimension, sequence dimension)
