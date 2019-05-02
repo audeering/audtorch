@@ -5,6 +5,11 @@ Utility functions.
 
 .. automodule:: audtorch.utils
 
+flatten_list
+------------
+
+.. autofunction:: flatten_list
+
 to_tuple
 --------
 

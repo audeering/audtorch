@@ -7,6 +7,16 @@ import audtorch as at
 xfail = pytest.mark.xfail
 
 
+@pytest.mark.parametrize('nested_list,expected_list', [
+    ([1, 2, 3, [4], [], [[[[[[[[[5]]]]]]]]]], [1, 2, 3, 4, 5]),
+    ([[1, 2], 3], [1, 2, 3]),
+    ([1, 2, 3], [1, 2, 3]),
+])
+def test_flatten_list(nested_list, expected_list):
+    flattened_list = at.utils.flatten_list(nested_list)
+    assert flattened_list == expected_list
+
+
 @pytest.mark.parametrize('input,tuple_len,expected_output', [
     ('aa', 2, ('a', 'a')),
     (2, 1, (2,)),
