@@ -9,6 +9,9 @@ import numpy as np
 import audiofile as af
 
 
+__doctest_skip__ = ['load']
+
+
 def load(filename, *, duration=None, offset=0):
     r"""Load audio file.
 
@@ -31,7 +34,7 @@ def load(filename, *, duration=None, offset=0):
             * **int**: sample rate of the audio file
 
     Example:
-        >>> signal, sampling_rate = load('speech.wav')  # doctest: +SKIP
+        >>> signal, sampling_rate = load('speech.wav')
 
     """
     signal = np.array([[]])  # empty signal of shape (1, 0)
