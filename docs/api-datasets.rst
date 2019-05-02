@@ -3,12 +3,6 @@ audtorch.datasets
 
 Audio data sets.
 
-To run the examples execute the following commands first::
-
-    >>> import sounddevice
-    >>> import pandas as pd
-    >>> from audtorch import datasets, transforms
-
 .. automodule:: audtorch.datasets
 
 

@@ -9,12 +9,6 @@ and work on the data before it will be returned.
     All of the transforms work currently only with :py:obj:`numpy.array` as
     inputs, not :py:obj:`torch.Tensor`.
 
-To run the examples execute the following commands first::
-
-    >>> import random
-    >>> import numpy as np
-    >>> from audtorch import transforms, datasets
-
 .. automodule:: audtorch.transforms
 
 Compose
