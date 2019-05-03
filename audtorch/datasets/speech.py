@@ -135,7 +135,7 @@ class LibriSpeech(PandasDataset):
 
     Args:
         root (str): root directory of data set
-        sets (str or list, optional): desired sets of 'LibriSpeech'.
+        sets (str or list, optional): desired sets of `LibriSpeech`.
             Mutually exclusive with :attr:`dataframe`.
             Default: `None`
         dataframe (pandas.DataFrame, optional): pandas data frame containing
