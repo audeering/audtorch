@@ -81,6 +81,11 @@ download_url
 
 .. autofunction:: download_url
 
+download_url_list
+~~~~~~~~~~~~~~~~~
+
+.. autofunction:: download_url_list
+
 extract_archive
 ~~~~~~~~~~~~~~~
 

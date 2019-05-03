@@ -8,6 +8,8 @@ from tqdm import tqdm
 import numpy as np
 import audiofile as af
 
+from ..utils import run_worker_threads
+
 
 __doctest_skip__ = ['load']
 
@@ -93,6 +95,35 @@ def download_url(url, root, *, filename=None, md5=None):
                 urllib.request.urlretrieve(url, filename,
                                            reporthook=bar_updater)
     return os.path.expanduser(filename)
+
+
+def download_url_list(urls, root, *, num_workers=0):
+    r"""Download files from a list of URLs to a specified directory.
+
+    Args:
+        urls (list of str or dict): either list of URLs or dictionary
+            with URLs as keys and with either filenames or tuples of
+            filename and MD5 checksum as values. Uses basename of URL if
+            filename is `None`. Performs no check if MD5 checksum is `None`
+        root (str): directory to place downloaded files in
+        num_workers (int, optional): number of worker threads
+            (0 = len(urls)). Default: `0`
+
+    """
+    # always convert to dict
+    if type(urls) is list:
+        urls = {x: None for x in urls}
+
+    # download file and extract
+    def _task(url, filename):
+        md5 = None
+        if type(filename) is tuple:
+            filename, md5 = filename
+        return download_url(url, root, filename=filename, md5=md5)
+
+    # start workers
+    params = [(url, filename) for url, filename in urls.items()]
+    return run_worker_threads(num_workers, _task, params)
 
 
 def extract_archive(filename, *, out_path=None, remove_finished=False):
