@@ -206,7 +206,7 @@ class LibriSpeech(PandasDataset):
             self._download()
 
         if not self._check_exists():
-            raise RuntimeError('Data set not found.')
+            raise RuntimeError('Requested sets of data set not found.')
 
         if dataframe is None:
             files = self._get_files()
@@ -221,15 +221,21 @@ class LibriSpeech(PandasDataset):
             transform=transform,
             target_transform=target_transform)
 
+    def _check_exists(self):
+        return all([os.path.exists(os.path.join(self.root, s))
+                    for s in self.sets])
+
     def _download(self):
-        if self._check_exists():
+        absent_sets = [s for s in self.sets
+                       if not os.path.exists(os.path.join(self.root, s))]
+        if not absent_sets:
             return
 
         out_path = os.path.join(self.root, "tmp")
         if not os.path.exists(out_path):
             os.makedirs(out_path)
 
-        urls = [self.urls[s] for s in self.sets]
+        urls = [self.urls[s] for s in absent_sets]
         filenames = download_url_list(urls, out_path, num_workers=0)
         for filename in filenames:
             extract_archive(os.path.join(out_path, filename),
