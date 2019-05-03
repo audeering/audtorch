@@ -151,7 +151,7 @@ class LibriSpeech(PandasDataset):
             if not present. Default: `False`
 
     Example:
-        >>> data = LibriSpeech(sets='dev-clean')
+        >>> data = LibriSpeech(root='/data/LibriSpeech', sets='dev-clean')
         >>> print(data)
         Dataset LibriSpeech
             Number of data points: 2703
@@ -227,9 +227,9 @@ class LibriSpeech(PandasDataset):
 
         out_path = os.path.join(self.root, "tmp")
         if not os.path.exists(out_path):
-            os.mkdir(out_path)
+            os.makedirs(out_path)
 
-        urls = [self._urls[s] for s in self.sets]
+        urls = [self.urls[s] for s in self.sets]
         filenames = download_url_list(urls, out_path, num_workers=0)
         for filename in filenames:
             extract_archive(os.path.join(out_path, filename),
