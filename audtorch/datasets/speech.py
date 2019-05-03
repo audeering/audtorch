@@ -155,13 +155,13 @@ class LibriSpeech(PandasDataset):
         >>> print(data)
         Dataset LibriSpeech
             Number of data points: 2703
-            Root Location: .../librispeech/am/LibriSpeech
+            Root Location: /data/LibriSpeech
             Sampling Rate: 16000Hz
             Sets: dev-clean
-        >>> sig, label = data[8]
+        >>> signal, label = data[8]
         >>> label
         AS FOR ETCHINGS THEY ARE OF TWO KINDS BRITISH AND FOREIGN
-        >>> sounddevice.play(sig, data.sampling_rate)
+        >>> sounddevice.play(signal.transpose(), data.sampling_rate)
 
     """
 
