@@ -41,6 +41,13 @@ MozillaCommonVoice
     :members:
 
 
+LibriSpeech
+~~~~~~~~~~~
+
+.. autoclass:: LibriSpeech
+    :members:
+
+
 Scene Analysis
 --------------
 
