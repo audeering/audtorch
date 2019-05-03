@@ -37,7 +37,7 @@ If you prefer, you can also replace the last command with::
 Pull requests
 -------------
 
-When creating anew pull request, please conside the following points:
+When creating a new pull request, please conside the following points:
 
 * Focus on a single topic as it is easier to review short pull requests
 * Ensure your code is readable and `PEP 8`_ compatible
