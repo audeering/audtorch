@@ -45,3 +45,12 @@ def test_energy(input, expected_output):
 def test_power(input, expected_output):
     output = at.utils.power(input)
     assert output == expected_output
+
+
+@pytest.mark.parametrize('n_workers,task_fun,params', [
+    (3, lambda x, n: x ** n, [(2, n) for n in range(10)]),
+])
+def test_run_worker_threads(n_workers, task_fun, params):
+    list1 = at.utils.run_worker_threads(n_workers, task_fun, params)
+    list2 = [task_fun(*p) for p in params]
+    assert len(list1) == len(list2) and list1 == list2

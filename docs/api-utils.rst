@@ -24,3 +24,8 @@ power
 -----
 
 .. autofunction:: power
+
+run_worker_threads
+------------------
+
+.. autofunction:: run_worker_threads
