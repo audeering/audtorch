@@ -1,9 +1,11 @@
 import os
 from warnings import warn
+from tabulate import tabulate
 
 import pandas as pd
 import resampy
-from torch.utils.data import Dataset
+from torch.utils.data import (Dataset, ConcatDataset)
+from audtorch.datasets.utils import ensure_same_sampling_rate
 
 from .utils import (load, sampling_rate_after_transform)
 from .utils import (files_and_labels_from_df)
@@ -283,6 +285,91 @@ class CsvDataset(PandasDataset):
         fmt_str = super().extra_repr()
         fmt_str += ('    CSV file: {}\n'
                     .format(os.path.basename(self.csv_file)))
+        return fmt_str
+
+
+class AudioConcatDataset(ConcatDataset):
+    r"""Concatenation data set of multiple audio data sets.
+
+    This data set checks that all audio data sets are
+    compatible with respect to the sampling rate which they
+    are processed with.
+
+    * :attr:`sampling_rate` holds the consistent sampling rate of the
+      concatenated data set
+    * :attr:`datasets` holds a list of all audio data sets
+    * :attr:`cumulative_sizes` holds a list of sizes accumulated over all
+      audio data sets, i.e. [len(data1), len(data1) + len(data2), ...]
+
+    Args:
+        datasets (list of audtorch.datasets): Audio data sets
+            with property `sampling_rate`.
+
+    Example:
+        >>> dev_clean = LibriSpeech(sets='dev-clean')
+        >>> dev_other = LibriSpeech(sets='dev-other')
+        >>> data = AudioConcatDataset([dev_clean, dev_other])
+        >>> print(data)
+        Data set AudioConcatDataset
+        Number of data points: 5567
+        Sampling Rate: 16000Hz
+        <BLANKLINE>
+        data sets      data points  extra
+        -----------  -------------  ---------------
+        LibriSpeech           2703  Sets: dev-clean
+        LibriSpeech           2864  Sets: dev-other
+        <BLANKLINE>
+        >>> signal, label = data[8]
+        >>> label
+        AS FOR ETCHINGS THEY ARE OF TWO KINDS BRITISH AND FOREIGN
+        >>> sounddevice.play(signal.transpose(), data.sampling_rate)
+
+    """
+
+    def __init__(self, datasets):
+        super().__init__(datasets)
+        ensure_same_sampling_rate(datasets)
+
+    @property
+    def sampling_rate(self):
+        return self.datasets[0].sampling_rate
+
+    def extra_repr(self):
+        r"""Set the extra representation of the data set.
+
+        To print customized extra information, you should reimplement
+        this method in your own data set. Both single-line and multi-line
+        strings are acceptable.
+
+        The extra information will be shown after the sampling rate entry.
+
+        """
+        return ''
+
+    def __repr__(self):
+        fmt_str = 'Data set ' + self.__class__.__name__ + '\n'
+        fmt_str += '    Number of data points: {}\n'.format(self.__len__())
+        fmt_str += '    Sampling Rate: {}Hz\n'.format(self.sampling_rate)
+        fmt_str += self.extra_repr()
+
+        headers = ['data sets', 'data points',
+                   'transform', 'target_transform', 'extra']
+        tabular_data = [(d.__class__.__name__,
+                         d.__len__(),
+                         d.transform,
+                         d.target_transform,
+                         d.extra_repr()) for d in self.datasets]
+
+        col = 0  # remove columns without any entries
+        for _ in range(len(headers)):
+            if not any([True if row[col] else False for row in tabular_data]):
+                del headers[col]
+                tabular_data = [row[:col] + row[col + 1:]
+                                for row in tabular_data]
+            else:
+                col += 1
+
+        fmt_str += '\n' + tabulate(tabular_data=tabular_data, headers=headers)
         return fmt_str
 
 
