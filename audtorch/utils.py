@@ -111,7 +111,7 @@ def power(signal):
     return np.sum(np.abs(signal) ** 2) / signal.size
 
 
-def run_worker_threads(num_workers, task_fun, params, progress_bar=False):
+def run_worker_threads(num_workers, task_fun, params, *, progress_bar=False):
     r"""Run parallel tasks using worker threads.
 
     Args:
