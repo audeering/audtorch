@@ -115,20 +115,21 @@ def run_worker_threads(num_workers, task_fun, params, progress_bar=False):
     r"""Run parallel tasks using worker threads.
 
     Args:
-        num_workers (int): number of worker threads.
+        num_workers (int): number of worker threads
         task_fun (Callable): task function with one or more
-            parameters, e.g. x, y, z, and optionally returning a value.
+            parameters, e.g. x, y, z, and optionally returning a value
         params (list of tuples): list of tuples holding parameters
-            for each task, e.g. [(x1, y1, z1), (x2, y2, z2), ...].
+            for each task, e.g. [(x1, y1, z1), (x2, y2, z2), ...]
         progress_bar (bool): show a progress bar. Default: False
 
     Returns:
         list: result values in order of `params`
 
     Example:
-        >>> params = [(0.1,)] * 100
-        >>> run_worker_threads(5, time.sleep, params, progress_bar=True)
-        '100%|██████████| 100/100 [00:02<00:00, 49.69it/s]'
+        >>> power = lambda x, n: x ** n
+        >>> params = [(2, n) for n in range(10)]
+        >>> run_worker_threads(3, power, params)
+        [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]
 
     """
     num_workers = max(0, num_workers)
@@ -162,6 +163,7 @@ def run_worker_threads(num_workers, task_fun, params, progress_bar=False):
                 def __init__(self, n_tasks, maxsize=0):
                     super().__init__(maxsize)
                     self.pbar = tqdm(total=n_tasks)
+
                 def task_done(self):
                     super().task_done()
                     self.pbar.update(1)
