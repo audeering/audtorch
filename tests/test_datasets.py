@@ -69,7 +69,7 @@ def test_sampling_rate_after_transform(transform):
     [d0, d0, d0],
     [d1, d1],
     [d2, d2],
-    pytest.param([d0], marks=xfail(raises=RuntimeError)),
+    pytest.param([1], marks=xfail(raises=RuntimeError)),
     pytest.param([d0, d1], marks=xfail(raises=ValueError)),
     pytest.param([d1, d2], marks=xfail(raises=ValueError)),
 ])
