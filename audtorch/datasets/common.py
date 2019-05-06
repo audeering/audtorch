@@ -301,7 +301,7 @@ class AudioConcatDataset(ConcatDataset):
       audio data sets, i.e. `[len(data1), len(data1) + len(data2), ...]`
 
     Args:
-        datasets (list of audtorch.datasets): Audio data sets
+        datasets (list of audtorch.AudioDataset): Audio data sets
             with property `sampling_rate`.
 
     Example:
