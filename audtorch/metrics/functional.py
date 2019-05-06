@@ -56,7 +56,7 @@ def pearsonr(x, y, batch_first=True):
         >>> print('Pearson Correlation between input and target is {0}'.format(output[:, 0]))
         Pearson Correlation between input and target is tensor([ 0.2991, -0.8471,  0.9138])
 
-    """
+    """  # noqa: E501
     assert x.shape == y.shape
 
     if batch_first:
@@ -144,7 +144,7 @@ def concordance_cc(x, y, batch_first=True):
         >>> print('Concordance Correlation between input and target is {0}'.format(output[:, 0]))
         Concordance Correlation between input and target is tensor([ 0.2605, -0.7862,  0.5298])
 
-    """
+    """  # noqa: E501
     assert x.shape == y.shape
 
     if batch_first:

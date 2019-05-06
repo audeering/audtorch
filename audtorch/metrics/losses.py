@@ -45,12 +45,13 @@ class EnergyConservingLoss(nn.L1Loss):
 
     Examples:
         >>> import torch
+        >>> _ = torch.manual_seed(0)
         >>> loss = EnergyConservingLoss()
         >>> input = torch.randn(3, 5, requires_grad=True)
         >>> target = torch.randn(3, 5)
         >>> mixture = torch.randn(3, 5)
         >>> loss(input, target, mixture)
-        tensor(2.0187, grad_fn=<ThAddBackward>)
+        tensor(2.1352, grad_fn=<ThAddBackward>)
 
     """
     def __init__(self, reduction='mean'):
