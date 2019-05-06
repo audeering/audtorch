@@ -1,9 +1,9 @@
 import os
 from warnings import warn
-from tabulate import tabulate
 
 import pandas as pd
 import resampy
+from tabulate import tabulate
 from torch.utils.data import (Dataset, ConcatDataset)
 from audtorch.datasets.utils import ensure_same_sampling_rate
 
