@@ -37,9 +37,18 @@ t3 = transforms.Compose([resamp1, crop, resamp2])
 d0 = datasets.WhiteNoise(duration=0.5, sampling_rate=48000, transform=crop)
 d1 = datasets.WhiteNoise(duration=0.5, sampling_rate=48000, transform=t1)
 d2 = datasets.WhiteNoise(duration=0.5, sampling_rate=48000, transform=t2)
+d3 = datasets.WhiteNoise(duration=0.5, sampling_rate=48000, transform=t3)
 df_empty = pd.DataFrame()
 df_a = pd.DataFrame(data=[0], columns=['a'])
 df_ab = pd.DataFrame(data=[('0', 1)], columns=['a', 'b'])
+
+
+@pytest.mark.parametrize('list_of_datasets', [
+    (d2, d3),
+    pytest.param([d0, d1], marks=xfail(raises=ValueError))
+])
+def test_audioconcatdataset(list_of_datasets):
+    datasets.AudioConcatDataset(list_of_datasets)
 
 
 @pytest.mark.parametrize(('input,expected_output,expected_sampling_rate,'
