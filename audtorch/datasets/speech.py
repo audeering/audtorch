@@ -25,6 +25,7 @@ class MozillaCommonVoice(CsvDataset):
     can specify a list of the labels and the data set will return a dictionary
     containing those labels. The default label that is returned is `text`.
 
+    * :attr:`root` holds the data set's location
     * :attr:`transform` controls the input transform
     * :attr:`target_transform` controls the target transform
     * :attr:`files` controls the audio files of the data set
@@ -33,10 +34,9 @@ class MozillaCommonVoice(CsvDataset):
     * :attr:`original_sampling_rate` holds the sampling rate of the audio files
       of the data set
 
-    In addition, the following class attributes are available
+    In addition, the following class attribute is available
 
     * :attr:`url` holds the download link of the data set
-    * :attr:`root` holds its default location on the NAS
 
     Args:
         root (str): root directory of data set, where the CSV files are
