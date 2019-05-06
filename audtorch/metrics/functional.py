@@ -1,11 +1,3 @@
-r"""To run the examples execute the following commands first::
-
-    >>> import torch
-    >>> from audtorch.metrics import functional as F
-
-"""
-
-
 def _pearsonr(x, y, batch_first=True):
     r"""Computes Pearson Correlation Coefficient across rows.
 

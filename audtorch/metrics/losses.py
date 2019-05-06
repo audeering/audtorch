@@ -1,6 +1,7 @@
 import torch.nn as nn
 import torch.nn.functional as F
 
+
 class EnergyConservingLoss(nn.L1Loss):
     r"""Energy conserving loss.
 
@@ -44,7 +45,7 @@ class EnergyConservingLoss(nn.L1Loss):
 
     Examples:
         >>> import torch
-        >>> loss = metrics.EnergyConservingLoss()
+        >>> loss = EnergyConservingLoss()
         >>> input = torch.randn(3, 5, requires_grad=True)
         >>> target = torch.randn(3, 5)
         >>> mixture = torch.randn(3, 5)

@@ -35,7 +35,7 @@ class PearsonR(object):
     Example:
         >>> import torch
         >>> _ = torch.manual_seed(0)
-        >>> metric = metrics.PearsonR()
+        >>> metric = PearsonR()
         >>> input = torch.rand(3, 5)
         >>> target = torch.rand(3, 5)
         >>> metric(input, target)
@@ -93,7 +93,7 @@ class ConcordanceCC(object):
     Example:
         >>> import torch
         >>> _ = torch.manual_seed(0)
-        >>> metric = metrics.ConcordanceCC()
+        >>> metric = ConcordanceCC()
         >>> input = torch.rand(3, 5)
         >>> target = torch.rand(3, 5)
         >>> metric(input, target)
