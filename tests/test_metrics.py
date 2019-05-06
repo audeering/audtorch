@@ -12,40 +12,40 @@ import audtorch.metrics.functional as F
 def test_energypreservingloss(reduction):
     loss = metrics.EnergyConservingLoss(reduction)
     # Random integers as tensors to avoid precision problems with torch.equal
-    input = torch.randint(100, (3, 5), requires_grad=True)
-    target = torch.randint(100, (3, 5))
-    mixture = torch.randint(100, (3, 5))
+    input = torch.rand((3, 5), requires_grad=True)
+    target = torch.rand((3, 5))
+    mixture = torch.rand((3, 5))
     noise = mixture - target
     noise_predicted = mixture - input
     expected_output = (torch.abs(input - target)
                        + torch.abs(noise - noise_predicted))
     output = loss(input, target, mixture)
-    if reduction is 'none':
+    if reduction == 'none':
         assert torch.equal(output, expected_output)
-    elif reduction is 'sum':
+    elif reduction == 'sum':
         assert torch.equal(output, torch.sum(expected_output))
-    elif reduction is 'elementwise_mean':
+    elif reduction == 'elementwise_mean':
         assert torch.equal(output, torch.mean(expected_output))
 
 
 @pytest.mark.parametrize('shape', [(5,), (5, 3)])
 def test_pearsonr(shape):
-    input = torch.randint(100, shape)
-    target = torch.randint(100, shape)
+    input = torch.rand(shape)
+    target = torch.rand(shape)
 
     if len(shape) == 1:
         r = F._pearsonr(input, target)
         assert r.shape[0] == 1
         np.testing.assert_almost_equal(
             r.numpy()[0], scipy.stats.pearsonr(
-                input.numpy(), target.numpy())[0], decimal=7)
+                input.numpy(), target.numpy())[0], decimal=6)
     else:
         r = F._pearsonr(input, target)
         assert r.shape[0] == shape[0]
         for index, (input_row, target_row) in enumerate(zip(input, target)):
             np.testing.assert_almost_equal(
                 r[index].numpy()[0], scipy.stats.pearsonr(
-                    input_row.numpy(), target_row.numpy())[0], decimal=7)
+                    input_row.numpy(), target_row.numpy())[0], decimal=6)
 
         r = F._pearsonr(input, target, batch_first=False)
         assert r.shape[1] == shape[1]
@@ -53,13 +53,13 @@ def test_pearsonr(shape):
                 zip(input.transpose(0, 1), target.transpose(0, 1))):
             np.testing.assert_almost_equal(
                 r[:, index].numpy()[0], scipy.stats.pearsonr(
-                    input_col.numpy(), target_col.numpy())[0], decimal=7)
+                    input_col.numpy(), target_col.numpy())[0], decimal=6)
 
 
 @pytest.mark.parametrize('shape', [(5,), (5, 3)])
 def test_concordance_cc(shape):
-    input = torch.randint(100, shape)
-    target = torch.randint(100, shape)
+    input = torch.rand(shape)
+    target = torch.rand(shape)
 
     def concordance_cc(x, y):
         r = scipy.stats.pearsonr(x, y)[0]
