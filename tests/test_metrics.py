@@ -8,7 +8,7 @@ import audtorch.metrics as metrics
 import audtorch.metrics.functional as F
 
 
-@pytest.mark.parametrize('reduction', ['none', 'sum', 'elementwise_mean'])
+@pytest.mark.parametrize('reduction', ['none', 'sum', 'mean'])
 def test_energypreservingloss(reduction):
     loss = metrics.EnergyConservingLoss(reduction)
     # Random integers as tensors to avoid precision problems with torch.equal
@@ -24,7 +24,7 @@ def test_energypreservingloss(reduction):
         assert torch.equal(output, expected_output)
     elif reduction == 'sum':
         assert torch.equal(output, torch.sum(expected_output))
-    elif reduction == 'elementwise_mean':
+    elif reduction == 'mean':
         assert torch.equal(output, torch.mean(expected_output))
 
 
