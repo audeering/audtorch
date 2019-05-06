@@ -299,7 +299,7 @@ class AudioConcatDataset(ConcatDataset):
       concatenated data set
     * :attr:`datasets` holds a list of all audio data sets
     * :attr:`cumulative_sizes` holds a list of sizes accumulated over all
-      audio data sets, i.e. [len(data1), len(data1) + len(data2), ...]
+      audio data sets, i.e. `[len(data1), len(data1) + len(data2), ...]`
 
     Args:
         datasets (list of audtorch.datasets): Audio data sets
