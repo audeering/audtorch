@@ -33,6 +33,7 @@ class PearsonR(object):
         - Output: scalar. If reduction is ``'none'``, then :math:`(N, 1)`
 
     Example:
+        >>> import torch
         >>> torch.manual_seed(0)
         >>> metric = metrics.PearsonR()
         >>> input = torch.rand(3, 5)
@@ -90,6 +91,7 @@ class ConcordanceCC(object):
         - Output: scalar. If reduction is ``'none'``, then :math:`(N, 1)`
 
     Example:
+        >>> import torch
         >>> torch.manual_seed(0)
         >>> metric = metrics.ConcordanceCC()
         >>> input = torch.rand(3, 5)

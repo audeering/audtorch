@@ -43,6 +43,7 @@ class EnergyConservingLoss(nn.L1Loss):
           shape as the input
 
     Examples:
+        >>> import torch
         >>> loss = metrics.EnergyConservingLoss()
         >>> input = torch.randn(3, 5, requires_grad=True)
         >>> target = torch.randn(3, 5)
