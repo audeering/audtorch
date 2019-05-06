@@ -22,4 +22,5 @@
     api-transforms
     api-transforms-functional
     api-utils
+    refs
     genindex
