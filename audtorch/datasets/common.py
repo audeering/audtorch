@@ -306,8 +306,10 @@ class AudioConcatDataset(ConcatDataset):
             with property `sampling_rate`.
 
     Example:
-        >>> dev_clean = LibriSpeech(sets='dev-clean')
-        >>> dev_other = LibriSpeech(sets='dev-other')
+        >>> from audtorch.datasets import LibriSpeech
+        >>> import sounddevice as sd
+        >>> dev_clean = LibriSpeech(root='/data/LibriSpeech', sets='dev-clean')
+        >>> dev_other = LibriSpeech(root='/data/LibriSpeech', sets='dev-other')
         >>> data = AudioConcatDataset([dev_clean, dev_other])
         >>> print(data)
         Data set AudioConcatDataset
@@ -318,11 +320,10 @@ class AudioConcatDataset(ConcatDataset):
         -----------  -------------  ---------------
         LibriSpeech           2703  Sets: dev-clean
         LibriSpeech           2864  Sets: dev-other
-        <BLANKLINE>
         >>> signal, label = data[8]
         >>> label
         AS FOR ETCHINGS THEY ARE OF TWO KINDS BRITISH AND FOREIGN
-        >>> sounddevice.play(signal.transpose(), data.sampling_rate)
+        >>> sd.play(signal.transpose(), data.sampling_rate)
 
     """
 
