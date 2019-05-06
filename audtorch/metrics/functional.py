@@ -154,7 +154,7 @@ def concordance_cc(x, y, batch_first=True):
 
     bessel_correction_term = (x.shape[dim] - 1) / x.shape[dim]
 
-    r = _pearsonr(x, y, batch_first)
+    r = pearsonr(x, y, batch_first)
     x_mean = x.mean(dim=dim, keepdim=True)
     y_mean = y.mean(dim=dim, keepdim=True)
     x_std = x.std(dim=dim, keepdim=True)

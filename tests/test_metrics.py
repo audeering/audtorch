@@ -34,20 +34,20 @@ def test_pearsonr(shape):
     target = torch.rand(shape)
 
     if len(shape) == 1:
-        r = F._pearsonr(input, target)
+        r = F.pearsonr(input, target)
         assert r.shape[0] == 1
         np.testing.assert_almost_equal(
             r.numpy()[0], scipy.stats.pearsonr(
                 input.numpy(), target.numpy())[0], decimal=6)
     else:
-        r = F._pearsonr(input, target)
+        r = F.pearsonr(input, target)
         assert r.shape[0] == shape[0]
         for index, (input_row, target_row) in enumerate(zip(input, target)):
             np.testing.assert_almost_equal(
                 r[index].numpy()[0], scipy.stats.pearsonr(
                     input_row.numpy(), target_row.numpy())[0], decimal=6)
 
-        r = F._pearsonr(input, target, batch_first=False)
+        r = F.pearsonr(input, target, batch_first=False)
         assert r.shape[1] == shape[1]
         for index, (input_col, target_col) in enumerate(
                 zip(input.transpose(0, 1), target.transpose(0, 1))):
@@ -70,20 +70,20 @@ def test_concordance_cc(shape):
         return ccc
 
     if len(shape) == 1:
-        ccc = F._concordance_cc(input, target)
+        ccc = F.concordance_cc(input, target)
         assert ccc.shape[0] == 1
         np.testing.assert_almost_equal(
             ccc.numpy()[0], concordance_cc(input.numpy(), target.numpy()),
             decimal=6)
     else:
-        ccc = F._concordance_cc(input, target)
+        ccc = F.concordance_cc(input, target)
         assert ccc.shape[0] == shape[0]
         for index, (input_row, target_row) in enumerate(zip(input, target)):
             np.testing.assert_almost_equal(
                 ccc[index].numpy()[0], concordance_cc(
                     input_row.numpy(), target_row.numpy()), decimal=6)
 
-        ccc = F._concordance_cc(input, target, batch_first=False)
+        ccc = F.concordance_cc(input, target, batch_first=False)
         assert ccc.shape[1] == shape[1]
         for index, (input_col, target_col) in enumerate(
                 zip(input.transpose(0, 1), target.transpose(0, 1))):
