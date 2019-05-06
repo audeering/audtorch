@@ -121,6 +121,7 @@ class LibriSpeech(PandasDataset):
     `train-clean-100`, `train-clean-360`, `train-other-500` `dev-clean`,
     `dev-other`, `test-clean`, `test-other`
 
+    * :attr:`root` holds the data set's location
     * :attr:`transform` controls the input transform
     * :attr:`target_transform` controls the target transform
     * :attr:`files` controls the audio files of the data set
@@ -131,7 +132,6 @@ class LibriSpeech(PandasDataset):
 
     * :attr:`all_sets` holds the names of the different pre-defined sets
     * :attr:`urls` holds the download links of the different sets
-    * :attr:`root` holds the dataset's default location
 
     Args:
         root (str): root directory of data set
