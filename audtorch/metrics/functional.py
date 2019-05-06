@@ -57,7 +57,7 @@ def _pearsonr(x, y, batch_first=True):
           or :math:`(1)` for correlation between vectors
 
     Examples:
-        >>> torch.manual_seed(0)
+        >>> _ = torch.manual_seed(0)
         >>> input = torch.rand(3, 5)
         >>> target = torch.rand(3, 5)
         >>> output = F._pearsonr(input, target)
@@ -145,7 +145,7 @@ def _concordance_cc(x, y, batch_first=True):
           or :math:`(1)` for correlation between vectors
 
     Examples:
-        >>> torch.manual_seed(0)
+        >>> _ = torch.manual_seed(0)
         >>> input = torch.rand(3, 5)
         >>> target = torch.rand(3, 5)
         >>> output = F._concordance_cc(input, target)
