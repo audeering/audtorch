@@ -7,9 +7,9 @@ class BucketSampler(Sampler):
 
     This sampler iterates over the data sets of `concat_dataset`
     and samples sequentially from them.
-    Samples of each batch deliberately originate solely
-    from same data set. Only when the current data set is exhausted,
-    the next data set is sampled from. In other words,
+    Samples of each batch deliberately originate solely from the same data set.
+    Only when the current data set is exhausted, the next data set
+    is sampled from. In other words,
     samples from different buckets are never mixed.
 
     In each epoch `num_batches` batches of size `batch_sizes`
@@ -17,7 +17,7 @@ class BucketSampler(Sampler):
     If the requested number of batches cannot be extracted from a data set,
     only its available batches are queued.
     By default, the data sets (and thus their batches) are iterated over
-    in increasing (or permuted) order of their data set id.
+    in increasing order of their data set id.
 
     Note:
         The information in :attr:`batch_sizes` and :attr:`num_batches`
@@ -37,41 +37,45 @@ class BucketSampler(Sampler):
     all of different batch size, and queue them
     in increasing order of their data set id"
 
+    * :attr:`batch_sizes` controls batch size for each data set
+    * :attr:`num_batches` controls number of batches to extract
+      from each data set
+    * :attr:`permuted_order` controls if order in which data sets are iterated
+      over is permuted or in which specific order iteration is permuted
+    * :attr:`shuffle_each_bucket` controls if each data set is shuffled
+    * :attr:`drop_last` controls whether to drop last samples of a bucket
+      which cannot form a mini-batch
+
     Args:
-        concat_dataset (ConcatDataset): ordered concatenated data set
+        concat_dataset (torch.utils.data.ConcatDataset): ordered concatenated
+            data set
         batch_sizes (list): batch sizes per data set. Permissible values are
             unsigned integers
-        num_batches (list or None): number of batches per data set.
+        num_batches (list or None, optional): number of batches per data set.
             Permissible values are non-negative integers and None.
-            If None, then extract as many batches as data set provides.
+            If None, then as many batches are extracted as data set provides.
             Default: `None`
-        permuted_order (bool or list): option whether to permute the order of
-            data set ids in which the respective data set's batches are queued.
-            If True (False), data set ids are (not) shuffled. Besides,
-            a customized list of permuted data set ids can be specified.
-            Default: `False`
-        shuffle_each_bucket (bool): option whether to shuffle samples
+        permuted_order (bool or list, optional): option whether to permute the
+            order of data set ids in which the respective data set's batches
+            are queued. If True (False), data set ids are (not) shuffled.
+            Besides, a customized list of permuted data set ids can be
+            specified. Default: `False`
+        shuffle_each_bucket (bool, optional): option whether to shuffle samples
             in each data set. Recommended to set to True. Default: `True`
-        drop_last (bool): controls whether the last samples of a bucket
-            which cannot form an entire batch should be dropped.
+        drop_last (bool, optional): controls whether the last samples of a
+            bucket which cannot form a mini-batch should be dropped.
             Default: `False`
-
-    Attributes:
-        batch_sizes (list): controls batch size for each data set
-        num_batches (list): controls number of batches to extract from
-            each data set
-        permuted_order (bool or list): controls if order which data sets are
-            iterated over is permuted or in which specific order iteration
-            is permuted
-        shuffle_each_bucket (bool): controls if each data set is shuffled
 
     Example:
-        >>> dataset = TensorDataset(torch.randn(100))
+        >>> import torch
+        >>> from torch.utils.data import (TensorDataset, ConcatDataset)
+        >>> from audtorch.datasets.utils import defined_split
+        >>> data = TensorDataset(torch.randn(100))
         >>> lengths = np.random.randint(0, 890, (100,))
-        >>> split_func = samplers.buckets_of_even_size(lengths, num_buckets=3)
-        >>> data_sets = datasets.defined_split(dataset, split_func)
-        >>> concat_dataset = ConcatDataset(data_sets)
-        >>> batch_sampler = samplers.BucketSampler(concat_dataset, 3 * [16])
+        >>> split_func = buckets_of_even_size(lengths, num_buckets=3)
+        >>> datasets = defined_split(data, split_func)
+        >>> concat_dataset = ConcatDataset(datasets)
+        >>> batch_sampler = BucketSampler(concat_dataset, 3 * [16])
 
     """
 
@@ -87,25 +91,22 @@ class BucketSampler(Sampler):
         self.dataset_ids = list(range(len(self.datasets)))
 
         if isinstance(permuted_order, list):
-            assert sorted(self.permuted_order) == \
-                self.dataset_ids, \
-                "`permuted_order` not consistent with" \
-                " number of data sets."
+            assert sorted(self.permuted_order) == self.dataset_ids, \
+                '`permuted_order` not consistent with number of data sets.'
             self.dataset_ids = permuted_order
 
-        assert all([self.batch_sizes[dset_id] > 0
-                    and isinstance(self.batch_sizes[dset_id], int)
-                    for dset_id in self.dataset_ids]), \
-            "Only positive integers permitted for \
-            `num_batches`."
+        assert all(
+            [self.batch_sizes[i] > 0 and isinstance(self.batch_sizes[i], int)
+             for i in self.dataset_ids]
+        ), 'Only positive integers permitted for `num_batches`.'
 
         if self.num_batches is not None:
-            assert all([self.num_batches[dset_id] >= 0
-                        and isinstance(self.num_batches[dset_id], int)
-                        for dset_id in self.dataset_ids if
-                        self.num_batches[dset_id] is not None]), \
-                "Only non-negative integers and `None` permitted for \
-                `num_batches`."
+            assert all(
+                [self.num_batches[i] >= 0 and isinstance(
+                    self.num_batches[i], int) for i in self.dataset_ids
+                 if self.num_batches[i] is not None]), \
+                "Only non-negative integers or " \
+                "`None` permitted for `num_batches`."
 
         if not isinstance(drop_last, bool):
             raise ValueError("drop_last should be a boolean value, but got "
@@ -175,16 +176,16 @@ class BucketSampler(Sampler):
 
 
 def buckets_by_boundaries(key_values, bucket_boundaries):
-    r"""Sort samples into buckets using bucket boundaries
+    r"""Split samples into buckets using bucket boundaries
 
     Args:
-        key_values (list): contains key values, e.g. sequence length
+        key_values (list): contains key values, e.g. sequence lengths
         bucket_boundaries (list): contains boundaries of buckets in
             ascending order. The list should neither contain a lower or
             upper boundary, e.g. not numpy.iinfo.min or numpy.iinfo.max.
 
     Returns:
-        func: Key function to use for sorting: \
+        func: Key function to use for splitting: \
         :math:`f(\text{item}) = \text{bucket\_id}`
 
     """
@@ -208,19 +209,20 @@ def buckets_by_boundaries(key_values, bucket_boundaries):
 
 
 def buckets_of_even_size(key_values, num_buckets, reverse=False):
-    r"""Sort samples into buckets of even size
+    r"""Split samples into buckets of even size
 
     The samples are sorted with either increasing or
     decreasing key value.
 
     Args:
-        key_values (list): contains key values, e.g. sequence length
+        key_values (list): contains key values, e.g. sequence lengths
         num_buckets (int): number of buckets to form. Permitted are
             positive integers
-        reverse (bool): if True, then descending order. Default: `False`
+        reverse (bool, optional): if True, then sort in descending order.
+            Default: `False`
 
     Returns:
-        func: Key function to use for sorting: \
+        func: Key function to use for splitting: \
         :math:`f(\text{item}) = \text{bucket\_id}`
 
     """
@@ -275,12 +277,14 @@ def _stack_concatenated_datasets(concat_dataset):
         list: list of lists of data set indices
 
     Example:
+        >>> import torch
+        >>> from torch.utils.data import (TensorDataset, ConcatDataset)
         >>> data_1 = TensorDataset(torch.Tensor([0, 1, 2, 3]))
         >>> data_2 = TensorDataset(torch.Tensor([0, 1, 2]))
         >>> concat_dataset = ConcatDataset((data_1, data_2))
         >>> concat_dataset.cumulative_sizes
         [4, 7]
-        >>> samplers._stack_concatenated_datasets(concat_dataset)
+        >>> _stack_concatenated_datasets(concat_dataset)
         [[0, 1, 2, 3], [4, 5, 6]]
 
     """
