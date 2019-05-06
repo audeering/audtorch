@@ -51,7 +51,7 @@ class EnergyConservingLoss(nn.L1Loss):
         >>> target = torch.randn(3, 5)
         >>> mixture = torch.randn(3, 5)
         >>> loss(input, target, mixture)
-        tensor(2.1352, grad_fn=<ThAddBackward>)
+        tensor(2.1352, grad_fn=<AddBackward0>)
 
     """
     def __init__(self, reduction='mean'):
