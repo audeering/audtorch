@@ -209,7 +209,6 @@ def test_resample(input, input_sample_rate, output_sample_rate, method, axis):
     pytest.param(A, 4, 1, 2, -1e-07, marks=xfail(raises=ValueError)),
     pytest.param(A, 4, 1, 2, 0, marks=xfail(raises=ValueError)),
     pytest.param(A, 2048, 1024, 2, 1e-07, marks=xfail(raises=ValueError)),
-    pytest.param(A, 3, 1, 2, 1e-07, marks=xfail(raises=ValueError)),
     (np.random.normal(size=[2, 3, 16000]), 2048, 1024, 2, 1e-07),
     (np.random.normal(size=[2, 16000, 3]), 2048, 1024, 1, 1e-07),
     (np.random.normal(size=[16000, 2, 3]), 2048, 1024, 0, 1e-07),
