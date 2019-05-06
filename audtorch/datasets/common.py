@@ -5,9 +5,9 @@ import pandas as pd
 import resampy
 from tabulate import tabulate
 from torch.utils.data import (Dataset, ConcatDataset)
-from audtorch.datasets.utils import ensure_same_sampling_rate
 
-from .utils import (load, sampling_rate_after_transform)
+from .utils import (
+    ensure_same_sampling_rate, load, sampling_rate_after_transform)
 from .utils import (files_and_labels_from_df)
 
 
