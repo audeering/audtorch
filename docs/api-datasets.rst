@@ -30,6 +30,12 @@ CsvDataset
 .. autoclass:: CsvDataset
     :members:
 
+AudioConcatDataset
+~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: AudioConcatDataset
+    :members:
+
 
 Speech
 ------

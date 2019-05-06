@@ -54,6 +54,7 @@ autodoc_mock_imports = [
     'torch',
     'scipy',
     'tqdm',
+    'tabulate',
 ]
 
 # HTML --------------------------------------------------------------------

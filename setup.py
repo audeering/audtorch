@@ -12,6 +12,7 @@ setup(
         'torch',
         'pandas',
         'tqdm',
+        'tabulate',
     ],
     author=('Andreas Triantafyllopoulos, '
             'Stephan Huber, '
