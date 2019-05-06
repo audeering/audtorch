@@ -47,7 +47,7 @@ class PearsonR(object):
         self.batch_first = batch_first
 
     def __call__(self, x, y):
-        r = F._pearsonr(x, y, self.batch_first)
+        r = F.pearsonr(x, y, self.batch_first)
         if self.reduction == 'mean':
             r = r.mean()
         elif self.reduction == 'sum':
@@ -105,7 +105,7 @@ class ConcordanceCC(object):
         self.batch_first = batch_first
 
     def __call__(self, x, y):
-        r = F._concordance_cc(x, y, self.batch_first)
+        r = F.concordance_cc(x, y, self.batch_first)
         if self.reduction == 'mean':
             r = r.mean()
         elif self.reduction == 'sum':

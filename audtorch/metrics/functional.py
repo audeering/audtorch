@@ -1,4 +1,4 @@
-def _pearsonr(x, y, batch_first=True):
+def pearsonr(x, y, batch_first=True):
     r"""Computes Pearson Correlation Coefficient across rows.
 
     Pearson Correlation Coefficient (also known as Linear Correlation
@@ -52,7 +52,7 @@ def _pearsonr(x, y, batch_first=True):
         >>> _ = torch.manual_seed(0)
         >>> input = torch.rand(3, 5)
         >>> target = torch.rand(3, 5)
-        >>> output = F._pearsonr(input, target)
+        >>> output = pearsonr(input, target)
         >>> print('Pearson Correlation between input and target is {0}'.format(output[:, 0]))
         Pearson Correlation between input and target is tensor([ 0.2991, -0.8471,  0.9138])
 
@@ -79,7 +79,7 @@ def _pearsonr(x, y, batch_first=True):
     return corr
 
 
-def _concordance_cc(x, y, batch_first=True):
+def concordance_cc(x, y, batch_first=True):
     r"""Computes Concordance Correlation Coefficient across rows.
 
     Concordance Correlation Coefficient is computed as:
@@ -140,7 +140,7 @@ def _concordance_cc(x, y, batch_first=True):
         >>> _ = torch.manual_seed(0)
         >>> input = torch.rand(3, 5)
         >>> target = torch.rand(3, 5)
-        >>> output = F._concordance_cc(input, target)
+        >>> output = concordance_cc(input, target)
         >>> print('Concordance Correlation between input and target is {0}'.format(output[:, 0]))
         Concordance Correlation between input and target is tensor([ 0.2605, -0.7862,  0.5298])
 
