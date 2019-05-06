@@ -1,56 +1,52 @@
 import pytest
 import torch
 import numpy as np
+from numpy.random import randint
 import random
 from bisect import bisect_right
-from torch.utils.data import TensorDataset, ConcatDataset
+from torch.utils.data import (TensorDataset, ConcatDataset)
 
 from audtorch.samplers import (
     buckets_of_even_size, buckets_by_boundaries, BucketSampler)
 from audtorch.datasets.utils import defined_split
 
-# dataset parameters
+
+# data sets
 data_size = 1000
 num_feats = 160
-max_seq_len = 3000
-feats_range = (0, 1000)
-seq_len_range = (0, max_seq_len)
-
-# variables and datasets
-lens = torch.randint(*seq_len_range, (data_size,))
-inputs = torch.randint(*feats_range, (data_size, num_feats, max_seq_len))
-dataset = TensorDataset(inputs)
+max_length = 3000
+max_feature = 1000
+lengths = torch.randint(0, max_length, (data_size,))
+inputs = torch.randint(0, max_feature, (data_size, num_feats, max_length))
+data = TensorDataset(inputs)
 
 # function params
-num_datasets = 10
-batch_sizes = [np.random.randint(1, np.iinfo(np.int8).max)
-               for _ in range(num_datasets)]
-num_batches = [np.random.randint(0, np.iinfo(np.int8).max)
-               for _ in range(num_datasets)]
+num_buckets = 10
+batch_sizes = [randint(1, np.iinfo(np.int8).max) for _ in range(num_buckets)]
+num_batches = [randint(0, np.iinfo(np.int8).max) for _ in range(num_buckets)]
 bucket_boundaries = [b + num for num, b in enumerate(
-    sorted(list(random.sample(range(max_seq_len - num_datasets),
-                              (num_datasets - 1)))))]
+    sorted(list(random.sample(range(max_length - num_buckets),
+                              (num_buckets - 1)))))]
 
 
-@pytest.mark.parametrize("keys", [lens])
-@pytest.mark.parametrize("num_buckets", [num_datasets])
+@pytest.mark.parametrize("key_values", [lengths])
+@pytest.mark.parametrize("num_buckets", [num_buckets])
 @pytest.mark.parametrize("reverse", [True, False])
-def test_buckets_of_even_size(keys, num_buckets, reverse):
+def test_buckets_of_even_size(key_values, num_buckets, reverse):
 
-    data_size = keys.shape[0]
+    data_size = key_values.shape[0]
     expected_bucket_size = data_size // num_buckets
     expected_bucket_dist = (num_buckets - 1) * [expected_bucket_size]
     expected_bucket_dist += \
         [expected_bucket_size + data_size % num_buckets]
 
-    key_func = buckets_of_even_size(
-        key_values=keys,
-        num_buckets=num_buckets,
-        reverse=reverse)
+    buckets = buckets_of_even_size(key_values=key_values,
+                                   num_buckets=num_buckets,
+                                   reverse=reverse)
 
     expected_bucket_ids = set(range(num_buckets))
-    bucket_ids = [key_func(i) for i in range(data_size)]
-    key_values = [keys[i] for i in range(data_size)]
+    bucket_ids = [buckets(i) for i in range(data_size)]
+    key_values = [key_values[i] for i in range(data_size)]
     bucket_dist = [bucket_ids.count(bucket_id)
                    for bucket_id in range(num_buckets)]
 
@@ -69,63 +65,61 @@ def test_buckets_of_even_size(keys, num_buckets, reverse):
     assert expected_bucket_dist == bucket_dist
 
 
-@pytest.mark.parametrize("keys", [lens])
+@pytest.mark.parametrize("key_values", [lengths])
 @pytest.mark.parametrize("bucket_boundaries", [bucket_boundaries])
-def test_buckets_by_boundaries(keys, bucket_boundaries):
+def test_buckets_by_boundaries(key_values, bucket_boundaries):
 
-    key_func = buckets_by_boundaries(
-        key_values=lens,
-        bucket_boundaries=bucket_boundaries)
+    buckets = buckets_by_boundaries(key_values=lengths,
+                                    bucket_boundaries=bucket_boundaries)
 
     num_buckets = len(bucket_boundaries) + 1
     expected_bucket_ids = list(range(num_buckets))
 
-    data_size = keys.shape[0]
-    bucket_ids = [key_func(idx) for idx in range(data_size)]
-    key_values = [keys[idx] for idx in range(data_size)]
+    data_size = key_values.shape[0]
+    bucket_ids = [buckets(idx) for idx in range(data_size)]
+    key_values = [key_values[idx] for idx in range(data_size)]
 
     # do bucket ids only range from 0 to num_buckets-1?
     # missing ids only allowed if corresponding bucket empty
     missing_buckets = list(set(expected_bucket_ids) - set(bucket_ids))
     for bucket_id in missing_buckets:
         if bucket_id == 0:
-            assert not any([key < bucket_boundaries[bucket_id]
-                            for key in key_values])
+            assert not any([v < bucket_boundaries[bucket_id]
+                            for v in key_values])
         elif bucket_id == expected_bucket_ids[-1]:
-            assert not any([key > bucket_boundaries[(bucket_id - 1)]
-                            for key in key_values])
+            assert not any([v > bucket_boundaries[(bucket_id - 1)]
+                            for v in key_values])
         else:
-            assert not any([key in
-                            range(bucket_boundaries[(bucket_id - 1)],
-                                  bucket_boundaries[bucket_id])
-                            for key in key_values])
+            assert not any([v in range(bucket_boundaries[(bucket_id - 1)],
+                                       bucket_boundaries[bucket_id])
+                            for v in key_values])
 
-    sort_indices = sorted(range(data_size), key=lambda idx: key_values[idx])
-    sorted_buckets = [bucket_ids[idx] for idx in sort_indices]
+    sort_indices = sorted(range(data_size), key=lambda i: key_values[i])
+    sorted_buckets = [bucket_ids[i] for i in sort_indices]
     diff_buckets = np.diff(sorted_buckets)
 
     # sorted with monotonously increasing/decreasing length of key values?
     assert all(diff >= 0 for diff in diff_buckets)
 
 
-@pytest.mark.parametrize("dataset", [dataset])
+@pytest.mark.parametrize("data", [data])
 @pytest.mark.parametrize(
     "key_func",
-    [buckets_of_even_size(lens, num_datasets, False),
-     buckets_by_boundaries(lens, bucket_boundaries)])
-@pytest.mark.parametrize("expected_num_datasets", [num_datasets])
+    [buckets_of_even_size(lengths, num_buckets, False),
+     buckets_by_boundaries(lengths, bucket_boundaries)])
+@pytest.mark.parametrize("expected_num_datasets", [num_buckets])
 @pytest.mark.parametrize("batch_sizes", [batch_sizes])
 @pytest.mark.parametrize("expected_num_batches", [num_batches])
 @pytest.mark.parametrize("permuted_order", [False, random.shuffle(
-    list(range(num_datasets)))])
+    list(range(num_buckets)))])
 @pytest.mark.parametrize("shuffle_each_bucket", [True, False])
 @pytest.mark.parametrize("drop_last", [True, False])
-def test_bucket_sampler(dataset, key_func, expected_num_datasets,
+def test_bucket_sampler(data, key_func, expected_num_datasets,
                         batch_sizes, expected_num_batches, permuted_order,
                         shuffle_each_bucket, drop_last):
 
-    datasets = defined_split(dataset, key_func)
-    concat_dataset = ConcatDataset(datasets)
+    subsets = defined_split(data, key_func)
+    concat_dataset = ConcatDataset(subsets)
 
     batch_sampler = BucketSampler(
         concat_dataset=concat_dataset,
@@ -152,7 +146,7 @@ def test_bucket_sampler(dataset, key_func, expected_num_datasets,
 
         skip = False
 
-        if batch_sizes[i] is 0 or expected_num_batches[i] is 0:
+        if batch_sizes[i] == 0 or expected_num_batches[i] == 0:
             continue
 
         fitted_batches = dataset_sizes[i] // batch_sizes[i]
@@ -165,7 +159,7 @@ def test_bucket_sampler(dataset, key_func, expected_num_datasets,
 
         if not drop_last and not skip:
             remainder = dataset_sizes[i] % batch_sizes[i]
-            if remainder is not 0:
+            if remainder != 0:
                 add_batch_sizes += [remainder]
 
         expected_epoch_batch_sizes += add_batch_sizes
