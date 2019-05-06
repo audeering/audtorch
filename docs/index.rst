@@ -18,6 +18,7 @@
 
     api-collate
     api-datasets
+    api-metrics
     api-transforms
     api-transforms-functional
     api-utils
