@@ -7,6 +7,7 @@ import tarfile
 from tqdm import tqdm
 import numpy as np
 import audiofile as af
+from torch.utils.data import Subset
 
 from ..utils import run_worker_threads
 
@@ -315,3 +316,47 @@ def _gen_bar_updater(pbar):
         pbar.update(progress_bytes - pbar.n)
 
     return bar_update
+
+
+def defined_split(dataset, split_func):
+    r"""Split data set into desired non-overlapping subsets.
+
+    Args:
+        dataset (torch.utils.data.Dataset): Data set to be split.
+        split_func (func): Function mapping from data set index
+            to subset id. Requirements:
+
+            -  func(idx: int) -> int
+            -  target domain needs to cover complete range,
+               [0, 1, ..., (number of splits - 1)].
+
+    Returns:
+        (list of Subsets): Desired subsets according to `split_func`.
+
+    Example:
+        >>> from audtorch.samplers import buckets_of_even_size
+        >>> import torch
+        >>> from torch.utils.data import TensorDataset
+        >>> data = TensorDataset(torch.randn(100))
+        >>> lengths = np.random.randint(0, 1000, (100,))
+        >>> split_func = buckets_of_even_size(lengths, 5)
+        >>> subsets = defined_split(data, split_func)
+        >>> [len(bucket) for bucket in subsets]
+        [20, 20, 20, 20, 20]
+
+    """
+    split_ids = [split_func(i) for i in range(len(dataset))]
+    unique_split_ids = list(np.unique(split_ids))
+    num_splits = len(unique_split_ids)
+
+    assert unique_split_ids == list(range(num_splits)), \
+        "Target domain of `split_func` does not represent range " \
+        "[0, 1, ..., (number of splits)-1] without missing element."
+
+    split_indices = [[] for _ in range(num_splits)]
+
+    for i, split_id in enumerate(split_ids):
+        split_indices[split_id] += [i]
+
+    return [Subset(dataset, indices)
+            for indices in split_indices]
