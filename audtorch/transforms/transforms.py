@@ -894,3 +894,181 @@ class LogSpectrogram(object):
         if self.window != 'hann':
             options += ', window={0}'.format(self.window)
         return '{0}({1})'.format(self.__class__.__name__, options)
+
+
+class RandomAdditiveMix(object):
+    r"""Mix two signals additively by a randomly picked ratio.
+
+    Randomly pick a signal from an augmentation data set and mix it with the
+    actual signal by a signal-to-noise ratio in dB randomly selected from a
+    list of possible ratios.
+
+    The signal from the augmentation data set is expanded, cropped,
+    or has its number of channels adjusted by a downmix or upmix using
+    :class:`Remix` if necessary.
+
+    The signal can be expanded by:
+
+        * ``'multiple'`` loading multiple files from the
+          augmentation data set and concatenating them along the time axis
+        * ``'pad'`` expand the signal by adding trailing zeros
+        * ``'replicate'`` replicate the signal to match the specified size.
+          If result exceeds specified size after replication, the signal will
+          then be cropped
+
+    The signal can be cropped by:
+
+        * ``'start'`` crop signal from the beginning of the file all
+          the way to the necessary length
+        * ``'random'`` starts at a random offset from the beginning of the file
+
+    * :attr:`dataset` controls the data set used for augmentation
+    * :attr:`ratio` controls the ratio in dB between mixed signals
+    * :attr:`ratios` controls the ratios to be randomly picked from
+    * :attr:`normalize` controls if the mixed signal is normalized
+    * :attr:`expand_method` controls if the signal from the augmented data
+      set is automatically expanded according to an expansion rule.
+      Default: `pad`
+    * :attr:`crop_method` controls how the signal is cropped. Is only
+      relevant if the augmentation signal is longer than the input one,
+      or if `expand_method` is set to `multiple`. Default: `random`
+    * :attr:`percentage_silence` controls the percentage of the input data
+      that will be mixed with silence. Should be between `0` and `1`.
+      Default: `1`
+    * :attr:`time_axis` controls time axis for automatic signal adjustment
+    * :attr:`channel_axis` controls channel axis for automatic signal
+      adjustment
+    * :attr:`fix_randomization` controls the randomness of the ratio selection
+
+    Note:
+        :attr:`fix_randomization` covers only the selection of the ratio. The
+        selection of a signal from the augmentation data set and its signal
+        length adjustment will always be random.
+
+    Args:
+        dataset (torch.utils.data.Dataset): data set for augmentation
+        ratios (list of int, optional): mix ratios in dB to randomly pick from
+            (e.g. SNRs). Default: `[0, 15, 30]`
+        normalize (bool, optional): normalize mixture. Default: `False`
+        expand_method (str, optional): controls the adjustment of
+            the length data set that is added to the original data set.
+            Default: `pad`.
+        crop_method (str, optional): controls the crop transform that will be
+            called on the mix signal if it is longer than the input signal.
+            Default: `random`
+        percentage_silence (float, optional): controls the percentage of
+            input data that should be augmented with silence. Default: `0`
+        time_axis (int, optional): length axis of both data sets. Default: `-1`
+        channel_axis (int, optional): channels axis of both data sets.
+            Default: `-2`
+        fix_randomization (bool, optional): freeze random selection between
+            different calls of transform. Default: `False`
+
+    Shape:
+        - Input: :math:`(*, C, N, *)`
+        - Output: :math:`(*, C, N, *)`, where :math:`C` is the number of
+          channels and :math:`N` is the number of samples. They don't have to
+          be placed in the order shown here, but the order is preserved during
+          transformation.
+          :math:`*` can be any additional number of dimensions.
+
+    Example:
+        >>> np.random.seed(0)
+        >>> a = np.array([[1, 2], [3, 4]])
+        >>> from audtorch import datasets as datasets
+        >>> noise = datasets.WhiteNoise(duration=1, sampling_rate=2)
+        >>> t = RandomAdditiveMix(noise, ratios=[3], expand_method='pad')
+        >>> print(t)
+        RandomAdditiveMix(dataset=WhiteNoise, ratios=[3], ratio=None, percentage_silence=0, expand_method=pad, crop_method=random, time_axis=-1, channel_axis=-2)
+        >>> t(a)
+        array([[3.67392992, 2.60655362],
+               [5.67392992, 4.60655362]])
+
+    """  # noqa: E501
+
+    def __init__(self, dataset, ratios=[0, 15, 30], normalize=False,
+                 expand_method='pad', crop_method='random',
+                 percentage_silence=0, time_axis=-1, channel_axis=-2,
+                 fix_randomization=False):
+        super().__init__()
+        self.dataset = dataset
+        self.ratios = ratios
+        self.ratio = None
+        self.percentage_silence = percentage_silence
+        self.normalize = normalize
+        self.expand_method = expand_method
+        self.crop_method = crop_method
+        self.time_axis = time_axis
+        self.channel_axis = channel_axis
+        self.fix_randomization = fix_randomization
+
+        self._remix = Remix(0, axis=channel_axis)
+        if self.expand_method != 'multiple':
+            self._expand = Expand(0, axis=self.time_axis,
+                                  method=self.expand_method)
+
+    def __call__(self, signal1):
+        if not self.fix_randomization or not self.ratio:
+            self.ratio = random.choice(self.ratios)
+
+        if random.random() < self.percentage_silence:
+            signal2 = np.zeros(signal1.shape)
+        else:
+            signal2 = random.choice(self.dataset)[0]
+
+            samples_signal1 = signal1.shape[self.time_axis]
+            samples_signal2 = signal2.shape[self.time_axis]
+            channels_signal1 = np.atleast_2d(signal1).shape[self.channel_axis]
+            channels_signal2 = np.atleast_2d(signal2).shape[self.channel_axis]
+
+            # Extend too short signal2
+            if samples_signal1 > samples_signal2:
+                if self.expand_method == 'multiple':
+                    self._remix.channels = channels_signal2
+                    while samples_signal2 < samples_signal1:
+                        new_signal = random.choice(self.dataset)[0]
+                        new_signal = self._remix(new_signal)
+                        signal2 = np.concatenate((signal2, new_signal),
+                                                 axis=self.time_axis)
+                        samples_signal2 = signal2.shape[self.time_axis]
+                else:
+                    self._expand.size = samples_signal1
+                    signal2 = self._expand(signal2)
+                    samples_signal2 = signal2.shape[self.time_axis]
+
+            # Crop too long signal2 to match signal1
+            if samples_signal1 < samples_signal2:
+                if self.crop_method == 'random':
+                    idx = RandomCrop.random_index(
+                        samples_signal2, samples_signal1
+                    )
+                elif self.crop_method == 'start':
+                    idx = (0, samples_signal1)
+                signal2 = F.crop(signal2, idx, axis=self.time_axis)
+
+            # Adjust number of channels of signal2 to signal1
+            if channels_signal1 != channels_signal2:
+                self._remix.channels = channels_signal1
+                signal2 = self._remix(signal2)
+
+        mixture = F.additive_mix(signal1, signal2, self.ratio)
+
+        if self.normalize:
+            mixture = F.normalize(mixture)
+
+        return mixture
+
+    def __repr__(self):
+        options = ('dataset={0}, ratios={1}, ratio={2}, '
+                   'percentage_silence={3}, '
+                   'expand_method={4}, crop_method={5}, '
+                   'time_axis={6}, channel_axis={7}'
+                   .format(self.dataset.__class__.__name__, self.ratios,
+                           self.ratio, self.percentage_silence,
+                           self.expand_method, self.crop_method,
+                           self.time_axis, self.channel_axis))
+        if self.normalize:
+            options += ', normalize=True'
+        if self.fix_randomization:
+            options += ', fix_randomization=True'
+        return '{0}({1})'.format(self.__class__.__name__, options)
