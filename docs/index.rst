@@ -20,6 +20,7 @@
     api-datasets
     api-metrics
     api-metrics-functional
+    api-samplers
     api-transforms
     api-transforms-functional
     api-utils

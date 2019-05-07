@@ -7,6 +7,7 @@ import tarfile
 from tqdm import tqdm
 import numpy as np
 import audiofile as af
+from torch.utils.data import Subset
 
 from ..utils import run_worker_threads
 
@@ -315,3 +316,43 @@ def _gen_bar_updater(pbar):
         pbar.update(progress_bytes - pbar.n)
 
     return bar_update
+
+
+def defined_split(dataset, split_func):
+    r"""Split data set into desired non-overlapping subsets.
+
+    Args:
+        dataset (torch.utils.data.Dataset): data set to be split
+        split_func (func): function mapping from data set index to subset id,
+            :math:`f(\text{index}) = \text{subset\_id}`.
+            The target domain of subset ids does not need to cover the
+            complete range `[0, 1, ..., (num_subsets - 1)]`
+
+    Returns:
+        (list of Subsets): desired subsets according to :attr:`split_func`
+
+    Example:
+        >>> import torch
+        >>> from torch.utils.data import TensorDataset
+        >>> from audtorch.samplers import buckets_of_even_size
+        >>> data = TensorDataset(torch.randn(100))
+        >>> lengths = np.random.randint(0, 1000, (100,))
+        >>> split_func = buckets_of_even_size(lengths, 5)
+        >>> subsets = defined_split(data, split_func)
+        >>> [len(subset) for subset in subsets]
+        [20, 20, 20, 20, 20]
+
+    """
+    subset_ids = [split_func(i) for i in range(len(dataset))]
+    unique_subset_ids = sorted(set(subset_ids))
+    num_subsets = len(unique_subset_ids)
+
+    split_indices = [[] for _ in range(num_subsets)]
+
+    for i, subset_id in enumerate(subset_ids):
+        # handle non-coherent target domain
+        subset_id = unique_subset_ids.index(subset_id)
+        split_indices[subset_id] += [i]
+
+    return [Subset(dataset, indices)
+            for indices in split_indices]
