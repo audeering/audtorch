@@ -128,3 +128,8 @@ files_and_labels_from_df
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autofunction:: files_and_labels_from_df
+
+defined_split
+~~~~~~~~~~~~~
+
+.. autofunction:: defined_split
