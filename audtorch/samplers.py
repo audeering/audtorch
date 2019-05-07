@@ -183,7 +183,7 @@ def buckets_by_boundaries(key_values, bucket_boundaries):
         holds:
 
             :math:`b_{i-1} <= \text{key value} < b_i`,
-            where :math:`b_i` is `bucket boundary` at index `i`
+            where :math:`b_i` is `bucket boundary` at index :math:`i`
 
     Args:
         key_values (list): contains key values, e.g. sequence lengths
