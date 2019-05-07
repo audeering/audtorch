@@ -977,7 +977,7 @@ class RandomAdditiveMix(object):
         >>> np.random.seed(0)
         >>> a = np.array([[1, 2], [3, 4]])
         >>> noise = datasets.WhiteNoise(duration=1, sampling_rate=2)
-        >>> t = RandomAdditiveMix(dataset=noise, ratios=[3], expand_method='pad')
+        >>> t = RandomAdditiveMix(noise, ratios=[3], expand_method='pad')
         >>> print(t)
         RandomAdditiveMix(dataset=WhiteNoise, ratios=[3], ratio=None, percentage_silence=0, expand_method=pad, crop_method=random, time_axis=-1, channel_axis=-2)
         >>> t(a)
@@ -986,7 +986,7 @@ class RandomAdditiveMix(object):
 
     """  # noqa: E501
 
-    def __init__(self, *, dataset, ratios=[0, 15, 30], normalize=False,
+    def __init__(self, dataset, *, ratios=[0, 15, 30], normalize=False,
                  expand_method='pad', crop_method='random',
                  percentage_silence=0, time_axis=-1, channel_axis=-2,
                  fix_randomization=False):
