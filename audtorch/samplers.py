@@ -176,7 +176,14 @@ class BucketSampler(Sampler):
 
 
 def buckets_by_boundaries(key_values, bucket_boundaries):
-    r"""Split samples into buckets using bucket boundaries
+    r"""Split samples into buckets based on key values using bucket boundaries.
+
+    Note:
+        A sample is sorted into bucket :math:`i` if for their key value
+        holds:
+
+            :math:`b_{i-1} <= \text{key value} < b_i`,
+            where :math:`b_i` is `bucket boundary` at index `i`
 
     Args:
         key_values (list): contains key values, e.g. sequence lengths
@@ -216,7 +223,7 @@ def buckets_by_boundaries(key_values, bucket_boundaries):
 
 
 def buckets_of_even_size(key_values, num_buckets, reverse=False):
-    r"""Split samples into buckets of even size
+    r"""Split samples into buckets of even size based on key values.
 
     The samples are sorted with either increasing (or decreasing) key value.
     If number of samples cannot be distributed evenly to buckets,
