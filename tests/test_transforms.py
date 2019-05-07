@@ -224,3 +224,27 @@ def test_stft(input, window_size, hop_size, axis, magnitude_boost):
     assert np.array_equal(t_log(input), np.log(magnitude + magnitude_boost))
     assert np.array_equal(t.phase, phase)
     assert np.array_equal(t_log.phase, phase)
+
+
+@pytest.mark.parametrize('signal1,signal2,ratio,'
+                         'percentage_silence,expected_signal', [
+                             (A, A, 0, 0, 2 * A),
+                             (A, A, _half_ratio, 0, 1.5 * A),
+                             (a11, a11, 0, 0, 2 * a11),
+                             (a11, a11, _half_ratio, 0, 1.5 * a11),
+                             (A, np.zeros_like(A), 0, 0, A),
+                             (np.zeros_like(A), A, 0, 0, A),
+                             (A, np.zeros_like(A), 0, 1, A),
+                         ])
+def test_randomadditivemix(signal1, signal2, ratio, percentage_silence,
+                           expected_signal):
+    mixed_signal = F.additive_mix(signal1, signal2, ratio)
+    assert np.array_equal(mixed_signal, expected_signal)
+    augmentation_data_set = [[signal2]]
+    t = transforms.RandomAdditiveMix(augmentation_data_set, ratios=[ratio],
+                                     percentage_silence=percentage_silence)
+    assert np.array_equal(t(signal1), expected_signal)
+    t = transforms.RandomAdditiveMix(augmentation_data_set)
+    transform = t(signal1)
+    functional = F.additive_mix(signal1, signal2, t.ratio)
+    assert np.array_equal(transform, functional)
