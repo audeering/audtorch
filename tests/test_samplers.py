@@ -21,9 +21,9 @@ inputs = torch.randint(0, max_feature, (data_size, num_feats, max_length))
 data = TensorDataset(inputs)
 
 # function params
-num_buckets = 10
-batch_sizes = [randint(1, np.iinfo(np.int8).max) for _ in range(num_buckets)]
-num_batches = [randint(0, np.iinfo(np.int8).max) for _ in range(num_buckets)]
+num_buckets = randint(1, 10)
+batch_sizes = num_buckets * [randint(1, np.iinfo(np.int8).max)]
+num_batches = num_buckets * [randint(0, np.iinfo(np.int8).max)]
 bucket_boundaries = [b + num for num, b in enumerate(
     sorted(list(random.sample(range(max_length - num_buckets),
                               (num_buckets - 1)))))]
@@ -34,11 +34,9 @@ bucket_boundaries = [b + num for num, b in enumerate(
 @pytest.mark.parametrize("reverse", [True, False])
 def test_buckets_of_even_size(key_values, num_buckets, reverse):
 
-    data_size = key_values.shape[0]
-    expected_bucket_size = data_size // num_buckets
-    expected_bucket_dist = (num_buckets - 1) * [expected_bucket_size]
-    expected_bucket_dist += \
-        [expected_bucket_size + data_size % num_buckets]
+    expected_bucket_size, remainders = divmod(data_size, num_buckets)
+    expected_bucket_dist = remainders * [expected_bucket_size + 1]
+    expected_bucket_dist += (num_buckets - remainders) * [expected_bucket_size]
 
     buckets = buckets_of_even_size(key_values=key_values,
                                    num_buckets=num_buckets,
@@ -61,7 +59,7 @@ def test_buckets_of_even_size(key_values, num_buckets, reverse):
     # sorted with monotonously increasing/decreasing length of key values?
     assert all(diff >= 0 for diff in diff_buckets)
 
-    # are buckets evenly distributed (except last)?
+    # are buckets evenly distributed (except for remainders)?
     assert expected_bucket_dist == bucket_dist
 
 
