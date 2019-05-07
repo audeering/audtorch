@@ -952,7 +952,7 @@ class RandomAdditiveMix(object):
         normalize (bool, optional): normalize mixture. Default: `False`
         expand_method (str, optional): controls the adjustment of
             the length data set that is added to the original data set.
-            Default: `pad`.
+            Default: `pad`
         crop_method (str, optional): controls the crop transform that will be
             called on the mix signal if it is longer than the input signal.
             Default: `random`
@@ -973,11 +973,11 @@ class RandomAdditiveMix(object):
           :math:`*` can be any additional number of dimensions.
 
     Example:
+        >>> from audtorch import datasets
         >>> np.random.seed(0)
         >>> a = np.array([[1, 2], [3, 4]])
-        >>> from audtorch import datasets as datasets
         >>> noise = datasets.WhiteNoise(duration=1, sampling_rate=2)
-        >>> t = RandomAdditiveMix(noise, ratios=[3], expand_method='pad')
+        >>> t = RandomAdditiveMix(dataset=noise, ratios=[3], expand_method='pad')
         >>> print(t)
         RandomAdditiveMix(dataset=WhiteNoise, ratios=[3], ratio=None, percentage_silence=0, expand_method=pad, crop_method=random, time_axis=-1, channel_axis=-2)
         >>> t(a)
@@ -986,7 +986,7 @@ class RandomAdditiveMix(object):
 
     """  # noqa: E501
 
-    def __init__(self, dataset, ratios=[0, 15, 30], normalize=False,
+    def __init__(self, *, dataset, ratios=[0, 15, 30], normalize=False,
                  expand_method='pad', crop_method='random',
                  percentage_silence=0, time_axis=-1, channel_axis=-2,
                  fix_randomization=False):

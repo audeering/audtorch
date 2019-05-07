@@ -241,10 +241,11 @@ def test_randomadditivemix(signal1, signal2, ratio, percentage_silence,
     mixed_signal = F.additive_mix(signal1, signal2, ratio)
     assert np.array_equal(mixed_signal, expected_signal)
     augmentation_data_set = [[signal2]]
-    t = transforms.RandomAdditiveMix(augmentation_data_set, ratios=[ratio],
+    t = transforms.RandomAdditiveMix(dataset=augmentation_data_set,
+                                     ratios=[ratio],
                                      percentage_silence=percentage_silence)
     assert np.array_equal(t(signal1), expected_signal)
-    t = transforms.RandomAdditiveMix(augmentation_data_set)
+    t = transforms.RandomAdditiveMix(dataset=augmentation_data_set)
     transform = t(signal1)
     functional = F.additive_mix(signal1, signal2, t.ratio)
     assert np.array_equal(transform, functional)
