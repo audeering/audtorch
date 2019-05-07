@@ -1,8 +1,10 @@
 import pytest
 import numpy as np
 import pandas as pd
+import torch
+from torch.utils.data import TensorDataset
 
-from audtorch import (datasets, transforms)
+from audtorch import (datasets, samplers, transforms)
 
 
 xfail = pytest.mark.xfail
@@ -118,3 +120,15 @@ def test_files_and_labels_from_df(df, expected_files, expected_labels):
                                                       column_labels='b')
     assert files == expected_files
     assert labels == expected_labels
+
+
+@pytest.mark.parametrize('key_values,split_func,kwargs,expected', [
+    (list(range(5)), samplers.buckets_of_even_size, 2, [3, 2]),
+    (list(range(10)), samplers.buckets_by_boundaries, [0, 3, 8], [3, 5, 2])
+])
+def test_defined_split(key_values, split_func, kwargs, expected):
+    data = TensorDataset(torch.arange(len(key_values)))
+    split_func = split_func(torch.Tensor(key_values), kwargs)
+    subsets = datasets.defined_split(data, split_func)
+
+    assert expected == [len(subset) for subset in subsets]
