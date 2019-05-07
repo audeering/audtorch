@@ -322,16 +322,14 @@ def defined_split(dataset, split_func):
     r"""Split data set into desired non-overlapping subsets.
 
     Args:
-        dataset (torch.utils.data.Dataset): Data set to be split.
-        split_func (func): Function mapping from data set index
-            to subset id. Requirements:
-
-            -  func(idx: int) -> int
-            -  target domain needs to cover complete range,
-               [0, 1, ..., (number of splits - 1)].
+        dataset (torch.utils.data.Dataset): data set to be split
+        split_func (func): function mapping from data set index to subset id,
+            :math:`f(\text{index}) = \text{subset\_id}`.
+            The target domain of subset ids does not need to cover the
+            complete range `[0, 1, ..., (num_subsets - 1)]`
 
     Returns:
-        (list of Subsets): Desired subsets according to `split_func`.
+        (list of Subsets): desired subsets according to :attr:`split_func`
 
     Example:
         >>> import torch
@@ -341,22 +339,20 @@ def defined_split(dataset, split_func):
         >>> lengths = np.random.randint(0, 1000, (100,))
         >>> split_func = buckets_of_even_size(lengths, 5)
         >>> subsets = defined_split(data, split_func)
-        >>> [len(bucket) for bucket in subsets]
+        >>> [len(subset) for subset in subsets]
         [20, 20, 20, 20, 20]
 
     """
-    split_ids = [split_func(i) for i in range(len(dataset))]
-    unique_split_ids = list(np.unique(split_ids))
-    num_splits = len(unique_split_ids)
+    subset_ids = [split_func(i) for i in range(len(dataset))]
+    unique_subset_ids = sorted(set(subset_ids))
+    num_subsets = len(unique_subset_ids)
 
-    assert unique_split_ids == list(range(num_splits)), \
-        "Target domain of `split_func` does not represent range " \
-        "[0, 1, ..., (number of splits)-1] without missing element."
+    split_indices = [[] for _ in range(num_subsets)]
 
-    split_indices = [[] for _ in range(num_splits)]
-
-    for i, split_id in enumerate(split_ids):
-        split_indices[split_id] += [i]
+    for i, subset_id in enumerate(subset_ids):
+        # handle non-coherent target domain
+        subset_id = unique_subset_ids.index(subset_id)
+        split_indices[subset_id] += [i]
 
     return [Subset(dataset, indices)
             for indices in split_indices]
