@@ -100,3 +100,9 @@ LogSpectrogram
 
 .. autoclass:: LogSpectrogram
     :members:
+
+RandomAdditiveMix
+-----------------
+
+.. autoclass:: RandomAdditiveMix
+    :members:
