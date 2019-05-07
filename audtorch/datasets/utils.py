@@ -334,9 +334,9 @@ def defined_split(dataset, split_func):
         (list of Subsets): Desired subsets according to `split_func`.
 
     Example:
-        >>> from audtorch.samplers import buckets_of_even_size
         >>> import torch
         >>> from torch.utils.data import TensorDataset
+        >>> from audtorch.samplers import buckets_of_even_size
         >>> data = TensorDataset(torch.randn(100))
         >>> lengths = np.random.randint(0, 1000, (100,))
         >>> split_func = buckets_of_even_size(lengths, 5)

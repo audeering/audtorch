@@ -73,8 +73,8 @@ class BucketSampler(Sampler):
         >>> data = TensorDataset(torch.randn(100))
         >>> lengths = np.random.randint(0, 890, (100,))
         >>> split_func = buckets_of_even_size(lengths, num_buckets=3)
-        >>> datasets = defined_split(data, split_func)
-        >>> concat_dataset = ConcatDataset(datasets)
+        >>> subsets = defined_split(data, split_func)
+        >>> concat_dataset = ConcatDataset(subsets)
         >>> batch_sampler = BucketSampler(concat_dataset, 3 * [16])
 
     """
@@ -188,6 +188,13 @@ def buckets_by_boundaries(key_values, bucket_boundaries):
         func: Key function to use for splitting: \
         :math:`f(\text{item}) = \text{bucket\_id}`
 
+    Example:
+        >>> lengths = [288, 258, 156, 99, 47, 13]
+        >>> boundaries = [80, 150]
+        >>> split_func = buckets_by_boundaries(lengths, boundaries)
+        >>> [split_func(i) for i in range(len(lengths))]
+        [2, 2, 2, 1, 0, 0]
+
     """
     assert bucket_boundaries == sorted(bucket_boundaries), \
         "Iterable `bucket_boundaries` not given in ascending order."
@@ -211,8 +218,9 @@ def buckets_by_boundaries(key_values, bucket_boundaries):
 def buckets_of_even_size(key_values, num_buckets, reverse=False):
     r"""Split samples into buckets of even size
 
-    The samples are sorted with either increasing or
-    decreasing key value.
+    The samples are sorted with either increasing (or decreasing) key value.
+    If number of samples cannot be distributed evenly to buckets,
+    the first buckets are filled up with one remainder each.
 
     Args:
         key_values (list): contains key values, e.g. sequence lengths
@@ -225,6 +233,13 @@ def buckets_of_even_size(key_values, num_buckets, reverse=False):
         func: Key function to use for splitting: \
         :math:`f(\text{item}) = \text{bucket\_id}`
 
+    Example:
+        >>> lengths = [288, 258, 156, 47, 112, 99, 13]
+        >>> num_buckets = 4
+        >>> split_func = buckets_of_even_size(lengths, num_buckets)
+        >>> [split_func(i) for i in range(len(lengths))]
+        [3, 2, 2, 0, 1, 1, 0]
+
     """
     # make sure that bucket size is larger than 0
     assert (len(key_values) >= num_buckets), \
@@ -234,23 +249,25 @@ def buckets_of_even_size(key_values, num_buckets, reverse=False):
     assert (num_buckets > 0) and isinstance(num_buckets, int), \
         "Specified value for `num_buckets` not a positive integer."
 
-    bucket_size = len(key_values) // num_buckets
-    sorted_indices = sorted(
-        range(len(key_values)),
-        key=lambda i: key_values[i],
-        reverse=reverse)
+    bucket_size, remainder = divmod(len(key_values), num_buckets)
+    sorted_indices = sorted(range(len(key_values)),
+                            key=lambda i: key_values[i],
+                            reverse=reverse)
 
     bucket_membership = len(key_values) * [0]
-    sample_count = 0
-    bucket_id = 0
+    sample_count, bucket_id, r = 0, 0, remainder
 
     for i in sorted_indices:
         bucket_membership[i] = bucket_id
         sample_count += 1
-        # if bucket full move on (not true for last bucket)
-        if sample_count == bucket_size and bucket_id < num_buckets - 1:
-            sample_count = 0
-            bucket_id += 1
+        if sample_count == bucket_size:  # bucket full
+            # distribute one remainder per bucket
+            if r > 0 and bucket_id + r == remainder:
+                r -= 1
+                sample_count -= 1
+            else:
+                sample_count = 0
+                bucket_id += 1
 
     def key_func(item):
         return bucket_membership[item]
