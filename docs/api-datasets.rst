@@ -65,7 +65,7 @@ AudioConcatDataset
 
 
 
-utils
+Utils
 -----
 
 Utility functions for handling audio data sets.
