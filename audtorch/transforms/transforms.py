@@ -20,8 +20,8 @@ class Compose(object):
 
     Args:
         transforms (list of object): list of transforms to compose
-        fix_randomization (bool, optional): controls randomization of underlying
-            transforms. Default: `False`
+        fix_randomization (bool, optional): controls randomization of
+            underlying transforms. Default: `False`
 
     Example:
         >>> a = np.array([[1, 2], [3, 4]])
