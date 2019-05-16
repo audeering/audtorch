@@ -25,13 +25,17 @@ MozillaCommonVoice
 .. autoclass:: MozillaCommonVoice
     :members:
 
+VoxCeleb1
+---------
+
+.. autoclass:: VoxCeleb1
+    :members:
 
 WhiteNoise
 ----------
 
 .. autoclass:: WhiteNoise
     :members:
-
 
 Base
 ----
@@ -62,7 +66,6 @@ AudioConcatDataset
 
 .. autoclass:: AudioConcatDataset
     :members:
-
 
 
 Utils
