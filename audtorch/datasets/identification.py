@@ -5,8 +5,14 @@ import pandas as pd
 from audtorch.datasets.common import AudioDataset
 
 
+__doctest_skip__ = ['*']
+
+
 class VoxCeleb1(AudioDataset):
     r"""VoxCeleb1 data set.
+
+    Open and publicly available data set of voices from University of Oxford:
+    http://www.robots.ox.ac.uk/~vgg/data/voxceleb/vox1.html
 
     VoxCeleb1 is a large audio-visual data set consisting of short clips of
     human speech extracted from YouTube interviews with celebrities. It is
@@ -29,10 +35,9 @@ class VoxCeleb1(AudioDataset):
 
     Args:
         root (str): root directory of dataset
-        partition (str, optional): name of a a data partition to use. No
-            absolute path is possible. You are most probably interested in
-            `train`, `dev`, `test` or `None`. If `None` is given, then the
-            whole data set will be returned. Default: `train`.
+        partition (str, optional): name of the data partition to use.
+            Choose one of `train`, `dev`, `test` or `None`. If `None` is given,
+            then the whole data set will be returned. Default: `train`
         identification_file (str, optional): name of the file containing the
             official identification split of the data set. Default:
             `identification_file.txt`
@@ -47,10 +52,9 @@ class VoxCeleb1(AudioDataset):
         * This data set will work only if the identification file is downloaded
           as is from the official homepage. Please open it in your browser and
           copy paste its contents in a file in your computer.
-        * It seems like the option to automatically download the data set
-          has been removed. Now the user needs to ask for a password to
-          download the data set themselves. You can find that option here:
-          http://www.robots.ox.ac.uk/~vgg/data/voxceleb/.
+        * To download the data set go to
+          http://www.robots.ox.ac.uk/~vgg/data/voxceleb/ and fill in the form
+          to request a password. Get the Audio Files that the owners provide.
 
         * When using the VoxCeleb1 data set in your research, please cite
           the following publication: :cite:`nagrani2017voxceleb`.
@@ -64,10 +68,10 @@ class VoxCeleb1(AudioDataset):
             Root Location: /data/voxceleb1
             Sampling Rate: 16000Hz
             Labels: speaker ID
-        >>> sig, target = data[0]
+        >>> signal, target = data[0]
         >>> target
         'id10003'
-        >>> sd.play(sig.transpose(), data.sampling_rate)
+        >>> sd.play(signal.transpose(), data.sampling_rate)
 
     """
     url = ('http://www.robots.ox.ac.uk/~vgg/data/voxceleb/')
