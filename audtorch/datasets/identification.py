@@ -10,7 +10,8 @@ class VoxCeleb1(AudioDataset):
 
     VoxCeleb1 is a large audio-visual data set consisting of short clips of
     human speech extracted from YouTube interviews with celebrities. It is
-    free for commercial and research purposes.
+    free for commercial and research purposes. This data set is used to iterate
+    over the audio part of the data set as provided by the official owners.
 
     Licence: CC BY-SA 4.0
 
@@ -19,25 +20,33 @@ class VoxCeleb1(AudioDataset):
     * :attr:`files` controls the audio files of the data set
     * :attr:`targets` controls the corresponding targets
     * :attr:`sampling_rate` holds the sampling rate of data set
+    * :attr:`identification_file` holds the name of the official identification
+      split of the data set
 
     In addition, the following class attributes are available:
 
-    * :attr:`root` holds its default location on the NAS
-    * :attr:`url` holds its default GitHub repository
+    * :attr:`url` holds its URL
 
     Args:
-        root (str, optional): root directory of dataset, where the CSV files
-            are located. Default: `OMGEmotion.root`
+        root (str): root directory of dataset
         partition (str, optional): name of a a data partition to use. No
             absolute path is possible. You are most probably interested in
             `train`, `dev`, `test` or `None`. If `None` is given, then the
             whole data set will be returned. Default: `train`.
+        identification_file (str, optional): name of the file containing the
+            official identification split of the data set. Default:
+            `identification_file.txt`
+        sampling_rate (int, optional): assumed sampling rate of the data set.
+            Default: `16000`
         transform (callable, optional): function/transform applied on the
             signal. Default: `None`
         target_transform (callable, optional): function/transform applied on
             the target. Default: `None`
 
     Note:
+        * This data set will work only if the identification file is downloaded
+          as is from the official homepage. Please open it in your browser and
+          copy paste its contents in a file in your computer.
         * It seems like the option to automatically download the data set
           has been removed. Now the user needs to ask for a password to
           download the data set themselves. You can find that option here:
@@ -64,7 +73,7 @@ class VoxCeleb1(AudioDataset):
     url = ('http://www.robots.ox.ac.uk/~vgg/data/voxceleb/')
     _partitions = {'train': 1, 'dev': 2, 'test': 3}
 
-    def __init__(self, root, partition='train',
+    def __init__(self, root, *, partition='train',
                  identification_file='identification_split.txt',
                  sampling_rate=16000,
                  transform=None, target_transform=None):
