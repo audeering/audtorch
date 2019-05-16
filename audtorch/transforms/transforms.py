@@ -16,10 +16,12 @@ from . import functional as F
 
 
 class Compose(object):
-    """Compose several transforms together.
+    r"""Compose several transforms together.
 
     Args:
         transforms (list of object): list of transforms to compose
+        fix_randomization (bool, optional): controls randomization of underlying
+            transforms. Default: `False`
 
     Example:
         >>> a = np.array([[1, 2], [3, 4]])
@@ -35,11 +37,14 @@ class Compose(object):
 
     """
 
-    def __init__(self, transforms):
+    def __init__(self, transforms, *, fix_randomization=False):
         self.transforms = transforms
+        self.fix_randomization = fix_randomization
 
     def __call__(self, signal):
         for t in self.transforms:
+            if hasattr(t, 'fix_randomization'):
+                t.fix_randomization = self.fix_randomization
             signal = t(signal)
         return signal
 
@@ -49,6 +54,8 @@ class Compose(object):
             format_string += '\n'
             format_string += '    {0}'.format(t)
         format_string += '\n)'
+        if self.fix_randomization:
+            format_string += ', fix_randomization=True'
         return format_string
 
 
