@@ -3,6 +3,7 @@ import os
 import pandas as pd
 
 from audtorch.datasets.common import AudioDataset
+from audtorch.datasets.utils import download_url
 
 
 __doctest_skip__ = ['*']
@@ -77,17 +78,15 @@ class VoxCeleb1(AudioDataset):
     _partitions = {'train': 1, 'dev': 2, 'test': 3}
 
     def __init__(self, root, *, partition='train',
-                 identification_file='iden_split.txt',
                  transform=None, target_transform=None):
         super().__init__(root, files=[], targets=[], transform=transform,
                          sampling_rate=16000,
                          target_transform=target_transform)
-        if not os.path.exists(os.path.join(self.root, identification_file)):
-            os.system('wget ' + self._iden_file_url + ' -P ' + self.root)
-            identification_file = 'iden_split.txt'
 
         filelist = pd.read_csv(
-            os.path.join(self.root, identification_file),
+            os.path.join(
+                self.root,
+                download_url(self._iden_file_url, self.root)),
             sep=' ', header=None)
         self.files, self.targets = self._get_files_speaker_lists(filelist)
 
