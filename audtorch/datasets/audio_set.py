@@ -4,7 +4,7 @@ import json
 import pandas as pd
 
 from ..utils import flatten_list
-from .common import AudioDataset
+from .base import AudioDataset
 
 
 __doctest_skip__ = ['*']

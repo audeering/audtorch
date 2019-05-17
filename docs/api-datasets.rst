@@ -6,8 +6,35 @@ Audio data sets.
 .. automodule:: audtorch.datasets
 
 
-Common
-------
+AudioSet
+--------
+
+.. autoclass:: AudioSet
+    :members:
+
+
+LibriSpeech
+-----------
+
+.. autoclass:: LibriSpeech
+    :members:
+
+MozillaCommonVoice
+------------------
+
+.. autoclass:: MozillaCommonVoice
+    :members:
+
+
+WhiteNoise
+----------
+
+.. autoclass:: WhiteNoise
+    :members:
+
+
+Base
+----
 
 This section contains a mix of generic data sets that are useful for a wide
 variety of cases and can be used as base classes for other data sets.
@@ -37,49 +64,8 @@ AudioConcatDataset
     :members:
 
 
-Speech
-------
 
-MozillaCommonVoice
-~~~~~~~~~~~~~~~~~~
-
-.. autoclass:: MozillaCommonVoice
-    :members:
-
-
-LibriSpeech
-~~~~~~~~~~~
-
-.. autoclass:: LibriSpeech
-    :members:
-
-
-Scene Analysis
---------------
-
-This section contains data sets that can be primarily used for the analysis of
-acoustic scenes.
-
-AudioSet
-~~~~~~~~
-
-.. autoclass:: AudioSet
-    :members:
-
-
-Noise
------
-
-This section contains data sets that are primarily used as noise sources.
-
-WhiteNoise
-~~~~~~~~~~
-
-.. autoclass:: WhiteNoise
-    :members:
-
-
-utils
+Utils
 -----
 
 Utility functions for handling audio data sets.
