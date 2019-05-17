@@ -72,14 +72,20 @@ class VoxCeleb1(AudioDataset):
 
     """
     url = ('http://www.robots.ox.ac.uk/~vgg/data/voxceleb/')
+    _iden_file_url = (
+        'http://www.robots.ox.ac.uk/~vgg/data/voxceleb/meta/iden_split.txt')
     _partitions = {'train': 1, 'dev': 2, 'test': 3}
 
     def __init__(self, root, *, partition='train',
-                 identification_file='identification_split.txt',
+                 identification_file='iden_split.txt',
                  transform=None, target_transform=None):
         super().__init__(root, files=[], targets=[], transform=transform,
                          sampling_rate=16000,
                          target_transform=target_transform)
+        if not os.path.exists(os.path.join(self.root, identification_file)):
+            os.system('wget ' + self._iden_file_url + ' -P ' + self.root)
+            identification_file = 'iden_split.txt'
+
         filelist = pd.read_csv(
             os.path.join(self.root, identification_file),
             sep=' ', header=None)
