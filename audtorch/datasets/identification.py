@@ -16,8 +16,7 @@ class VoxCeleb1(AudioDataset):
 
     VoxCeleb1 is a large audio-visual data set consisting of short clips of
     human speech extracted from YouTube interviews with celebrities. It is
-    free for commercial and research purposes. This data set is used to iterate
-    over the audio part of the data set as provided by the official owners.
+    free for commercial and research purposes.
 
     Licence: CC BY-SA 4.0
 
