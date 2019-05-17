@@ -40,8 +40,6 @@ class VoxCeleb1(AudioDataset):
         identification_file (str, optional): name of the file containing the
             official identification split of the data set. Default:
             `identification_file.txt`
-        sampling_rate (int, optional): assumed sampling rate of the data set.
-            Default: `16000`
         transform (callable, optional): function/transform applied on the
             signal. Default: `None`
         target_transform (callable, optional): function/transform applied on
@@ -78,10 +76,9 @@ class VoxCeleb1(AudioDataset):
 
     def __init__(self, root, *, partition='train',
                  identification_file='identification_split.txt',
-                 sampling_rate=16000,
                  transform=None, target_transform=None):
         super().__init__(root, files=[], targets=[], transform=transform,
-                         sampling_rate=sampling_rate,
+                         sampling_rate=16000,
                          target_transform=target_transform)
         filelist = pd.read_csv(
             os.path.join(self.root, identification_file),
