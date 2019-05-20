@@ -26,8 +26,6 @@ class VoxCeleb1(AudioDataset):
     * :attr:`files` controls the audio files of the data set
     * :attr:`targets` controls the corresponding targets
     * :attr:`sampling_rate` holds the sampling rate of data set
-    * :attr:`identification_file` holds the name of the official identification
-      split of the data set
 
     In addition, the following class attributes are available:
 
@@ -38,9 +36,6 @@ class VoxCeleb1(AudioDataset):
         partition (str, optional): name of the data partition to use.
             Choose one of `train`, `dev`, `test` or `None`. If `None` is given,
             then the whole data set will be returned. Default: `train`
-        identification_file (str, optional): name of the file containing the
-            official identification split of the data set. Default:
-            `identification_file.txt`
         transform (callable, optional): function/transform applied on the
             signal. Default: `None`
         target_transform (callable, optional): function/transform applied on
