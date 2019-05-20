@@ -82,7 +82,7 @@ def download_url(url, root, *, filename=None, md5=None):
 
     # downloads file
     if os.path.isfile(filename):
-        print('Using downloaded file: ' + filename)
+        pass
     else:
         bar_updater = _gen_bar_updater(tqdm(unit='B', unit_scale=True))
         try:
