@@ -55,8 +55,9 @@ To create fixed length speech samples augmented with white noise run:
     >>> signal, label = data[8]
     >>> sd.play(signal.transpose(), data.sampling_rate)
 
-Besides data sets and transforms the package provides a few metrics, samplers,
-and collate functons.
+Besides data sets and transforms the package provides standard evaluation
+metrics, samplers, and necessary collate functions for training deep neural
+networks for audio tasks.
 
 .. _audtorch: https://audtorch.readthedocs.io
 .. _PyTorch: https://pytorch.org
