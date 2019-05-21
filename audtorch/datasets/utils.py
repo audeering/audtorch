@@ -81,9 +81,7 @@ def download_url(url, root, *, filename=None, md5=None):
     os.makedirs(root, exist_ok=True)
 
     # downloads file
-    if os.path.isfile(filename):
-        pass
-    else:
+    if not os.path.isfile(filename):
         bar_updater = _gen_bar_updater(tqdm(unit='B', unit_scale=True))
         try:
             print('Downloading ' + url + ' to ' + filename)
