@@ -2,7 +2,7 @@ import os
 
 import pandas as pd
 
-from audtorch.datasets.common import AudioDataset
+from audtorch.datasets.base import AudioDataset
 from audtorch.datasets.utils import download_url
 
 
