@@ -37,8 +37,10 @@ audtorch_ is supported by Python 3.5 or higher. To install it run
 Usage
 =====
 
-audtorch_ provides classes for common audio data sets and a collection of
-transforms that can handle numpy arrays.
+audtorch_ automates the data iteration process for deep neural
+network training using PyTorch_. It provides a set of feature extraction
+transforms that can be implemented on-the-fly on the CPU.
+
 To create fixed length speech samples augmented with white noise run:
 
 .. code-block:: python
@@ -57,3 +59,4 @@ Besides data sets and transforms the package provides a few metrics, samplers,
 and collate functons.
 
 .. _audtorch: https://audtorch.readthedocs.io
+.. _PyTorch: https://pytorch.org
