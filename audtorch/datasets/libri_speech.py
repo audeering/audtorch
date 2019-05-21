@@ -56,6 +56,7 @@ class LibriSpeech(PandasDataset):
             if not present. Default: `False`
 
     Example:
+        >>> import sounddevice as sd
         >>> data = LibriSpeech(root='/data/LibriSpeech', sets='dev-clean')
         >>> print(data)
         Dataset LibriSpeech
@@ -66,7 +67,7 @@ class LibriSpeech(PandasDataset):
         >>> signal, label = data[8]
         >>> label
         AS FOR ETCHINGS THEY ARE OF TWO KINDS BRITISH AND FOREIGN
-        >>> sounddevice.play(signal.transpose(), data.sampling_rate)
+        >>> sd.play(signal.transpose(), data.sampling_rate)
 
     """
 
