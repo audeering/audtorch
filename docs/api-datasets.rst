@@ -67,6 +67,17 @@ AudioConcatDataset
 .. autoclass:: AudioConcatDataset
     :members:
 
+Mixture
+-------
+
+This section contains data sets that are primarily used for mixing different
+data sets.
+
+SpeechNoiseMix
+~~~~~~~~~~~~~~
+
+.. autoclass:: SpeechNoiseMix
+    :members:
 
 Utils
 -----
