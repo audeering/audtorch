@@ -58,7 +58,7 @@ class SpeechNoiseMix(Dataset):
         >>> sd.play(noisy.transpose(), data.sampling_rate)
 
     """  # noqa: E501
-    def __init__(self, speech_dataset, mix_transform, transform=None,
+    def __init__(self, speech_dataset, mix_transform, *, transform=None,
                  target_transform=None, joint_transform=None,
                  percentage_silence=0):
         super().__init__()
