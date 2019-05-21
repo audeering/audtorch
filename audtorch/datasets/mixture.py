@@ -7,6 +7,9 @@ from .common import _include_repr
 from .utils import ensure_same_sampling_rate
 
 
+__doctest_skip__ = ['*']
+
+
 class SpeechNoiseMix(Dataset):
     r"""Mix speech and noise with speech as target.
 
@@ -28,25 +31,24 @@ class SpeechNoiseMix(Dataset):
       augmentation
 
     Args:
-        speech_dataset (Dataset): Speech data set.
-        mix_transform (callable): Function/transform that can augment a signal
-            with noise.
-        transform (callable, optional): Function/transform applied on the
-            speech-noise-mixture (input). Default; `None`.
-        target_transform (callable, optional): Function/transform applied
-            on the speech (target). Default: `None`.
-        joint_transform (callable, optional): Function/transform applied
-            on the mixtue (input) and speech (target). If the transform
-            includes randomization it is applied with the same random parameter
-            during both calls.
-        percentage_silence (float, optional): Value between `0` and `1`, which
+        speech_dataset (Dataset): speech data set
+        mix_transform (callable): function/transform that can augment a signal
+            with noise
+        transform (callable, optional): function/transform applied on the
+            speech-noise-mixture (input) only. Default; `None`
+        target_transform (callable, optional): function/transform applied
+            on the speech (target) only. Default: `None`
+        joint_transform (callable, optional): function/transform applied
+            on the mixtue (input) and speech (target) simultaneously. If the
+            transform includes randomization it is applied with the same random
+            parameter during both calls
+        percentage_silence (float, optional): value between `0` and `1`, which
             controls the percentage of randomly inserted noise input, silent
-            target pairs. Default: `0`.
+            target pairs. Default: `0`
 
     Examples:
         >>> import sounddevice as sd
-        >>> import audtorch.datasets as datasets
-        >>> import audtorch.transforms as transforms
+        >>> from audtorch import datasets, transforms
         >>> noise = datasets.WhiteNoise(duration=10, sampling_rate=48000)
         >>> mix = transforms.RandomAdditiveMix(noise)
         >>> normalize = transforms.Normalize()
