@@ -2,6 +2,8 @@
 audtorch
 ========
 
+|tests| |docs| |license|
+
 Deep learning with PyTorch_ and audio.
 
 audtorch_ collects audio related data sets, transforms and other useful
@@ -18,6 +20,16 @@ efforts to integrate more audio directly into PyTorch_:
 .. _pytorch/audio: https://github.com/pytorch/audio
 .. _keunwoochoi/torchaudio-contrib:
     https://github.com/keunwoochoi/torchaudio-contrib
+
+.. |tests| image:: https://travis-ci.org/audeering/audtorch.svg?branch=master
+    :target: https://travis-ci.org/audeering/audtorch/
+    :alt: audtorch on TravisCI
+.. |docs| image:: https://readthedocs.org/projects/audtorch/badge/
+    :target: https://audtorch.readthedocs.io/
+    :alt: audtorch's documentation on Read the Docs
+.. |license| image:: https://img.shields.io/badge/license-MIT-green.svg
+    :target: https://github.com/audeering/audtorch/blob/master/LICENSE
+    :alt: audtorch's MIT license
 
 
 Installation
