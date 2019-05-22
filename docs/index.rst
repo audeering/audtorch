@@ -1,7 +1,7 @@
 .. audtorch documentation master file
 
 .. include:: ../README.rst
-    :end-line: 22
+    :end-line: 33
 
 .. toctree::
     :caption: Getting started
