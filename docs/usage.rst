@@ -1,2 +1,2 @@
 .. include:: ../README.rst
-    :start-line: 48
+    :start-line: 46
