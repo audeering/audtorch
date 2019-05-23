@@ -1,4 +1,26 @@
+import os
+import sys
 from subprocess import check_output
+
+
+# Import ------------------------------------------------------------------
+
+# Relative source code path. Avoids `import audtorch`, which need package to be
+# installed first.
+sys.path.insert(0, os.path.abspath('..'))
+
+# Ignore package dependencies during building the docs
+autodoc_mock_imports = [
+    'audiofile',
+    'librosa',
+    'numpy',
+    'pandas',
+    'resampy',
+    'torch',
+    'scipy',
+    'tqdm',
+    'tabulate',
+]
 
 
 # Project -----------------------------------------------------------------
@@ -43,19 +65,6 @@ intersphinx_mapping = {
     'scipy': ('https://docs.scipy.org/doc/scipy/reference/', None),
     'torch': ('https://pytorch.org/docs/stable/', None),
 }
-
-# Ignore package dependencies during building the docs
-autodoc_mock_imports = [
-    'audiofile',
-    'librosa',
-    'numpy',
-    'pandas',
-    'resampy',
-    'torch',
-    'scipy',
-    'tqdm',
-    'tabulate',
-]
 
 # HTML --------------------------------------------------------------------
 
