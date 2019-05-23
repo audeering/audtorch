@@ -106,13 +106,13 @@ You can install it and a few other necessary packages with::
 
 To create the HTML pages, use::
 
-    python setup.py build_sphinx
+    sphinx-build docs/ build/sphinx/html/ -b html
 
 The generated files will be available in the directory ``build/sphinx/html/``.
 
 It is also possible to automatically check if all links are still valid::
 
-    python setup.py build_sphinx -b linkcheck
+    sphinx-build docs/ build/sphinx/html/ -b linkcheck
 
 .. _Sphinx: http://sphinx-doc.org/
 
