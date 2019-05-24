@@ -115,6 +115,8 @@ def test_additivemix(input1, input2, ratio, percentage_silence,
                       [a21 / max(a21), a22 / max(a22)]])),
     (a11, None, a11 / np.max(a11)),
     (a11, -1, a11 / np.max(a11)),
+    ([a11, a12], 1, np.array([a11 / max(a11), a12 / max(a12)])),
+    ([[1, 4], [3, 2]], 0, np.array([[1 / 3, 4 / 4], [3 / 3, 2 / 4]])),
 ])
 def test_normalize(input, axis, expected_output):
     output = F.normalize(input, axis=axis)
