@@ -249,7 +249,7 @@ def normalize(signal, *, axis=None):
                [0.75, 1.  ]])
 
     """
-    if axis:
+    if axis != None:
         peak = np.expand_dims(np.amax(np.abs(signal), axis=axis), axis=axis)
     else:
         peak = np.amax(np.abs(signal))
