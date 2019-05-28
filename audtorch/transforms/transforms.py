@@ -682,6 +682,43 @@ class Normalize(object):
         return '{0}({1})'.format(self.__class__.__name__, options)
 
 
+class Standardize(object):
+    r"""Standardize signal.
+
+    Ensure the signal has a mean value of 0 and a variance of 1.
+
+    * :attr:`axis` controls axis for standardization
+
+    Args:
+        axis (int, optional): standardize only along the given axis.
+            Default: `-1`
+
+    Shape:
+        - Input: :math:`(*)`
+        - Output: :math:`(*)`, where :math:`*` can be any number of dimensions.
+
+    Example:
+        >>> a = np.array([1, 2, 3, 4])
+        >>> t = Standardize()
+        >>> print(t)
+        Standardize(axis=-1)
+        >>> t(a)
+        array([-1.34164079, -0.4472136 ,  0.4472136 ,  1.34164079])
+
+    """
+
+    def __init__(self, axis=-1):
+        super().__init__()
+        self.axis = axis
+
+    def __call__(self, signal):
+        return F.standardize(signal, axis=self.axis)
+
+    def __repr__(self):
+        options = 'axis={0}'.format(self.axis)
+        return '{0}({1})'.format(self.__class__.__name__, options)
+
+
 class Resample(object):
     """Resample to new sampling rate.
 

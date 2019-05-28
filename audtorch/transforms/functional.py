@@ -256,6 +256,38 @@ def normalize(signal, *, axis=None):
     return signal / np.maximum(peak, 1e-7)
 
 
+def standardize(signal, axis=None):
+    r"""Standardize signal.
+
+    Ensure the signal has a mean value of 0 and a variance of 1.
+
+    Note:
+        The signal will never be divided by a variance smaller than 1e-7.
+
+    Args:
+        signal (numpy.ndarray): audio signal
+        axis (int, optional): standardize only along the given axis.
+            Default: `None`
+
+    Returns:
+        numpy.ndarray: standardized signal
+
+    Example:
+        >>> a = np.array([[1, 2], [3, 4]])
+        >>> standardize(a)
+        array([[-1.34164079, -0.4472136 ],
+               [ 0.4472136 ,  1.34164079]])
+
+    """
+    if axis is not None:
+        mean = np.expand_dims(np.mean(signal, axis=axis), axis=axis)
+        std = np.expand_dims(np.std(signal, axis=axis), axis=axis)
+    else:
+        mean = np.mean(signal)
+        std = np.std(signal)
+    return (signal - mean) / np.maximum(std, 1e-7)
+
+
 def stft(signal, window_size, hop_size, *, n_fft=None, window='hann', axis=-1):
     r"""Short-term Fourier transform.
 
