@@ -877,6 +877,7 @@ class Log(object):
                [1.1920928e-07, 1.0986123e+00, 1.0986123e+00]], dtype=float32)
 
     """
+
     def __init__(self, magnitude_boost=1e-7):
         self.magnitude_boost = magnitude_boost
 
@@ -946,6 +947,9 @@ class LogSpectrogram(object):
     def __init__(self, window_size, hop_size, *, window='hann',
                  normalize=False, magnitude_boost=1e-7, axis=-1):
         super().__init__()
+        warn('LogSpectrogram will be removed in a future version. '
+             'Please use a Compose transform consisting of Spectrogram and '
+             'Log instead.', DeprecationWarning)
         self.window_size = window_size
         self.hop_size = hop_size
         self.window = window
