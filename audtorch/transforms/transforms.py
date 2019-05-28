@@ -757,6 +757,7 @@ class Spectrogram(object):
 
     * :attr:`window_size` controls FFT window size in samples
     * :attr:`hop_size` controls STFT window hop size in samples
+    * :attr:`n_fft` controls number of frequency bins in STFT
     * :attr:`window` controls window function of spectrogram computation
     * :attr:`axis` controls axis of spectrogram computation
     * :attr:`phase` holds the phase of the spectrogram
@@ -764,6 +765,8 @@ class Spectrogram(object):
     Args:
         window_size (int): size of STFT window in samples
         hop_size (int): size of STFT window hop in samples
+        n_fft(int, optional): number of frequency bins in STFT. If `None`,
+            then it defaults to `window_size`. Default: `None`
         window (str, tuple, number, function, or numpy.ndarray, optional): type
             of STFT window. Default: `hann`
         axis (int, optional): axis of STFT calculation. Default: `-1`
@@ -790,17 +793,20 @@ class Spectrogram(object):
 
     """
 
-    def __init__(self, window_size, hop_size, *, window='hann', axis=-1):
+    def __init__(self, window_size, hop_size, *, n_fft=None,
+                 window='hann', axis=-1):
         super().__init__()
         self.window_size = window_size
         self.hop_size = hop_size
+        self.n_fft = n_fft
         self.window = window
         self.axis = axis
         self.phase = []
 
     def __call__(self, signal):
         spectrogram = F.stft(signal, self.window_size, self.hop_size,
-                             window=self.window, axis=self.axis)
+                             n_fft=self.n_fft, window=self.window,
+                             axis=self.axis)
         magnitude, self.phase = librosa.magphase(spectrogram)
         return magnitude
 

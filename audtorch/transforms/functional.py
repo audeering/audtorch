@@ -256,7 +256,7 @@ def normalize(signal, *, axis=None):
     return signal / np.maximum(peak, 1e-7)
 
 
-def stft(signal, window_size, hop_size, *, window='hann', axis=-1):
+def stft(signal, window_size, hop_size, *, n_fft=None, window='hann', axis=-1):
     r"""Short-term Fourier transform.
 
     The short-term Fourier transform (STFT) is calculated by using librosa.
@@ -295,7 +295,9 @@ def stft(signal, window_size, hop_size, *, window='hann', axis=-1):
     # Pad to ensure same signal length after reconstruction
     # See discussion at https://github.com/librosa/librosa/issues/328
     signal = pad(signal, (0, np.mod(samples, hop_size)), value=0, axis=axis)
-    fft_config = dict(n_fft=window_size, hop_length=hop_size,
+    if n_fft is None:
+        n_fft = window_size
+    fft_config = dict(n_fft=n_fft, hop_length=hop_size,
                       win_length=window_size, window=window)
     spectrogram = np.apply_along_axis(librosa.stft, axis, signal, **fft_config)
     return spectrogram
