@@ -140,6 +140,19 @@ def test_normalize(input, axis, expected_output):
     assert np.array_equal(t(input), expected_output)
 
 
+@pytest.mark.parametrize('input,axis', [
+    (A, None),
+    (A, -1),
+    (a11, None),
+    (a11, -1),
+])
+def test_standardize(input, axis):
+    t = transforms.Standardize(axis=axis)
+    output = t(input)
+    np.testing.assert_almost_equal(output.mean(axis=axis).mean(), 0)
+    np.testing.assert_almost_equal(output.std(axis=axis).mean(), 1)
+
+
 @pytest.mark.parametrize('input,idx,axis', [
     (A, (0, 2), -1),
     (a11, (1, 2), -1),
