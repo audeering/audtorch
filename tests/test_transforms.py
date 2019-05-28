@@ -207,23 +207,22 @@ def test_resample(input, input_sample_rate, output_sample_rate, method, axis):
 @pytest.mark.parametrize('input,window_size,hop_size,axis,magnitude_boost', [
     (A, 4, 1, 2, 1e-07),
     pytest.param(A, 4, 1, 2, -1e-07, marks=xfail(raises=ValueError)),
-    pytest.param(A, 4, 1, 2, 0, marks=xfail(raises=ValueError)),
+    pytest.param(A, 4, 1, 2, -1, marks=xfail(raises=ValueError)),
     pytest.param(A, 2048, 1024, 2, 1e-07, marks=xfail(raises=ValueError)),
     (np.random.normal(size=[2, 3, 16000]), 2048, 1024, 2, 1e-07),
     (np.random.normal(size=[2, 16000, 3]), 2048, 1024, 1, 1e-07),
     (np.random.normal(size=[16000, 2, 3]), 2048, 1024, 0, 1e-07),
+    (np.random.normal(size=[16000, 2, 3]), 2048, 1024, 0, 0),
     (np.random.normal(size=16000), 2048, 1024, 0, 1e-07),
 ])
 def test_stft(input, window_size, hop_size, axis, magnitude_boost):
     t = transforms.Spectrogram(window_size, hop_size, axis=axis)
-    t_log = transforms.LogSpectrogram(window_size, hop_size, axis=axis,
-                                      magnitude_boost=magnitude_boost)
+    t_log = transforms.Log(magnitude_boost=magnitude_boost)
     spectrogram = F.stft(input, window_size, hop_size, axis=axis)
     magnitude, phase = librosa.magphase(spectrogram)
     assert np.array_equal(t(input), magnitude)
-    assert np.array_equal(t_log(input), np.log(magnitude + magnitude_boost))
+    assert np.array_equal(t_log(t(input)), np.log(magnitude + magnitude_boost))
     assert np.array_equal(t.phase, phase)
-    assert np.array_equal(t_log.phase, phase)
 
 
 @pytest.mark.parametrize('signal1,signal2,ratio,'

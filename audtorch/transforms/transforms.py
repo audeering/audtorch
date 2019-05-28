@@ -720,7 +720,7 @@ class Standardize(object):
 
 
 class Resample(object):
-    """Resample to new sampling rate.
+    r"""Resample to new sampling rate.
 
     The signal is resampled by one of the following methods.
 
@@ -858,7 +858,7 @@ class Spectrogram(object):
 class Log(object):
     r"""Logarithmic transform of an input signal.
 
-    * :attr:`magnitude_boost` controls the positive value added to the
+    * :attr:`magnitude_boost` controls the non-negative value added to the
       magnitude of the signal before applying the logarithmus
 
     Args:
@@ -879,6 +879,10 @@ class Log(object):
     """
     def __init__(self, magnitude_boost=1e-7):
         self.magnitude_boost = magnitude_boost
+
+        if self.magnitude_boost < 0:
+            raise ValueError('`magnitude_boost` has to be >=0, but is {}'
+                             .format(self.magnitude_boost))
 
     def __call__(self, signal):
         signal = np.log(signal + self.magnitude_boost)
