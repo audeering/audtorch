@@ -818,6 +818,40 @@ class Spectrogram(object):
         return '{0}({1})'.format(self.__class__.__name__, options)
 
 
+class Log(object):
+    r"""Logarithmic transform of an input signal.
+
+    * :attr:`magnitude_boost` controls the positive value added to the
+      magnitude of the signal before applying the logarithmus
+
+    Args:
+        magnitude_boost (float, optional): positive value added to the
+            magnitude of the signal before applying the logarithmus.
+            Default: `1e-7`
+
+    Example:
+        >>> a = np.array([1., 2., 3., 4.])
+        >>> spect = Spectrogram(window_size=2, hop_size=2)
+        >>> t = Log()
+        >>> print(t)
+        Log(magnitude_boost=1e-07)
+        >>> t(spect(a))
+        array([[1.1920928e-07, 1.0986123e+00, 1.0986123e+00],
+               [1.1920928e-07, 1.0986123e+00, 1.0986123e+00]], dtype=float32)
+
+    """
+    def __init__(self, magnitude_boost=1e-7):
+        self.magnitude_boost = magnitude_boost
+
+    def __call__(self, signal):
+        signal = np.log(signal + self.magnitude_boost)
+        return signal
+
+    def __repr__(self):
+        options = ('magnitude_boost={}'.format(self.magnitude_boost))
+        return '{0}({1})'.format(self.__class__.__name__, options)
+
+
 class LogSpectrogram(object):
     r"""Logarithmic spectrogram of an audio signal.
 
