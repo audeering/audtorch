@@ -289,9 +289,9 @@ def standardize(signal, axis=None):
 
 
 def stft(signal, window_size, hop_size, *, n_fft=None, window='hann', axis=-1):
-    r"""Short-term Fourier transform.
+    r"""Short-time Fourier transform.
 
-    The short-term Fourier transform (STFT) is calculated by using librosa.
+    The Short-time Fourier transform (STFT) is calculated by using librosa.
     It returns an array with the same shape as the input array, besides the
     axis chosen for STFT calculation is replaced by the two new ones of the
     spectrogram.
@@ -336,9 +336,9 @@ def stft(signal, window_size, hop_size, *, n_fft=None, window='hann', axis=-1):
 
 
 def istft(spectrogram, window_size, hop_size, *, window='hann', axis=-2):
-    r"""Inverse short-term Fourier transform.
+    r"""Inverse Short-time Fourier transform.
 
-    The inverse short-term Fourier transform (iSTFT) is calculated by using
+    The inverse Short-time Fourier transform (iSTFT) is calculated by using
     librosa.
     It handles multi-dimensional inputs, but assumes that the two spectrogram
     axis are beside each other, starting with the axis corresponding to
@@ -389,7 +389,7 @@ def istft(spectrogram, window_size, hop_size, *, window='hann', axis=-2):
 
 
 def _istft(spectrogram, frequency_bins, time_bins, **config):
-    """Inverse short-term Fourier transform from a single axis.
+    """Inverse Short-time Fourier transform from a single axis.
 
     Time and frequency bins have to be provided in a single vector. This allows
     effective computation using `numpy.apply_along_axis`.
