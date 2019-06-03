@@ -283,15 +283,15 @@ def standardize(signal, axis=None, mean=True, std=True):
 
     """
     if axis is not None:
-        mean = np.expand_dims(np.mean(signal, axis=axis), axis=axis)
-        std = np.expand_dims(np.std(signal, axis=axis), axis=axis)
+        signal_mean = np.expand_dims(np.mean(signal, axis=axis), axis=axis)
+        signal_std = np.expand_dims(np.std(signal, axis=axis), axis=axis)
     else:
-        mean = np.mean(signal)
-        std = np.std(signal)
+        signal_mean = np.mean(signal)
+        signal_std = np.std(signal)
     if mean:
-        signal = signal - mean
+        signal = signal - signal_mean
     if std:
-        signal = signal / np.maximum(std, 1e-7)
+        signal = signal / np.maximum(signal_std, 1e-7)
     return signal
 
 
