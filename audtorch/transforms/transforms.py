@@ -687,9 +687,14 @@ class Standardize(object):
 
     Ensure the signal has a mean value of 0 and a variance of 1.
 
+    * :attr:`mean` controls whether mean centering will be applied
+    * :attr:`std` controls whether standard deviation normalization will be
+      applied
     * :attr:`axis` controls axis for standardization
 
     Args:
+        mean (bool, optional): apply mean centering. Default: `True`
+        std (bool, optional): normalize by standard deviation. Default: `True`
         axis (int, optional): standardize only along the given axis.
             Default: `-1`
 
@@ -701,21 +706,28 @@ class Standardize(object):
         >>> a = np.array([1, 2, 3, 4])
         >>> t = Standardize()
         >>> print(t)
-        Standardize(axis=-1)
+        Standardize(axis=-1, mean=True, std=True)
         >>> t(a)
         array([-1.34164079, -0.4472136 ,  0.4472136 ,  1.34164079])
 
     """
 
-    def __init__(self, axis=-1):
+    def __init__(self, *, mean=True, std=True, axis=-1):
         super().__init__()
         self.axis = axis
+        self.mean = mean
+        self.std = std
 
     def __call__(self, signal):
-        return F.standardize(signal, axis=self.axis)
+        return F.standardize(signal, axis=self.axis,
+                             mean=self.mean, std=self.std)
 
     def __repr__(self):
         options = 'axis={0}'.format(self.axis)
+        if self.mean:
+            options += ', mean=True'
+        if self.std:
+            options += ', std=True'
         return '{0}({1})'.format(self.__class__.__name__, options)
 
 
