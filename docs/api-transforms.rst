@@ -83,6 +83,12 @@ Normalize
 .. autoclass:: Normalize
     :members:
 
+Standardize
+-----------
+
+.. autoclass:: Standardize
+    :members:
+
 Resample
 --------
 

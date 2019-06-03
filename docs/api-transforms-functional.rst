@@ -47,6 +47,11 @@ normalize
 
 .. autofunction:: normalize
 
+standardize
+-----------
+
+.. autofunction:: standardize
+
 stft
 ----
 
