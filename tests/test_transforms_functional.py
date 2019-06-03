@@ -123,6 +123,18 @@ def test_normalize(input, axis, expected_output):
     assert np.array_equal(output, expected_output)
 
 
+@pytest.mark.parametrize('input,axis', [
+    (A, None),
+    (A, -1),
+    (a11, None),
+    (a11, -1),
+])
+def test_standardize(input, axis):
+    output = F.standardize(input, axis=axis)
+    np.testing.assert_almost_equal(output.mean(axis=axis).mean(), 0)
+    np.testing.assert_almost_equal(output.std(axis=axis).mean(), 1)
+
+
 @pytest.mark.parametrize('input,window_size,hop_size,axis', [
     (A, 4, 1, 2),
     pytest.param(A, 2048, 1024, 2, marks=xfail(raises=ValueError)),
