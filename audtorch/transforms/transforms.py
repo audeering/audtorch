@@ -863,8 +863,13 @@ class Log(object):
 
     Args:
         magnitude_boost (float, optional): positive value added to the
-            magnitude of the signal before applying the logarithmus.
-            Default: `1e-7`
+            magnitude of the signal before applying the logarithmus. Default:
+            `1e-7`
+
+    Shape:
+        - Input: :math:`(*)`
+        - Output: :math:`(*)`, where :math:`*` can be any additional number of
+          dimensions.
 
     Example:
         >>> a = np.array([1., 2., 3., 4.])

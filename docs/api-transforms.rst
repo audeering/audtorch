@@ -95,6 +95,12 @@ Spectrogram
 .. autoclass:: Spectrogram
     :members:
 
+Log
+---
+
+.. autoclass:: Log
+    :members:
+
 LogSpectrogram
 --------------
 
