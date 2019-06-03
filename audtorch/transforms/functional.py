@@ -256,7 +256,7 @@ def normalize(signal, *, axis=None):
     return signal / np.maximum(peak, 1e-7)
 
 
-def standardize(signal, axis=None, mean=True, std=True):
+def standardize(signal, *, axis=None, mean=True, std=True):
     r"""Standardize signal.
 
     Ensure the signal has a mean value of 0 and a variance of 1.
@@ -266,11 +266,10 @@ def standardize(signal, axis=None, mean=True, std=True):
 
     Args:
         signal (numpy.ndarray): audio signal
-        axis (int, optional): standardize only along the given axis.
-            Default: `None`
         mean (bool, optional): apply mean centering. Default: `True`
         std (bool, optional): normalize by standard deviation. Default: `True`
-
+        axis (int, optional): standardize only along the given axis.
+            Default: `None`
 
     Returns:
         numpy.ndarray: standardized signal
