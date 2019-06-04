@@ -682,8 +682,57 @@ class Normalize(object):
         return '{0}({1})'.format(self.__class__.__name__, options)
 
 
+class Standardize(object):
+    r"""Standardize signal.
+
+    Ensure the signal has a mean value of 0 and a variance of 1.
+
+    * :attr:`mean` controls whether mean centering will be applied
+    * :attr:`std` controls whether standard deviation normalization will be
+      applied
+    * :attr:`axis` controls axis for standardization
+
+    Args:
+        mean (bool, optional): apply mean centering. Default: `True`
+        std (bool, optional): normalize by standard deviation. Default: `True`
+        axis (int, optional): standardize only along the given axis.
+            Default: `-1`
+
+    Shape:
+        - Input: :math:`(*)`
+        - Output: :math:`(*)`, where :math:`*` can be any number of dimensions.
+
+    Example:
+        >>> a = np.array([1, 2, 3, 4])
+        >>> t = Standardize()
+        >>> print(t)
+        Standardize(axis=-1, mean=True, std=True)
+        >>> t(a)
+        array([-1.34164079, -0.4472136 ,  0.4472136 ,  1.34164079])
+
+    """
+
+    def __init__(self, *, mean=True, std=True, axis=-1):
+        super().__init__()
+        self.axis = axis
+        self.mean = mean
+        self.std = std
+
+    def __call__(self, signal):
+        return F.standardize(signal, axis=self.axis,
+                             mean=self.mean, std=self.std)
+
+    def __repr__(self):
+        options = 'axis={0}'.format(self.axis)
+        if self.mean:
+            options += ', mean=True'
+        if self.std:
+            options += ', std=True'
+        return '{0}({1})'.format(self.__class__.__name__, options)
+
+
 class Resample(object):
-    """Resample to new sampling rate.
+    r"""Resample to new sampling rate.
 
     The signal is resampled by one of the following methods.
 
@@ -757,6 +806,7 @@ class Spectrogram(object):
 
     * :attr:`window_size` controls FFT window size in samples
     * :attr:`hop_size` controls STFT window hop size in samples
+    * :attr:`fft_size` controls number of frequency bins in STFT
     * :attr:`window` controls window function of spectrogram computation
     * :attr:`axis` controls axis of spectrogram computation
     * :attr:`phase` holds the phase of the spectrogram
@@ -764,6 +814,8 @@ class Spectrogram(object):
     Args:
         window_size (int): size of STFT window in samples
         hop_size (int): size of STFT window hop in samples
+        fft_size(int, optional): number of frequency bins in STFT. If `None`,
+            then it defaults to `window_size`. Default: `None`
         window (str, tuple, number, function, or numpy.ndarray, optional): type
             of STFT window. Default: `hann`
         axis (int, optional): axis of STFT calculation. Default: `-1`
@@ -790,17 +842,20 @@ class Spectrogram(object):
 
     """
 
-    def __init__(self, window_size, hop_size, *, window='hann', axis=-1):
+    def __init__(self, window_size, hop_size, *, fft_size=None,
+                 window='hann', axis=-1):
         super().__init__()
         self.window_size = window_size
         self.hop_size = hop_size
+        self.fft_size = fft_size
         self.window = window
         self.axis = axis
         self.phase = []
 
     def __call__(self, signal):
         spectrogram = F.stft(signal, self.window_size, self.hop_size,
-                             window=self.window, axis=self.axis)
+                             fft_size=self.fft_size, window=self.window,
+                             axis=self.axis)
         magnitude, self.phase = librosa.magphase(spectrogram)
         return magnitude
 
@@ -809,6 +864,50 @@ class Spectrogram(object):
                    .format(self.window_size, self.hop_size, self.axis))
         if self.window != 'hann':
             options += ', window={0}'.format(self.window)
+        return '{0}({1})'.format(self.__class__.__name__, options)
+
+
+class Log(object):
+    r"""Logarithmic transform of an input signal.
+
+    * :attr:`magnitude_boost` controls the non-negative value added to the
+      magnitude of the signal before applying the logarithmus
+
+    Args:
+        magnitude_boost (float, optional): positive value added to the
+            magnitude of the signal before applying the logarithmus. Default:
+            `1e-7`
+
+    Shape:
+        - Input: :math:`(*)`
+        - Output: :math:`(*)`, where :math:`*` can be any additional number of
+          dimensions.
+
+    Example:
+        >>> a = np.array([1., 2., 3., 4.])
+        >>> spect = Spectrogram(window_size=2, hop_size=2)
+        >>> t = Log()
+        >>> print(t)
+        Log(magnitude_boost=1e-07)
+        >>> t(spect(a))
+        array([[1.1920928e-07, 1.0986123e+00, 1.0986123e+00],
+               [1.1920928e-07, 1.0986123e+00, 1.0986123e+00]], dtype=float32)
+
+    """
+
+    def __init__(self, magnitude_boost=1e-7):
+        self.magnitude_boost = magnitude_boost
+
+        if self.magnitude_boost < 0:
+            raise ValueError('`magnitude_boost` has to be >=0, but is {}'
+                             .format(self.magnitude_boost))
+
+    def __call__(self, signal):
+        signal = np.log(signal + self.magnitude_boost)
+        return signal
+
+    def __repr__(self):
+        options = ('magnitude_boost={}'.format(self.magnitude_boost))
         return '{0}({1})'.format(self.__class__.__name__, options)
 
 
@@ -865,6 +964,9 @@ class LogSpectrogram(object):
     def __init__(self, window_size, hop_size, *, window='hann',
                  normalize=False, magnitude_boost=1e-7, axis=-1):
         super().__init__()
+        warn('LogSpectrogram will be removed in a future version. '
+             'Please use a Compose transform consisting of Spectrogram and '
+             'Log instead.', DeprecationWarning)
         self.window_size = window_size
         self.hop_size = hop_size
         self.window = window

@@ -140,6 +140,24 @@ def test_normalize(input, axis, expected_output):
     assert np.array_equal(t(input), expected_output)
 
 
+@pytest.mark.parametrize('input,axis,mean,std', [
+    (A, None, True, True),
+    (A, -1, True, True),
+    (a11, None, True, True),
+    (a11, -1, True, True),
+    (A, -1, False, True),
+    (A, -1, True, False),
+    (A, -1, False, False),
+])
+def test_standardize(input, axis, mean, std):
+    t = transforms.Standardize(axis=axis)
+    output = t(input)
+    if mean:
+        np.testing.assert_almost_equal(output.mean(axis=axis).mean(), 0)
+    if std:
+        np.testing.assert_almost_equal(output.std(axis=axis).mean(), 1)
+
+
 @pytest.mark.parametrize('input,idx,axis', [
     (A, (0, 2), -1),
     (a11, (1, 2), -1),
@@ -204,26 +222,36 @@ def test_resample(input, input_sample_rate, output_sample_rate, method, axis):
     assert np.array_equal(transformed_input, expected_output)
 
 
-@pytest.mark.parametrize('input,window_size,hop_size,axis,magnitude_boost', [
-    (A, 4, 1, 2, 1e-07),
-    pytest.param(A, 4, 1, 2, -1e-07, marks=xfail(raises=ValueError)),
-    pytest.param(A, 4, 1, 2, 0, marks=xfail(raises=ValueError)),
-    pytest.param(A, 2048, 1024, 2, 1e-07, marks=xfail(raises=ValueError)),
-    (np.random.normal(size=[2, 3, 16000]), 2048, 1024, 2, 1e-07),
-    (np.random.normal(size=[2, 16000, 3]), 2048, 1024, 1, 1e-07),
-    (np.random.normal(size=[16000, 2, 3]), 2048, 1024, 0, 1e-07),
-    (np.random.normal(size=16000), 2048, 1024, 0, 1e-07),
+@pytest.mark.parametrize('input,window_size,hop_size,axis', [
+    (A, 4, 1, 2),
+    pytest.param(A, 2048, 1024, 2, marks=xfail(raises=ValueError)),
+    (np.random.normal(size=[2, 3, 16000]), 2048, 1024, 2),
+    (np.random.normal(size=[2, 16000, 3]), 2048, 1024, 1),
+    (np.random.normal(size=[16000, 2, 3]), 2048, 1024, 0),
+    (np.random.normal(size=[16000, 2, 3]), 2048, 1024, 0),
+    (np.random.normal(size=16000), 2048, 1024, 0),
 ])
-def test_stft(input, window_size, hop_size, axis, magnitude_boost):
+def test_stft(input, window_size, hop_size, axis):
     t = transforms.Spectrogram(window_size, hop_size, axis=axis)
-    t_log = transforms.LogSpectrogram(window_size, hop_size, axis=axis,
-                                      magnitude_boost=magnitude_boost)
     spectrogram = F.stft(input, window_size, hop_size, axis=axis)
     magnitude, phase = librosa.magphase(spectrogram)
     assert np.array_equal(t(input), magnitude)
-    assert np.array_equal(t_log(input), np.log(magnitude + magnitude_boost))
     assert np.array_equal(t.phase, phase)
-    assert np.array_equal(t_log.phase, phase)
+
+
+@pytest.mark.parametrize('input,magnitude_boost', [
+    (A, 1e-07),
+    pytest.param(A, -1e-07, marks=xfail(raises=ValueError)),
+    pytest.param(A, -1, marks=xfail(raises=ValueError)),
+    (np.random.normal(size=[2, 3, 16000]), 1e-03),
+    (np.random.normal(size=[2, 16000, 3]), 1e-07),
+    (np.random.normal(size=[16000, 2, 3]), 1e-07),
+    (np.random.normal(size=16000), 1e-07),
+])
+def test_log(input, magnitude_boost):
+    input = input + abs(input.min())
+    t_log = transforms.Log(magnitude_boost=magnitude_boost)
+    assert np.array_equal(t_log(input), np.log(input + magnitude_boost))
 
 
 @pytest.mark.parametrize('signal1,signal2,ratio,'

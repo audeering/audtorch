@@ -83,6 +83,12 @@ Normalize
 .. autoclass:: Normalize
     :members:
 
+Standardize
+-----------
+
+.. autoclass:: Standardize
+    :members:
+
 Resample
 --------
 
@@ -93,6 +99,12 @@ Spectrogram
 -----------
 
 .. autoclass:: Spectrogram
+    :members:
+
+Log
+---
+
+.. autoclass:: Log
     :members:
 
 LogSpectrogram

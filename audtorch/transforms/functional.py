@@ -256,10 +256,49 @@ def normalize(signal, *, axis=None):
     return signal / np.maximum(peak, 1e-7)
 
 
-def stft(signal, window_size, hop_size, *, window='hann', axis=-1):
-    r"""Short-term Fourier transform.
+def standardize(signal, *, mean=True, std=True, axis=None):
+    r"""Standardize signal.
 
-    The short-term Fourier transform (STFT) is calculated by using librosa.
+    Ensure the signal has a mean value of 0 and a variance of 1.
+
+    Note:
+        The signal will never be divided by a variance smaller than 1e-7.
+
+    Args:
+        signal (numpy.ndarray): audio signal
+        mean (bool, optional): apply mean centering. Default: `True`
+        std (bool, optional): normalize by standard deviation. Default: `True`
+        axis (int, optional): standardize only along the given axis.
+            Default: `None`
+
+    Returns:
+        numpy.ndarray: standardized signal
+
+    Example:
+        >>> a = np.array([[1, 2], [3, 4]])
+        >>> standardize(a)
+        array([[-1.34164079, -0.4472136 ],
+               [ 0.4472136 ,  1.34164079]])
+
+    """
+    if mean:
+        signal_mean = np.mean(signal, axis=axis)
+        if axis is not None:
+            signal_mean = np.expand_dims(signal_mean, axis=axis)
+        signal = signal - signal_mean
+    if std:
+        signal_std = np.std(signal, axis=axis)
+        if axis is not None:
+            signal_std = np.expand_dims(signal_std, axis=axis)
+        signal = signal / np.maximum(signal_std, 1e-7)
+    return signal
+
+
+def stft(signal, window_size, hop_size, *, fft_size=None, window='hann',
+         axis=-1):
+    r"""Short-time Fourier transform.
+
+    The Short-time Fourier transform (STFT) is calculated by using librosa.
     It returns an array with the same shape as the input array, besides the
     axis chosen for STFT calculation is replaced by the two new ones of the
     spectrogram.
@@ -295,16 +334,18 @@ def stft(signal, window_size, hop_size, *, window='hann', axis=-1):
     # Pad to ensure same signal length after reconstruction
     # See discussion at https://github.com/librosa/librosa/issues/328
     signal = pad(signal, (0, np.mod(samples, hop_size)), value=0, axis=axis)
-    fft_config = dict(n_fft=window_size, hop_length=hop_size,
+    if fft_size is None:
+        fft_size = window_size
+    fft_config = dict(n_fft=fft_size, hop_length=hop_size,
                       win_length=window_size, window=window)
     spectrogram = np.apply_along_axis(librosa.stft, axis, signal, **fft_config)
     return spectrogram
 
 
 def istft(spectrogram, window_size, hop_size, *, window='hann', axis=-2):
-    r"""Inverse short-term Fourier transform.
+    r"""Inverse Short-time Fourier transform.
 
-    The inverse short-term Fourier transform (iSTFT) is calculated by using
+    The inverse Short-time Fourier transform (iSTFT) is calculated by using
     librosa.
     It handles multi-dimensional inputs, but assumes that the two spectrogram
     axis are beside each other, starting with the axis corresponding to
@@ -355,7 +396,7 @@ def istft(spectrogram, window_size, hop_size, *, window='hann', axis=-2):
 
 
 def _istft(spectrogram, frequency_bins, time_bins, **config):
-    """Inverse short-term Fourier transform from a single axis.
+    """Inverse Short-time Fourier transform from a single axis.
 
     Time and frequency bins have to be provided in a single vector. This allows
     effective computation using `numpy.apply_along_axis`.
