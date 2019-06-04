@@ -256,7 +256,7 @@ def normalize(signal, *, axis=None):
     return signal / np.maximum(peak, 1e-7)
 
 
-def standardize(signal, *, axis=None, mean=True, std=True):
+def standardize(signal, *, mean=True, std=True, axis=None):
     r"""Standardize signal.
 
     Ensure the signal has a mean value of 0 and a variance of 1.
