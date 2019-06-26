@@ -1,5 +1,5 @@
 ---
-name: "\U0001F4DA Documentation"
+name: "Documentation"
 about: Report an issue related to https://audtorch.readthedocs.io/
 
 ---
