@@ -144,7 +144,7 @@ class LibriSpeech(PandasDataset):
         urls = [self.urls[s] for s in absent_sets]
         filenames = download_url_list(urls, out_path, num_workers=0)
         for filename in filenames:
-            extract_archive(os.path.join(out_path, filename),
+            extract_archive(filename,
                             out_path=out_path,
                             remove_finished=True)
         os.system('mv {} {}'.format(os.path.join(out_path, 'LibriSpeech/*'),
