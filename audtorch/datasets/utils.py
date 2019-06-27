@@ -357,5 +357,13 @@ def defined_split(dataset, split_func):
 
 
 def safe_path(path):
-    """Ensure the path is absolute and doesn't include `..` or `~`."""
+    """Ensure the path is absolute and doesn't include `..` or `~`.
+
+    Args:
+        path (str): absolute or relative path
+
+    Returns:
+        str: absolute path
+
+    """
     return os.path.abspath(os.path.expanduser(path))
