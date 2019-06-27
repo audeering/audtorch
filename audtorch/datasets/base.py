@@ -7,7 +7,7 @@ from tabulate import tabulate
 from torch.utils.data import (Dataset, ConcatDataset)
 
 from .utils import (ensure_same_sampling_rate, files_and_labels_from_df,
-                    load, sampling_rate_after_transform)
+                    load, sampling_rate_after_transform, safe_path)
 
 
 __doctest_skip__ = ['*']
@@ -58,7 +58,7 @@ class AudioDataset(Dataset):
 
     def __init__(self, root, files, targets, sampling_rate, *, transform=None,
                  target_transform=None):
-        self.root = os.path.expanduser(root)
+        self.root = safe_path(root)
         self.files = [os.path.join(self.root, f) for f in files]
         self.targets = targets
         self.original_sampling_rate = sampling_rate
@@ -268,7 +268,7 @@ class CsvDataset(PandasDataset):
     def __init__(self, root, csv_file, sampling_rate, *, sep=',',
                  column_labels='label', column_filename='filename',
                  transform=None, target_transform=None):
-        self.root = os.path.expanduser(root)
+        self.root = safe_path(root)
         self.csv_file = os.path.join(self.root, csv_file)
 
         if not os.path.isfile(self.csv_file):

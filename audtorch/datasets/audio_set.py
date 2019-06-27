@@ -5,6 +5,7 @@ import pandas as pd
 
 from ..utils import flatten_list
 from .base import AudioDataset
+from .utils import safe_path
 
 
 __doctest_skip__ = ['*']
@@ -133,7 +134,7 @@ class AudioSet(AudioDataset):
     def __init__(self, root, csv_file='balanced_train_segments.csv',
                  sampling_rate=16000, include=None, exclude=None,
                  transform=None, target_transform=None):
-        root = os.path.expanduser(root)
+        root = safe_path(root)
         # Allow only official CSV files as no audio paths are defined otherwise
         assert csv_file in ['eval_segments.csv', 'balanced_train_segments.csv',
                             'unbalanced_train_segments.csv']

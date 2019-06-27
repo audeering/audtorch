@@ -2,7 +2,7 @@ import os
 import glob
 import pandas as pd
 
-from .utils import (download_url_list, extract_archive)
+from .utils import (download_url_list, extract_archive, safe_path)
 from ..utils import run_worker_threads
 from .base import PandasDataset
 
@@ -94,7 +94,7 @@ class LibriSpeech(PandasDataset):
     def __init__(self, root, *, sets=None, dataframe=None,
                  transform=None, target_transform=None, download=False):
 
-        self.root = os.path.expanduser(root)
+        self.root = safe_path(root)
 
         if isinstance(sets, str):
             sets = [sets]
