@@ -6,6 +6,30 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog`_,
 and this project adheres to `Semantic Versioning`_.
 
+Version 0.2.0 (2019-06-28)
+--------------------------
+
+Added
+~~~~~
+
+* ``Standardize``, ``Log`` (#29)
+
+Changed
+~~~~~~~
+
+* Switch to `Keep a Changelog`_ format (#34)
+
+Deprecated
+~~~~~~~~~~
+
+* ``LogSpectrogram`` (#29)
+
+Fixed
+~~~~~
+
+* ``normalize`` axis (#28)
+
+
 Version 0.1.1 (2019-05-23)
 --------------------------
 
