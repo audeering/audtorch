@@ -137,7 +137,7 @@ Creating a New Release
 
 New releases are made using the following steps:
 
-#. Update ``NEWS.rst``
+#. Update ``CHANGELOG.rst``
 #. Commit those changes as "Release x.y.z"
 #. Create an (annotated) tag with ``git tag -a x.y.z``
 #. Clear the ``dist/`` directory
@@ -146,7 +146,7 @@ New releases are made using the following steps:
 #. Check that both files have the correct content
 #. Upload them to PyPI_ with twine_: ``python -m twine upload dist/*``
 #. Push the commit and the tag to Github and `add release notes`_ containing
-   the bullet points from ``NEWS.rst``
+   the bullet points from ``CHANGELOG.rst``
 #. Check that the new release was built correctly on `Read The Docs`_, and
    select the new release as default version
 
