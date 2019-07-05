@@ -1,4 +1,5 @@
 import numpy as np
+import torch
 try:
     import librosa
 except ImportError:
@@ -97,6 +98,34 @@ def replicate(signal, repetitions, *, axis=-1):
     reps = [1 for _ in range(len(signal.shape))]
     reps[axis] = repetitions
     return np.tile(signal, reps)
+
+
+def mask(signal, num_blocks, max_width, *, value=0., axis=-1):
+    r"""Randomly mask signal along axis.
+
+    Args:
+        signal (torch.Tensor): audio signal
+        num_blocks (int): number of mask blocks
+        max_width (int): maximum size of block
+        value (float, optional): mask value. Default: `0.`
+        axis (int, optional): axis along which to mask. Default: `-1`
+
+    Returns:
+        torch.Tensor: masked signal
+
+    """
+    signal_size = signal.shape[axis]
+    # add 1 to `high` because it's excluded from sampling
+    widths = torch.randint(low=1, high=max_width + 1, size=(num_blocks,))
+    start = torch.LongTensor(
+        [torch.randint(0, signal_size - widths[i].item(), (1,))
+         for i in range(num_blocks)])
+
+    for i, s in enumerate(start):
+        signal.narrow(start=s.item(),
+                      length=widths[i].item(),
+                      dim=axis).fill_(value)
+    return signal
 
 
 def downmix(signal, channels, *, method='mean', axis=-2):
