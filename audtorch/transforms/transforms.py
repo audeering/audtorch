@@ -824,11 +824,11 @@ class Spectrogram(object):
         - Input: :math:`(*, N_\text{in}, *)`
         - Output: :math:`(*, N_f, N_t, *)`, where :math:`N_\text{in}` is
           the number of input samples and
-          :math:`N_t = {\text{window\_size} \over 2} + 1` is the number of
-          output samples along the time axis of the spectrogram, and
-          :math:`N_f = \lceil {1 \over \text{hop\_size}} (N_\text{in} +
+          :math:`N_f = {\text{window\_size} \over 2} + 1` is the number of
+          output samples along the frequency axis of the spectrogram, and
+          :math:`N_t = \lceil {1 \over \text{hop\_size}} (N_\text{in} +
           {\text{window\_size} \over 2}) \rceil` is the number of output
-          samples along the frequency axis of the spectrogram.
+          samples along the time axis of the spectrogram.
           :math:`*` can be any additional number of dimensions.
 
     Example:
