@@ -3,6 +3,7 @@ from warnings import warn
 
 import numpy as np
 import resampy
+import torch
 try:
     import librosa
 except ImportError:
@@ -485,6 +486,115 @@ class Expand(object):
         options = 'size={0}, method={1}, axis={2}'.format(
             self.size, self.method, self.axis)
         return '{0}({1})'.format(self.__class__.__name__, options)
+
+
+class RandomMask(object):
+    r"""Randomly masks signal along axis.
+
+    The signal is masked by multiple blocks (i.e. consecutive units) size of
+    which is uniformly sampled given an upper limit on the block size.
+    The algorithm for a single block is as follows:
+
+        1. :math:`width ~ U[0, {maximum_width}]`
+        2. :math:`start ~ U[0, {signal_size} - width)`
+
+    The number of blocks is approximated by the specified `coverage` of the
+    masking and the average size of a block.
+
+    * :attr:`coverage` controls how large the proportion of masking is
+      relative to the signal size
+    * :attr:`max_width` controls the maximum size of a masked block
+    * :attr:`value` controls the value to mask the signal with
+    * :attr:`axis` controls the axis to mask the signal along
+
+    Args:
+        coverage (float): proportion of signal to mask
+        max_width (int): maximum block size. The unit depends on the signal
+            and axis. See `MaskSpectrogramTime` and `MaskSpectrogramFrequency`
+        value (float): mask value
+        axis (int): axis to mask signal along
+
+    Example:
+        >>> a = torch.empty((1, 4, 10)).uniform_(1, 2)
+        >>> t = RandomMask(0.1, max_width=1, value=0, axis=2)
+        >>> print(t)
+        RandomMask(coverage=0.1, max_width=1, value=0, axis=2)
+        >>> len((t(a) == 0).nonzero())  # number of 0 elements
+        4
+
+    """
+    def __init__(self, coverage, max_width, value, axis):
+        self.coverage = coverage
+        self.max_width = max_width
+        self.value = value
+        self.axis = axis
+
+    def __call__(self, signal):
+
+        if isinstance(signal, np.ndarray):
+            signal = torch.from_numpy(signal)
+
+        signal_size = signal.shape[self.axis]
+
+        if signal_size < self.max_width:
+            raise RuntimeError(
+                'size along axis {} is smaller than `max_width`: '
+                '{} < {}'.format(self.axis, signal_size, self.max_width))
+
+        average_width = (self.max_width + 1) / 2
+        num_blocks = int(signal_size * self.coverage / average_width)
+        if num_blocks != 0:
+            num_blocks = max(1, num_blocks)
+
+        return F.mask(signal, num_blocks, self.max_width, value=self.value,
+                      axis=self.axis)
+
+    def __repr__(self):
+        options = 'coverage={0}, max_width={1}, value={2}, axis={3}'.format(
+            self.coverage, self.max_width, self.value, self.axis)
+        return '{0}({1})'.format(self.__class__.__name__, options)
+
+
+class MaskSpectrogramTime(RandomMask):
+    r"""Randomly masks spectrogram along time axis.
+
+    See `RandomMask` for more details.
+
+    Note:
+        The time axis is derived from `Spectrogram`'s output shape.
+
+    Args:
+        coverage (float): proportion of signal to mask
+        max_width (int): maximum block size in number of samples. The default
+            value corresponds to a time span of 0.1 seconds of a signal
+            with `sr=16000` and stft-specifications of `window_size=320` and
+            `hop_size=160`. Default: `11`
+        value (float): mask value
+
+    """
+    def __init__(self, coverage, *, max_width=11, value=0):
+        super().__init__(coverage, max_width, value, axis=1)
+
+
+class MaskSpectrogramFrequency(RandomMask):
+    r"""Randomly masks spectrogram along frequency axis.
+
+    See `RandomMask` for more details.
+
+    Note:
+        The frequency axis is derived from `Spectrogram`'s output shape.
+
+    Args:
+        coverage (float): proportion of signal to mask
+        max_width (int, optional): maximum block size in number of
+            frequency bins. The default value corresponds to approximately
+            10% of all frequency bins with stft-specifications
+            of `window_size=320`. Default: `16`
+        value (float): mask value
+
+    """
+    def __init__(self, coverage, *, max_width=16, value=0):
+        super().__init__(coverage, max_width, value, axis=0)
 
 
 class Downmix(object):
