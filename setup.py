@@ -25,6 +25,10 @@ setup(
     license='MIT License',
     keywords=['audio'],
     url='https://github.com/audeering/audtorch',
+    project_urls={
+        'Documentation': 'https://audtorch.readthedocs.io',
+        'Tracker': 'https://github.com/audeering/audtorch/issues',
+    },
     platforms='any',
     tests_require=['pytest'],
     classifiers=[
