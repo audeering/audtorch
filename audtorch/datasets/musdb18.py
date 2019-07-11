@@ -85,7 +85,7 @@ class Musdb18(Dataset):
             percentage_silence=0,
             transform=None,
             target_transform=None,
-            joint_transform=None,
+            joint_transform=None
     ):
         self.root = os.path.abspath(os.path.expanduser(root))
         self.original_sampling_rate = 44100
