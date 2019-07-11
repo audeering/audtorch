@@ -9,6 +9,9 @@ from .base import _include_repr
 from .utils import sampling_rate_after_transform
 
 
+__doctest_skip__ = ['*']
+
+
 class Musdb18(Dataset):
     r"""Musical Source Separation musdb18 data set.
 
