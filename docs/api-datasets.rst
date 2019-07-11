@@ -25,11 +25,16 @@ MozillaCommonVoice
 .. autoclass:: MozillaCommonVoice
     :members:
 
+Musdb18
+-------
+
+.. autoclass:: Musdb18
+    :members:
+
 SpeechCommands
 --------------
 
 .. autoclass:: SpeechCommands
-    :members:
 
 VoxCeleb1
 ---------
