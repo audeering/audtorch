@@ -35,7 +35,7 @@ class Musdb18(Dataset):
     .. _DSD100 dataset: https://sigsep.github.io/datasets/dsd100.html
     .. _MedleyDB: http://medleydb.weebly.com/
     .. _Native Instruments: https://www.native-instruments.com/en/specials/stems-for-all/free-stems-tracks/
-    .. _https://www.heise.de/ct/artikel/c-t-Remix-Wettbewerb-The-Easton-Ellises-2542427.html#englisch
+    .. _heise stems remix competition: https://www.heise.de/ct/artikel/c-t-Remix-Wettbewerb-The-Easton-Ellises-2542427.html#englisch
 
     * :attr:`transform` controls the input transform
     * :attr:`target_transform` controls the target transform
