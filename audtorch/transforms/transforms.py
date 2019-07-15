@@ -581,7 +581,7 @@ class MaskSpectrogramTime(RandomMask):
 
     """
     def __init__(self, coverage, *, max_width=11, value=0):
-        super().__init__(coverage, max_width, value, axis=1)
+        super().__init__(coverage, max_width, value, axis=2)
 
 
 class MaskSpectrogramFrequency(RandomMask):
@@ -610,7 +610,7 @@ class MaskSpectrogramFrequency(RandomMask):
 
     """
     def __init__(self, coverage, *, max_width=8, value=0):
-        super().__init__(coverage, max_width, value, axis=0)
+        super().__init__(coverage, max_width, value, axis=1)
 
 
 class Downmix(object):
