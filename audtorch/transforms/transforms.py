@@ -571,6 +571,14 @@ class MaskSpectrogramTime(RandomMask):
             `hop_size=160`. Default: `11`
         value (float): mask value
 
+    Example:
+        >>> import librosa, matplotlib.pyplot as plt, numpy as np
+        >>> a = torch.empty(65000).uniform_(-1, 1)
+        >>> t = Compose([Spectrogram(320, 160), MaskSpectrogramTime(0.1)])
+        >>> magnitude = t(a).squeeze().numpy()
+        >>> librosa.display.specshow(np.log10(np.abs(magnitude)))
+        >>> plt.show()
+
     """
     def __init__(self, coverage, *, max_width=11, value=0):
         super().__init__(coverage, max_width, value, axis=1)
@@ -591,6 +599,14 @@ class MaskSpectrogramFrequency(RandomMask):
             10% of all frequency bins with stft-specifications
             of `window_size=320`. Default: `16`
         value (float): mask value
+
+    Example:
+        >>> import librosa, matplotlib.pyplot as plt, numpy as np
+        >>> a = torch.empty(65000).uniform_(-1, 1)
+        >>> t = Compose([Spectrogram(320, 160), MaskSpectrogramFrequency(0.1)])
+        >>> magnitude = t(a).squeeze().numpy()
+        >>> librosa.display.specshow(np.log10(np.abs(magnitude)))
+        >>> plt.show()
 
     """
     def __init__(self, coverage, *, max_width=16, value=0):
