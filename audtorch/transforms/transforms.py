@@ -596,8 +596,8 @@ class MaskSpectrogramFrequency(RandomMask):
         coverage (float): proportion of signal to mask
         max_width (int, optional): maximum block size in number of
             frequency bins. The default value corresponds to approximately
-            10% of all frequency bins with stft-specifications
-            of `window_size=320`. Default: `16`
+            5% of all frequency bins with stft-specifications of
+            `window_size=320` and `hop_size=160`. Default: `8`
         value (float): mask value
 
     Example:
@@ -609,7 +609,7 @@ class MaskSpectrogramFrequency(RandomMask):
         >>> plt.show()
 
     """
-    def __init__(self, coverage, *, max_width=16, value=0):
+    def __init__(self, coverage, *, max_width=8, value=0):
         super().__init__(coverage, max_width, value, axis=0)
 
 
