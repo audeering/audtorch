@@ -115,7 +115,7 @@ def mask(signal, num_blocks, max_width, *, value=0., axis=-1):
 
     """
     signal_size = signal.shape[axis]
-    # add 1 to `high` because it's excluded from sampling
+    # add 1 to `max_width` to include value `max_width` in sampling
     widths = torch.randint(low=1, high=max_width + 1, size=(num_blocks,))
     start = torch.LongTensor(
         [torch.randint(0, signal_size - widths[i].item(), (1,))
