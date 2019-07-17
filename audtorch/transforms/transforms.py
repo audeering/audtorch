@@ -572,11 +572,12 @@ class MaskSpectrogramTime(RandomMask):
         value (float): mask value
 
     Example:
-        >>> import librosa, matplotlib.pyplot as plt, numpy as np
+        >>> from librosa.display import specshow
+        >>> import matplotlib.pyplot as plt, numpy as np
         >>> a = torch.empty(65000).uniform_(-1, 1)
         >>> t = Compose([Spectrogram(320, 160), MaskSpectrogramTime(0.1)])
         >>> magnitude = t(a).squeeze().numpy()
-        >>> librosa.display.specshow(np.log10(np.abs(magnitude)))
+        >>> specshow(np.log10(np.abs(magnitude) + 1e-4)) #doctest: +SKIP
         >>> plt.show()
 
     """
@@ -601,11 +602,12 @@ class MaskSpectrogramFrequency(RandomMask):
         value (float): mask value
 
     Example:
-        >>> import librosa, matplotlib.pyplot as plt, numpy as np
+        >>> from librosa.display import specshow
+        >>> import matplotlib.pyplot as plt, numpy as np
         >>> a = torch.empty(65000).uniform_(-1, 1)
         >>> t = Compose([Spectrogram(320, 160), MaskSpectrogramFrequency(0.1)])
         >>> magnitude = t(a).squeeze().numpy()
-        >>> librosa.display.specshow(np.log10(np.abs(magnitude)))
+        >>> specshow(np.log10(np.abs(magnitude) + 1e-4)) #doctest: +SKIP
         >>> plt.show()
 
     """
