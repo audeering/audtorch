@@ -280,8 +280,8 @@ def files_and_labels_from_df(df, *, root='.', column_labels='label',
         >>> df = pd.DataFrame(data=[('speech.wav', 'speech')],
         ...                   columns=['filename', 'label'])
         >>> files, labels = files_and_labels_from_df(df)
-        >>> files[0], labels[0]
-        ('./speech.wav', 'speech')
+        >>> os.path.relpath(files[0]), labels[0]
+        ('speech.wav', 'speech')
 
     """
     if df is None:
