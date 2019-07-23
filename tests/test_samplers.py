@@ -14,8 +14,8 @@ from audtorch.datasets.utils import defined_split
 # data sets
 data_size = 1000
 num_feats = 160
-max_length = 3000
-max_feature = 1000
+max_length = 300
+max_feature = 100
 lengths = torch.randint(0, max_length, (data_size,))
 inputs = torch.randint(0, max_feature, (data_size, num_feats, max_length))
 data = TensorDataset(inputs)
