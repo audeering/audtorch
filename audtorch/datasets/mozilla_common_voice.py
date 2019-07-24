@@ -1,6 +1,6 @@
 import os
 
-from .utils import (download_url, extract_archive)
+from .utils import (download_url, extract_archive, safe_path)
 from .base import CsvDataset
 
 
@@ -82,7 +82,7 @@ class MozillaCommonVoice(CsvDataset):
                  download=False):
 
         if download:
-            self.root = os.path.expanduser(root)
+            self.root = safe_path(root)
             self._download()
 
         super().__init__(root, csv_file, sampling_rate=48000, sep=',',

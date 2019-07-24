@@ -118,6 +118,7 @@ def test_files_and_labels_from_df(df, expected_files, expected_labels):
                                                       root='.',
                                                       column_filename='a',
                                                       column_labels='b')
+    expected_files = [datasets.safe_path(f) for f in expected_files]
     assert files == expected_files
     assert labels == expected_labels
 

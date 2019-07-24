@@ -73,7 +73,7 @@ def download_url(url, root, *, filename=None, md5=None):
        str: path to downloaded file
 
     """
-    root = os.path.expanduser(root)
+    root = safe_path(root)
     if not filename:
         filename = os.path.basename(url)
     filename = os.path.join(root, filename)
@@ -93,7 +93,7 @@ def download_url(url, root, *, filename=None, md5=None):
                       ' Downloading ' + url + ' to ' + filename)
                 urllib.request.urlretrieve(url, filename,
                                            reporthook=bar_updater)
-    return os.path.expanduser(filename)
+    return safe_path(filename)
 
 
 def download_url_list(urls, root, *, num_workers=0):
@@ -280,13 +280,13 @@ def files_and_labels_from_df(df, *, root='.', column_labels='label',
         >>> df = pd.DataFrame(data=[('speech.wav', 'speech')],
         ...                   columns=['filename', 'label'])
         >>> files, labels = files_and_labels_from_df(df)
-        >>> files[0], labels[0]
-        ('./speech.wav', 'speech')
+        >>> os.path.relpath(files[0]), labels[0]
+        ('speech.wav', 'speech')
 
     """
     if df is None:
         return [], []
-    root = os.path.expanduser(root)
+    root = safe_path(root)
     if isinstance(column_labels, str):
         column_labels = [column_labels]
     ensure_df_columns_contain(df, column_labels)
@@ -354,3 +354,16 @@ def defined_split(dataset, split_func):
 
     return [Subset(dataset, indices)
             for indices in split_indices]
+
+
+def safe_path(path):
+    """Ensure the path is absolute and doesn't include `..` or `~`.
+
+    Args:
+        path (str): absolute or relative path
+
+    Returns:
+        str: absolute path
+
+    """
+    return os.path.abspath(os.path.expanduser(path))
