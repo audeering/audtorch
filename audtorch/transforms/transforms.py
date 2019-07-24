@@ -543,7 +543,7 @@ class RandomMask(object):
 
         average_width = (self.max_width + 1) / 2
         num_blocks = int(signal_size * self.coverage / average_width)
-        if num_blocks != 0:
+        if self.coverage != 0.:
             num_blocks = max(1, num_blocks)
 
         return F.mask(signal, num_blocks, self.max_width, value=self.value,
