@@ -1,9 +1,9 @@
 import pytest
+import torch
 import numpy as np
 import librosa
 
 import audtorch.transforms.functional as F
-
 
 xfail = pytest.mark.xfail
 
@@ -63,6 +63,27 @@ def test_replicate(input, repetitions, axis):
     expected_output = np.concatenate(tuple([input] * repetitions), axis)
     output = F.replicate(input, repetitions, axis=axis)
     assert np.array_equal(output, expected_output)
+
+
+@pytest.mark.parametrize('input,num_blocks,max_width,value,axis,'
+                         'min_expected_items', [
+                             (A, 0, 1, 0, -1, 0),
+                             (A, 1, 1, 0, -1, 4),
+                             (A, 2, 1, 0, -1, 4),
+                             (A, 1, 1, -1, -1, 4),
+                             (A, 1, 1, 0, -2, 8)
+                         ])
+def test_mask(input, num_blocks, max_width, value, axis,
+              min_expected_items):
+    input = torch.from_numpy(input).clone()
+    masked_signal = F.mask(
+        input, num_blocks, max_width, value=value, axis=axis)
+    masked_items = len((masked_signal == value).nonzero())
+    if num_blocks <= 1 and max_width == 1:
+        assert masked_items == min_expected_items
+    else:
+        # widths can vary, blocks can overlap
+        assert masked_items % min_expected_items == 0
 
 
 @pytest.mark.parametrize('input,channels,method,axis,expected_output', [
