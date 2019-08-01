@@ -1,5 +1,7 @@
 import os
 import glob
+import shutil
+
 import pandas as pd
 
 from .utils import (download_url_list, extract_archive, safe_path)
@@ -147,8 +149,9 @@ class LibriSpeech(PandasDataset):
             extract_archive(os.path.join(out_path, filename),
                             out_path=out_path,
                             remove_finished=True)
-        os.system('mv {} {}'.format(os.path.join(out_path, 'LibriSpeech/*'),
-                                    self.root))
+        contents = glob.glob(os.path.join(out_path, 'LibriSpeech/*'))
+        for f in contents:
+            shutil.move(f, self.root)
         os.rmdir(os.path.join(out_path, "LibriSpeech"))
         os.rmdir(out_path)
 
