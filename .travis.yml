@@ -12,3 +12,4 @@ install:
 script:
   - python -m pytest
   - python -m sphinx -W docs/ docs/_build/ -b html -W
+  - python -m sphinx docs/ docs/_build/ -b linkcheck -W
