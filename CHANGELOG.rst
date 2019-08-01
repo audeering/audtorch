@@ -6,6 +6,23 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog`_,
 and this project adheres to `Semantic Versioning`_.
 
+
+Version 0.2.1 (2019-08-01)
+--------------------------
+
+Changed
+~~~~~~~
+
+* Remove os.system call for moving files (#43)
+
+Fixed
+~~~~~
+
+* Remove broken logos from issue templates (#31)
+* Wrong ``Spectrogram`` output shape in documentation (#40)
+* Broken data set loading for relative paths (#33)
+
+
 Version 0.2.0 (2019-06-28)
 --------------------------
 
