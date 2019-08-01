@@ -19,7 +19,7 @@ newest development version from Github_::
    git clone https://github.com/audeering/audtorch/
    cd audtorch
    # Create virtual environment, e.g.
-   # virtualenv --python=/usr/bin/python3 --no-site-packages _env
+   # virtualenv --python=python3 _env
    # source _env/bin/activate
    python setup.py develop
 
