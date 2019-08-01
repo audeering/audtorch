@@ -1,5 +1,5 @@
 ---
-name: "❓Questions/Help/Support"
+name: "Questions/Help/Support"
 about: Do you need support? We have resources.
 
 ---
