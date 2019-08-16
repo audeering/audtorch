@@ -19,7 +19,7 @@ efforts to integrate more audio directly into PyTorch_:
 .. _keunwoochoi/torchaudio-contrib:
     https://github.com/keunwoochoi/torchaudio-contrib
 
-.. |tests| image:: https://travis-ci.org/audeering/audtorch.svg?branch=master
+.. |tests| image:: https://api.travis-ci.org/audeering/audtorch.svg?branch=master
     :target: https://travis-ci.org/audeering/audtorch/
     :alt: audtorch on TravisCI
 .. |docs| image:: https://readthedocs.org/projects/audtorch/badge/
