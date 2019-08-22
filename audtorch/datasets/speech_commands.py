@@ -90,7 +90,7 @@ class SpeechCommands(AudioDataset):
 
         # Match occurrences of silence with `unknown`
         if silence:
-            n_samples = max(targets.count('unknown'), 3_000)
+            n_samples = max(targets.count('unknown'), 3000)
             n_samples = int(n_samples * 0.9) \
                 if train else int(n_samples * 0.1)
 
