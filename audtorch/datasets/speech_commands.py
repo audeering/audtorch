@@ -19,15 +19,12 @@ class SpeechCommands(AudioDataset):
         root (str): root directory of data set, where the CSV files are
             located, e.g. `/data/speech_commands_v0.02`
         train (bool, optional): Partition the dataset into the training set.
-        `False` returns the test split. Default: True
+            `False` returns the test split. Default: False.
         download (bool, optional): Download the dataset to `root` if it's not
             already available. Default: False
-        sampling_rate (int, optional):
         include (list of str, optional): list of categories to include as
-            commands.
-            If `None` all categories are included. Default:
-            `['yes', 'no', 'up', 'down', 'left', 'right', 'on', 'off',
-            'stop', 'go']`
+            commands. If `None` all categories are included. Default: `['yes',
+            'no', 'up', 'down', 'left', 'right', 'on', 'off', 'stop', 'go']`.
         silence (bool, optional): include a 'silence' class composed of
             background noise. (Note: use randomcrop when training) Default: `True`
         transform (callable, optional): function/transform applied on the
@@ -47,7 +44,6 @@ class SpeechCommands(AudioDataset):
         >>> target
         'right'
         >>> sd.play(signal.transpose(), data.sampling_rate)
-
     """
 
     url = ('http://download.tensorflow.org/'
