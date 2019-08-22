@@ -8,8 +8,7 @@ __doctest_skip__ = ['*']
 
 
 class SpeechCommands(AudioDataset):
-    r"""An audio dataset of spoken words designed to help train and evaluate
-    keyword spotting systems
+    r"""Data set of spoken words designed for keyword spotting tasks.
 
     Speech Commands V2 publicly available from Google:
     http://download.tensorflow.org/data/speech_commands_v0.02.tar.gz
