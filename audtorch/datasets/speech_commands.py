@@ -7,29 +7,51 @@ from .utils import safe_path
 
 
 class SpeechCommands(AudioDataset):
-    """
+    r"""An audio dataset of spoken words designed to help train and evaluate
+    keyword spotting systems
 
-    Google Speech Commands V2
+    Speech Commands V2 publicly available from Google:
+    http://download.tensorflow.org/data/speech_commands_v0.02.tar.gz
+
+    License: CC BY 4.0
 
     Args:
         root (str): root directory of data set, where the CSV files are
             located, e.g. `/data/speech_commands_v0.02`
-        train (bool, optional): Return the training split. `False` returns the
-            test split. Default: True
+        train (bool, optional): Partition the dataset into the training set.
+        `False` returns the test split. Default: True
         download (bool, optional): Download the dataset to `root` if it's not
-            already available. Default: False (TODO)
+            already available. Default: False
         sampling_rate (int, optional):
         include (list of str, optional): list of categories to include as
             commands.
             If `None` all categories are included. Default:
-            `['yes', 'no', 'up', 'down', 'left', 'right', 'on', 'off', 'stop', 'go']`
-        silence (bool, optional): include a 'silence' class composed of background noise.
-            Default: `True`
+            `['yes', 'no', 'up', 'down', 'left', 'right', 'on', 'off',
+            'stop', 'go']`
+        silence (bool, optional): include a 'silence' class composed of
+            background noise. (Note: use randomcrop when training) Default: `True`
         transform (callable, optional): function/transform applied on the
             signal. Default: `None`
         target_transform (callable, optional): function/transform applied on
             the target. Default: `None`
+
+    Example:
+        >>> import sounddevice as sd
+        >>> data = SpeechCommands(root='/data/speech_commands_v0.02', train=True)
+        >>> print(data)
+        Dataset SpeechCommands
+            Number of data points: 97524
+            Root Location: /data/speech_commands_v0.02
+            Sampling Rate: 16000Hz
+        >>> signal, target = data[4]
+        >>> target
+        'right'
+        >>> sd.play(signal.transpose(), data.sampling_rate)
+
     """
+
+    url = ('http://download.tensorflow.org/'
+           'data/speech_commands_v0.02.tar.gz')
 
     # Available target commands
     commands = [
@@ -46,6 +68,7 @@ class SpeechCommands(AudioDataset):
                  include=None, silence=True, transform=None, target_transform=None):
 
         if download:
+            self.root = safe_path(root)
             self._download()
 
         if include is None:
@@ -77,9 +100,16 @@ class SpeechCommands(AudioDataset):
                     sfiles.append(os.path.join(root, '_background_noise_', file))
 
             targets.extend(['silence' for _ in range(n_samples)])
-            files.extend(random.choices(sfiles,k=n_samples))
+            files.extend(random.choices(sfiles, k=n_samples))
 
         super().__init__(root, files, targets, sampling_rate, transform=transform, target_transform=target_transform)
 
     def _download(self):
-        return NotImplementedError("TODO: Automatically download dataset to root dir")
+        if self._check_exists():
+            return
+        download_dir = self.root
+        corpus = 'speech_commands_v0.02'
+        if download_dir.endswith(corpus):
+            download_dir = download_dir[:-len(corpus)]
+        filename = download_url(self.url, download_dir)
+        extract_archive(filename, remove_finished=True)
