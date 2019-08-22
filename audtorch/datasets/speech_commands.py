@@ -3,7 +3,8 @@ import random
 
 from .utils import (download_url, extract_archive, safe_path)
 from .base import AudioDataset
-from .utils import safe_path
+
+__doctest_skip__ = ['*']
 
 
 class SpeechCommands(AudioDataset):
