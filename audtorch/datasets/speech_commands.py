@@ -3,6 +3,7 @@ import random
 
 from .utils import (download_url, extract_archive, safe_path)
 from .base import AudioDataset
+from os.path import join
 
 __doctest_skip__ = ['*']
 
@@ -72,19 +73,19 @@ class SpeechCommands(AudioDataset):
         if include is None:
             include = self.commands
 
-        with open(safe_path(os.path.join(self.root, 'testing_list.txt'))) as f:
+        with open(safe_path(join(self.root, 'testing_list.txt'))) as f:
             test_files = f.read().splitlines()
 
         files, targets = [], []
         for speech_cmd in self.commands:
-            d = os.listdir(os.path.join(self.root, speech_cmd))
-            d = [os.path.join(speech_cmd, x) for x in d]
+            d = os.listdir(join(self.root, speech_cmd))
+            d = [join(speech_cmd, x) for x in d]
 
             # Filter out test / train files using `testing_list.txt`
             d_f = list(set(d) - set(test_files)) \
                 if train else list(set(d) & set(test_files))
 
-            files.extend([os.path.join(self.root, p) for p in d_f])
+            files.extend([join(self.root, p) for p in d_f])
             target = speech_cmd if speech_cmd in include else 'unknown'
             targets.extend([target for _ in range(len(d_f))])
 
@@ -95,9 +96,9 @@ class SpeechCommands(AudioDataset):
                 if train else int(n_samples * 0.1)
 
             sf = []
-            for file in os.listdir(os.path.join(self.root, '_background_noise_')):
+            for file in os.listdir(join(self.root, '_background_noise_')):
                 if file.endswith('.wav'):
-                    sf.append(os.path.join(self.root, '_background_noise_', file))
+                    sf.append(join(self.root, '_background_noise_', file))
 
             targets.extend(['silence' for _ in range(n_samples)])
             files.extend(random.choices(sf, k=n_samples))
