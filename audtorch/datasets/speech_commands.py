@@ -64,27 +64,27 @@ class SpeechCommands(AudioDataset):
     def __init__(self, root, train=True, download=False, *,
                  sampling_rate=16000, include=None, silence=True,
                  transform=None, target_transform=None):
+        self.root = safe_path(root)
 
         if download:
-            self.root = safe_path(root)
             self._download()
 
         if include is None:
             include = self.commands
 
-        with open(safe_path(os.path.join(root, 'testing_list.txt'))) as f:
+        with open(safe_path(os.path.join(self.root, 'testing_list.txt'))) as f:
             test_files = f.read().splitlines()
 
         files, targets = [], []
         for speech_cmd in self.commands:
-            d = os.listdir(os.path.join(root, speech_cmd))
+            d = os.listdir(os.path.join(self.root, speech_cmd))
             d = [os.path.join(speech_cmd, x) for x in d]
 
             # Filter out test / train files using `testing_list.txt`
             d_f = list(set(d) - set(test_files)) \
                 if train else list(set(d) & set(test_files))
 
-            files.extend([os.path.join(root, p) for p in d_f])
+            files.extend([os.path.join(self.root, p) for p in d_f])
             target = speech_cmd if speech_cmd in include else 'unknown'
             targets.extend([target for _ in range(len(d_f))])
 
@@ -95,9 +95,9 @@ class SpeechCommands(AudioDataset):
                 if train else int(n_samples * 0.1)
 
             sf = []
-            for file in os.listdir(os.path.join(root, '_background_noise_')):
+            for file in os.listdir(os.path.join(self.root, '_background_noise_')):
                 if file.endswith('.wav'):
-                    sf.append(os.path.join(root, '_background_noise_', file))
+                    sf.append(os.path.join(self.root, '_background_noise_', file))
 
             targets.extend(['silence' for _ in range(n_samples)])
             files.extend(random.choices(sf, k=n_samples))
@@ -114,4 +114,4 @@ class SpeechCommands(AudioDataset):
         if download_dir.endswith(corpus):
             download_dir = download_dir[:-len(corpus)]
         filename = download_url(self.url, download_dir)
-        extract_archive(filename, remove_finished=True)
+        extract_archive(filename, out_path=self.root, remove_finished=True)
