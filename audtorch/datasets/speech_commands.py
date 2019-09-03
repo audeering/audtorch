@@ -1,7 +1,9 @@
 import os
 import random
+from warnings import warn
 
-from .utils import (download_url, extract_archive, safe_path)
+import resampy
+from .utils import (download_url, extract_archive, safe_path, load)
 from .base import AudioDataset
 from os.path import join
 
@@ -53,7 +55,7 @@ class SpeechCommands(AudioDataset):
            'data/speech_commands_v0.02.tar.gz')
 
     # Available target commands
-    commands = [
+    classes = [
         'right', 'eight', 'cat', 'tree', 'backward',
         'learn', 'bed', 'happy', 'go', 'dog', 'no',
         'wow', 'follow', 'nine', 'left', 'stop', 'three',
@@ -61,18 +63,15 @@ class SpeechCommands(AudioDataset):
         'visual', 'marvin', 'two', 'house', 'down', 'six',
         'yes', 'on', 'five', 'forward', 'off', 'four']
 
-    background_noise = '_background_noise_'
-
     partitions = {
         # https://arxiv.org/pdf/1710.06554.pdf
         '10cmd': ['yes', 'no', 'up', 'down', 'left',
-                  'right', 'on', 'off', 'stop', 'go',
-                  '_silence_', '_unknown_'],
-        'full':  list(commands).extend(['_silence_'])
+                  'right', 'on', 'off', 'stop', 'go'],
+        'full':  classes
     }
 
     def __init__(self, root, train=True, download=False, *,
-                 sampling_rate=16000, include='10cmd', silence=True,
+                 sampling_rate=16000, include='10cmd', silence=False,
                  transform=None, target_transform=None):
         self.root = safe_path(root)
 
@@ -82,11 +81,14 @@ class SpeechCommands(AudioDataset):
         if type(include) is not list:
             include = self.partitions[include]
 
+        if not set(include) == set(self.classes):
+            include.append("_unknown_")
+
         with open(safe_path(join(self.root, 'testing_list.txt'))) as f:
             test_files = f.read().splitlines()
 
         files, targets = [], []
-        for speech_cmd in self.commands:
+        for speech_cmd in self.classes:
             d = os.listdir(join(self.root, speech_cmd))
             d = [join(speech_cmd, x) for x in d]
 
@@ -96,11 +98,12 @@ class SpeechCommands(AudioDataset):
 
             files.extend([join(self.root, p) for p in d_f])
             target = speech_cmd if speech_cmd in include else '_unknown_'
-            targets.extend([target for _ in range(len(d_f))])
+            # speech commands is a classification dataset, so return logits
+            targets.extend([include.index(target) for _ in range(len(d_f))])
 
         # Match occurrences of silence with `unknown`
         if silence:
-            n_samples = max(targets.count('_unknown_'), 3000)
+            n_samples = max(targets.count(len(include) - 1), 3000)
             n_samples = int(n_samples * 0.9) \
                 if train else int(n_samples * 0.1)
 
@@ -109,12 +112,37 @@ class SpeechCommands(AudioDataset):
                 if file.endswith('.wav'):
                     sf.append(join(self.root, '_background_noise_', file))
 
-            targets.extend(['_silence_' for _ in range(n_samples)])
+            targets.extend([len(include) for _ in range(n_samples)])
             files.extend(random.choices(sf, k=n_samples))
 
         super().__init__(root, files, targets, sampling_rate,
                          transform=transform,
                          target_transform=target_transform)
+
+
+    # def __getitem__(self, index):
+    #     signal, signal_sampling_rate = load(self.files[index])
+    #     # Handle empty signals
+    #     if signal.shape[1] == 0:
+    #         warn('Returning previous file.', UserWarning)
+    #         return self.__getitem__(index - 1)
+    #     # Handle different sampling rate
+    #     if signal_sampling_rate != self.original_sampling_rate:
+    #         warn('Resample from {} to {}'
+    #              .format(signal_sampling_rate, self.original_sampling_rate),
+    #              UserWarning)
+    #         signal = resampy.resample(signal, signal_sampling_rate,
+    #                                   self.original_sampling_rate, axis=-1)
+    #
+    #     target = self.targets[index]
+    #
+    #     if self.transform is not None:
+    #         signal = self.transform(signal)
+    #
+    #     if self.target_transform is not None:
+    #         target = self.target_transform(target)
+    #
+    #     return signal, target
 
     def _download(self):
         if self._check_exists():
