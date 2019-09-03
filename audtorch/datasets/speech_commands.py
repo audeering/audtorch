@@ -23,9 +23,10 @@ class SpeechCommands(AudioDataset):
             `False` returns the test split. Default: False.
         download (bool, optional): Download the dataset to `root` if it's not
             already available. Default: False
-        include (list of str, optional): list of categories to include as
-            commands. If `None` all categories are included. Default:
-            `['yes','no','up','down','left','right','on','off','stop','go']`
+        include (str, or list of str): list of commands to include as recognised
+            words. options: `"10cmd"`, `"full"`. A custom dataset can be defined
+            using a list of command words. For example, ["stop","go"]. Words that
+            are not in the "include" list are treated as unknown words.
         silence (bool, optional): include a 'silence' class composed of
             background noise. (Note: use randomcrop when training)
             Default: `True`
@@ -62,16 +63,24 @@ class SpeechCommands(AudioDataset):
 
     background_noise = '_background_noise_'
 
+    partitions = {
+        # https://arxiv.org/pdf/1710.06554.pdf
+        '10cmd': ['yes', 'no', 'up', 'down', 'left',
+                  'right', 'on', 'off', 'stop', 'go',
+                  '_silence_', '_unknown_'],
+        'full':  list(commands).extend(['_silence_'])
+    }
+
     def __init__(self, root, train=True, download=False, *,
-                 sampling_rate=16000, include=None, silence=True,
+                 sampling_rate=16000, include='10cmd', silence=True,
                  transform=None, target_transform=None):
         self.root = safe_path(root)
 
         if download:
             self._download()
 
-        if include is None:
-            include = self.commands
+        if type(include) is not list:
+            include = self.partitions[include]
 
         with open(safe_path(join(self.root, 'testing_list.txt'))) as f:
             test_files = f.read().splitlines()
@@ -86,12 +95,12 @@ class SpeechCommands(AudioDataset):
                 if train else list(set(d) & set(test_files))
 
             files.extend([join(self.root, p) for p in d_f])
-            target = speech_cmd if speech_cmd in include else 'unknown'
+            target = speech_cmd if speech_cmd in include else '_unknown_'
             targets.extend([target for _ in range(len(d_f))])
 
         # Match occurrences of silence with `unknown`
         if silence:
-            n_samples = max(targets.count('unknown'), 3000)
+            n_samples = max(targets.count('_unknown_'), 3000)
             n_samples = int(n_samples * 0.9) \
                 if train else int(n_samples * 0.1)
 
@@ -100,7 +109,7 @@ class SpeechCommands(AudioDataset):
                 if file.endswith('.wav'):
                     sf.append(join(self.root, '_background_noise_', file))
 
-            targets.extend(['silence' for _ in range(n_samples)])
+            targets.extend(['_silence_' for _ in range(n_samples)])
             files.extend(random.choices(sf, k=n_samples))
 
         super().__init__(root, files, targets, sampling_rate,
