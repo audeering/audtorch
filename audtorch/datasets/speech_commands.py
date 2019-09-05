@@ -77,6 +77,7 @@ class SpeechCommands(AudioDataset):
         self.root = safe_path(root)
         self.same_length = False
         self.silence_label = -1
+        self.trim = RandomCrop(sampling_rate)
 
         if download:
             self._download()
@@ -154,8 +155,7 @@ class SpeechCommands(AudioDataset):
 
         # https://github.com/audeering/audtorch/pull/49#discussion_r319044362
         if target == self.silence_label and self.same_length:
-            trim = RandomCrop(self.sampling_rate)
-            signal = trim(signal)
+            signal = self.trim(signal)
 
         if self.transform is not None:
             signal = self.transform(signal)
