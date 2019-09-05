@@ -5,6 +5,7 @@ from warnings import warn
 import resampy
 from .utils import (download_url, extract_archive, safe_path, load)
 from .base import AudioDataset
+from ..transforms import RandomCrop
 from os.path import join
 
 __doctest_skip__ = ['*']
@@ -71,9 +72,11 @@ class SpeechCommands(AudioDataset):
     }
 
     def __init__(self, root, train=True, download=False, *,
-                 sampling_rate=16000, include='10cmd', silence=False,
+                 sampling_rate=16000, include='10cmd',
                  transform=None, target_transform=None):
         self.root = safe_path(root)
+        self.same_length = False
+        self.silence_label = -1
 
         if download:
             self._download()
@@ -101,48 +104,66 @@ class SpeechCommands(AudioDataset):
             # speech commands is a classification dataset, so return logits
             targets.extend([include.index(target) for _ in range(len(d_f))])
 
+        self.silence_label = len(include)
+
         # Match occurrences of silence with `unknown`
-        if silence:
-            n_samples = max(targets.count(len(include) - 1), 3000)
-            n_samples = int(n_samples * 0.9) \
-                if train else int(n_samples * 0.1)
-
-            sf = []
-            for file in os.listdir(join(self.root, '_background_noise_')):
-                if file.endswith('.wav'):
-                    sf.append(join(self.root, '_background_noise_', file))
-
-            targets.extend([len(include) for _ in range(n_samples)])
-            files.extend(random.choices(sf, k=n_samples))
+        # if silence:
+        #     n_samples = max(targets.count(len(include) - 1), 3000)
+        #     n_samples = int(n_samples * 0.9) \
+        #         if train else int(n_samples * 0.1)
+        #
+        #     sf = []
+        #     for file in os.listdir(join(self.root, '_background_noise_')):
+        #         if file.endswith('.wav'):
+        #             sf.append(join(self.root, '_background_noise_', file))
+        #
+        #     targets.extend([len(include) for _ in range(n_samples)])
+        #     files.extend(random.choices(sf, k=n_samples))
 
         super().__init__(root, files, targets, sampling_rate,
                          transform=transform,
                          target_transform=target_transform)
 
+    def add_silence(self, n_samples=3000, same_length=True):
+        # https://github.com/audeering/audtorch/pull/49#discussion_r317489141
+        self.same_length = same_length
+        self.targets.extend([self.silence_label for _ in range(n_samples)])
 
-    # def __getitem__(self, index):
-    #     signal, signal_sampling_rate = load(self.files[index])
-    #     # Handle empty signals
-    #     if signal.shape[1] == 0:
-    #         warn('Returning previous file.', UserWarning)
-    #         return self.__getitem__(index - 1)
-    #     # Handle different sampling rate
-    #     if signal_sampling_rate != self.original_sampling_rate:
-    #         warn('Resample from {} to {}'
-    #              .format(signal_sampling_rate, self.original_sampling_rate),
-    #              UserWarning)
-    #         signal = resampy.resample(signal, signal_sampling_rate,
-    #                                   self.original_sampling_rate, axis=-1)
-    #
-    #     target = self.targets[index]
-    #
-    #     if self.transform is not None:
-    #         signal = self.transform(signal)
-    #
-    #     if self.target_transform is not None:
-    #         target = self.target_transform(target)
-    #
-    #     return signal, target
+        bg_noises = []
+        for file in os.listdir(join(self.root, '_background_noise_')):
+            if file.endswith('.wav'):
+                bg_noises.append(join(self.root, '_background_noise_', file))
+
+        self.files.extend(random.choices(bg_noises, k=n_samples))
+
+    def __getitem__(self, index):
+        signal, signal_sampling_rate = load(self.files[index])
+        # Handle empty signals
+        if signal.shape[1] == 0:
+            warn('Returning previous file.', UserWarning)
+            return self.__getitem__(index - 1)
+        # Handle different sampling rate
+        if signal_sampling_rate != self.original_sampling_rate:
+            warn('Resample from {} to {}'
+                 .format(signal_sampling_rate, self.original_sampling_rate),
+                 UserWarning)
+            signal = resampy.resample(signal, signal_sampling_rate,
+                                      self.original_sampling_rate, axis=-1)
+
+        target = self.targets[index]
+
+        # https://github.com/audeering/audtorch/pull/49#discussion_r319044362
+        if target == self.silence_label and self.same_length:
+            trim = RandomCrop(self.sampling_rate)
+            signal = trim(signal)
+
+        if self.transform is not None:
+            signal = self.transform(signal)
+
+        if self.target_transform is not None:
+            target = self.target_transform(target)
+
+        return signal, target
 
     def _download(self):
         if self._check_exists():
