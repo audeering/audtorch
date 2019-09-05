@@ -26,10 +26,10 @@ class SpeechCommands(AudioDataset):
             `False` returns the test split. Default: False.
         download (bool, optional): Download the dataset to `root` if it's not
             already available. Default: False
-        include (str, or list of str): list of commands to include as recognised
-            words. options: `"10cmd"`, `"full"`. A custom dataset can be defined
-            using a list of command words. For example, ["stop","go"]. Words that
-            are not in the "include" list are treated as unknown words.
+        include (str, or list of str): commands to include as 'recognised'
+        words. options: `"10cmd"`, `"full"`. A custom dataset can be defined
+            using a list of command words. For example, ["stop","go"]. Words
+             that are not in the "include" list are treated as unknown words.
         silence (bool, optional): include a 'silence' class composed of
             background noise. (Note: use randomcrop when training)
             Default: `True`
@@ -68,7 +68,7 @@ class SpeechCommands(AudioDataset):
         # https://arxiv.org/pdf/1710.06554.pdf
         '10cmd': ['yes', 'no', 'up', 'down', 'left',
                   'right', 'on', 'off', 'stop', 'go'],
-        'full':  classes
+        'full': classes
     }
 
     def __init__(self, root, train=True, download=False, *,
