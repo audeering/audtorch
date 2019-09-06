@@ -25,6 +25,12 @@ MozillaCommonVoice
 .. autoclass:: MozillaCommonVoice
     :members:
 
+SpeechCommands
+--------------
+
+.. autoclass:: SpeechCommands
+    :members:
+
 VoxCeleb1
 ---------
 
