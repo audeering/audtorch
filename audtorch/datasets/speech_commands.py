@@ -20,23 +20,32 @@ class SpeechCommands(AudioDataset):
     License: CC BY 4.0
 
     Args:
-        root (str): root directory of data set, where the CSV files are
-            located, e.g. `/data/speech_commands_v0.02`
+        root (str): root directory of data set,
+            where the CSV files are located,
+            e.g. `/data/speech_commands_v0.02`
         train (bool, optional): Partition the dataset into the training set.
-            `False` returns the test split. Default: False.
-        download (bool, optional): Download the dataset to `root` if it's not
-            already available. Default: False
-        include (str, or list of str): commands to include as 'recognised'
-        words. options: `"10cmd"`, `"full"`. A custom dataset can be defined
-            using a list of command words. For example, ["stop","go"]. Words
-             that are not in the "include" list are treated as unknown words.
+            `False` returns the test split.
+            Default: `False`
+        download (bool, optional): Download the dataset to `root`
+            if it's not already available.
+            Default: `False`
+        include (str, or list of str, optional): commands to include
+            as 'recognised' words.
+            Options: `"10cmd"`, `"full"`.
+            A custom dataset can be defined using a list of command words.
+            For example, `["stop","go"]`.
+            Words that are not in the "include" list
+            are treated as unknown words.
+            Default: `'10cmd'`
         silence (bool, optional): include a 'silence' class composed of
-            background noise. (Note: use randomcrop when training)
+            background noise (Note: use randomcrop when training).
             Default: `True`
         transform (callable, optional): function/transform applied on the
-            signal. Default: `None`
+            signal.
+            Default: `None`
         target_transform (callable, optional): function/transform applied on
-            the target. Default: `None`
+            the target.
+            Default: `None`
 
     Example:
         >>> import sounddevice as sd
