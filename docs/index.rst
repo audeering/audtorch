@@ -5,6 +5,7 @@
 
 .. toctree::
     :caption: Getting started
+    :hidden:
 
     install
     usage
@@ -16,6 +17,7 @@
 .. you want to create something different than HTML output.
 .. toctree::
     :caption: API Documentation
+    :hidden:
 
     api-collate
     api-datasets
