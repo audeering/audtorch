@@ -7,6 +7,13 @@ The format is based on `Keep a Changelog`_,
 and this project adheres to `Semantic Versioning`_.
 
 
+Version 0.3.0 (2019-09-13)
+--------------------------
+
+* Added: ``datasets.SpeechCommands`` (#49)
+* Removed: ``LogSpectrogram`` (#52)
+
+
 Version 0.2.1 (2019-08-01)
 --------------------------
 
