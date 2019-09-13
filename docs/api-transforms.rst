@@ -107,12 +107,6 @@ Log
 .. autoclass:: Log
     :members:
 
-LogSpectrogram
---------------
-
-.. autoclass:: LogSpectrogram
-    :members:
-
 RandomAdditiveMix
 -----------------
 
