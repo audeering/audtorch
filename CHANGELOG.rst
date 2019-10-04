@@ -7,6 +7,12 @@ The format is based on `Keep a Changelog`_,
 and this project adheres to `Semantic Versioning`_.
 
 
+Version 0.3.1 (2019-10-04)
+--------------------------
+
+* Changed: define package in ``setup.cfg``
+
+
 Version 0.3.0 (2019-09-13)
 --------------------------
 
