@@ -572,7 +572,7 @@ class MaskSpectrogramTime(RandomMask):
         value (float): mask value
 
     Example:
-        >>> from librosa.display import specshow
+        >>> from librosa.display import specshow  # doctest: +SKIP
         >>> import matplotlib.pyplot as plt  # doctest: +SKIP
         >>> a = torch.empty(65000).uniform_(-1, 1)
         >>> t = Compose([Spectrogram(320, 160), MaskSpectrogramTime(0.1)])
@@ -602,7 +602,7 @@ class MaskSpectrogramFrequency(RandomMask):
         value (float): mask value
 
     Example:
-        >>> from librosa.display import specshow
+        >>> from librosa.display import specshow  # doctest: +SKIP
         >>> import matplotlib.pyplot as plt  # doctest: +SKIP
         >>> a = torch.empty(65000).uniform_(-1, 1)
         >>> t = Compose([Spectrogram(320, 160), MaskSpectrogramFrequency(0.1)])
