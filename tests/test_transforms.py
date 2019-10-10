@@ -1,4 +1,5 @@
 import pytest
+import torch
 import numpy as np
 import scipy
 import resampy
@@ -6,7 +7,6 @@ import librosa
 
 import audtorch.transforms as transforms
 import audtorch.transforms.functional as F
-
 
 xfail = pytest.mark.xfail
 
@@ -85,6 +85,22 @@ def test_expand(input, size, axis, method):
             input,
             repetitions=size // input.shape[axis] + 1,
             axis=axis), (0, size), axis=axis))
+
+
+@pytest.mark.parametrize('input,coverage,max_width,value,axis,'
+                         'expected_masked_items', [
+                             (A, 0., 3, 0, -1, 0),
+                             (A, 0.1, 1, 0, -1, 4),
+                             (A, 0.25, 1, 0, -1, 4),
+                             (A, 0.3, 1, 0, -1, 4),
+                             (A, 0.1, 1, 0, -2, 8)
+                         ])
+def test_random_mask(input, coverage, max_width, value, axis,
+                     expected_masked_items):
+    input = torch.from_numpy(input).clone()
+    t = transforms.RandomMask(coverage, max_width, value, axis)
+    masked_items = len((t(input) == value).nonzero())
+    assert masked_items == expected_masked_items
 
 
 @pytest.mark.parametrize('input,channels,method,axis,expected_output', [
