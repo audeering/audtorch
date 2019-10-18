@@ -59,6 +59,24 @@ Expand
 .. autoclass:: Expand
     :members:
 
+RandomMask
+----------
+
+.. autoclass:: RandomMask
+    :members:
+
+MaskSpectrogramTime
+-------------------
+
+.. autoclass:: MaskSpectrogramTime
+    :members:
+
+MaskSpectrogramFrequency
+------------------------
+
+.. autoclass:: MaskSpectrogramFrequency
+    :members:
+
 Downmix
 -------
 

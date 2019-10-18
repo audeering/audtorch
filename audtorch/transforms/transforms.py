@@ -495,8 +495,8 @@ class RandomMask(object):
     which is uniformly sampled given an upper limit on the block size.
     The algorithm for a single block is as follows:
 
-        1. :math:`width ~ U[0, {maximum_width}]`
-        2. :math:`start ~ U[0, {signal_size} - width)`
+        1. :math:`\text{width} ~ U[0, {\text{maximum\_width}}]`
+        2. :math:`\text{start} ~ U[0, {\text{signal\_size}} - \text{width})`
 
     The number of blocks is approximated by the specified `coverage` of the
     masking and the average size of a block.
@@ -558,7 +558,7 @@ class RandomMask(object):
 class MaskSpectrogramTime(RandomMask):
     r"""Randomly masks spectrogram along time axis.
 
-    See `RandomMask` for more details.
+    See :class:`RandomMask` for more details.
 
     Note:
         The time axis is derived from `Spectrogram`'s output shape.
@@ -588,7 +588,7 @@ class MaskSpectrogramTime(RandomMask):
 class MaskSpectrogramFrequency(RandomMask):
     r"""Randomly masks spectrogram along frequency axis.
 
-    See `RandomMask` for more details.
+    See :class:`RandomMask` for more details.
 
     Note:
         The frequency axis is derived from `Spectrogram`'s output shape.

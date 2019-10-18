@@ -42,6 +42,11 @@ additive_mix
 
 .. autofunction:: additive_mix
 
+mask
+----
+
+.. autofunction:: mask
+
 normalize
 ---------
 
