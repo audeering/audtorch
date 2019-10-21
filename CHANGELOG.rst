@@ -7,6 +7,12 @@ The format is based on `Keep a Changelog`_,
 and this project adheres to `Semantic Versioning`_.
 
 
+Version 0.4.0 (2019-10-21)
+--------------------------
+
+* Added: masking transforms in time and frequency domain
+
+
 Version 0.3.2 (2019-10-04)
 --------------------------
 
