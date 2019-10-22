@@ -52,6 +52,7 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',  # support for Google-style docstrings
+    'sphinx_autodoc_typehints',
     'sphinxcontrib.bibtex',
     'sphinxcontrib.katex',
 ]
@@ -64,6 +65,7 @@ intersphinx_mapping = {
     'numpy': ('https://docs.scipy.org/doc/numpy/', None),
     'scipy': ('https://docs.scipy.org/doc/scipy/reference/', None),
     'torch': ('https://pytorch.org/docs/stable/', None),
+    'pandas': ('https://pandas-docs.github.io/pandas-docs-travis/', None),
 }
 
 # HTML --------------------------------------------------------------------

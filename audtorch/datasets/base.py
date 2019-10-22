@@ -1,4 +1,5 @@
 import os
+from typing import Callable, List, Union
 from warnings import warn
 
 import pandas as pd
@@ -19,26 +20,27 @@ class AudioDataset(Dataset):
     This data set can be used if you have a list of files and a list of
     corresponding targets.
 
+    :class:`PandasDataset`
+
     In addition, this class is a great starting point to inherit from if you
     wish to build your own data set.
 
-    * :attr:`transform` controls the input transform
-    * :attr:`target_transform` controls the target transform
-    * :attr:`files` controls the audio files of the data set
-    * :attr:`targets` controls the corresponding targets
-    * :attr:`sampling_rate` holds the sampling rate of the returned data
-    * :attr:`original_sampling_rate` holds the sampling rate of the audio files
-      of the data set
-
     Args:
-        root (str): root directory of dataset.
-        files (list): list of files
-        targets (list): list of targets
-        sampling_rate (int): sampling rate in Hz of the data set
-        transform (callable, optional): function/transform applied on the
-            signal. Default: `None`
-        target_transform (callable, optional): function/transform applied on
-            the target. Default: `None`
+        root: root directory of data set
+        files: list of files
+        targets: list of targets
+        sampling_rate: sampling rate in Hz of the data set
+        transform: function/transform applied on the signal
+        target_transform: function/transform applied on the target
+
+    Attributes:
+        transform: controls the input transform
+        target_transform: controls the target transform
+        files: controls the audio files of the data set
+        targets: controls the corresponding targets
+        sampling_rate: holds the sampling rate of the returned data
+        original_sampling_rate: holds the sampling rate of the audio files
+            of the data set
 
     Example:
         >>> data = AudioDataset(root='/data',
@@ -56,8 +58,16 @@ class AudioDataset(Dataset):
 
     """
 
-    def __init__(self, root, files, targets, sampling_rate, *, transform=None,
-                 target_transform=None):
+    def __init__(
+            self,
+            root: str,
+            files: List,
+            targets: List,
+            sampling_rate: int,
+            *,
+            transform: Callable = None,
+            target_transform: Callable = None
+    ):
         self.root = safe_path(root)
         self.files = [os.path.join(self.root, f) for f in files]
         self.targets = targets
@@ -135,10 +145,10 @@ class AudioDataset(Dataset):
 
 
 class PandasDataset(AudioDataset):
-    r"""Data set from pandas.DataFrame.
+    r"""Data set from :class:`pandas.DataFrame`.
 
     Create a data set by accessing the file locations and corresponding labels
-    through a pandas.DataFrame.
+    through a :class:`pandas.DataFrame`.
 
     You have to specify which labels of the data set you want as target by the
     names of the corresponding columns in the data frame. If you want to select
@@ -147,31 +157,28 @@ class PandasDataset(AudioDataset):
     a dictionary containing the labels.
 
     The filenames of the corresponding audio files have to be specified with
-    relative path from `root` in the data frame in a column with the name
-    :attr:`col_filename` which defaults to `filename`.
-
-    * :attr:`transform` controls the input transform
-    * :attr:`target_transform` controls the target transform
-    * :attr:`files` controls the audio files of the data set
-    * :attr:`targets` controls the corresponding targets
-    * :attr:`sampling_rate` holds the sampling rate of the returned data
-    * :attr:`original_sampling_rate` holds the sampling rate of the audio files
-      of the data set
-    * :attr:`column_labels` holds the name of the label columns
+    relative path from :obj:`root` in the data frame in a column with the name
+    :obj:`column_filename` which defaults to ``'filename'``.
 
     Args:
-        root (str): root directory of data set
-        df (pandas.DataFrame): data frame with filenames and labels. Relative
-            from `root`
-        sampling_rate (int): sampling rate in Hz of the data set
-        column_labels (str or list of str, optional): name of data frame
-            column(s) containing the desired labels. Default: `label`
-        column_filename (str, optional): name of column holding the file
-            names. Default: `filename`
-        transform (callable, optional): function/transform applied on the
-            signal. Default: `None`
-        target_transform (callable, optional): function/transform applied on
-            the target. Default: `None`
+        root: root directory of data set
+        df: data frame with filenames and labels. Relative from :obj:`root`
+        sampling_rate: sampling rate in Hz of the data set
+        column_labels: name of data frame column(s)
+            containing the desired labels.
+        column_filename: name of column holding the filenames
+        transform: function/transform applied on the signal
+        target_transform: function/transform applied on the target
+
+    Attributes:
+        transform: controls the input transform
+        target_transform: controls the target transform
+        files: controls the audio files of the data set
+        targets: controls the corresponding targets
+        sampling_rate: holds the sampling rate of the returned data
+        original_sampling_rate: holds the sampling rate of the audio files
+            of the data set
+        column_labels: holds the name of the label columns
 
     Example:
         >>> data = PandasDataset(root='/data',
@@ -190,9 +197,17 @@ class PandasDataset(AudioDataset):
 
     """
 
-    def __init__(self, root, df, sampling_rate, *, column_labels='label',
-                 column_filename='filename', transform=None,
-                 target_transform=None):
+    def __init__(
+            self,
+            root: str,
+            df: pd.DataFrame,
+            sampling_rate: int,
+            *,
+            column_labels: Union[List[str], str] = 'label',
+            column_filename: str = 'filename',
+            transform: Callable = None,
+            target_transform: Callable = None
+    ):
         files, labels = \
             files_and_labels_from_df(df, root=root,
                                      column_labels=column_labels,
@@ -220,32 +235,28 @@ class CsvDataset(PandasDataset):
     set will return a dictionary containing the targets.
 
     The filenames of the corresponding audio files have to be specified with
-    relative path from `root` in the CSV file in a column with the name
-    :attr:`col_filename` which defaults to `filename`.
-
-    * :attr:`transform` controls the input transform
-    * :attr:`target_transform` controls the target transform
-    * :attr:`files` controls the audio files of the data set
-    * :attr:`targets` controls the corresponding targets
-    * :attr:`sampling_rate` holds the sampling rate of the returned data
-    * :attr:`original_sampling_rate` holds the sampling rate of the audio files
-      of the data set
-    * :attr:`csv_file` holds the path to the used CSV file
+    relative path from ``root`` in the CSV file in a column with the name
+    :attr:`column_filename` which defaults to ``'filename'``.
 
     Args:
-        root (str): root directory of data set
-        csv_file (str): CSV file with filenames and labels. Relative from
-            `root`
-        sampling_rate (int): sampling rate in Hz of the data set
-        column_labels (str or list of str, optional): name of CSV column(s)
-            containing the desired labels. Default: `label`
-        column_filename (str, optional): name of CSV column holding the file
-            names. Default: `filename`
-        sep (str, optional): CSV delimiter. Default: `,`
-        transform (callable, optional): function/transform applied on the
-            signal. Default: `None`
-        target_transform (callable, optional): function/transform applied on
-            the target. Default: `None`
+        root: root directory of data set
+        csv_file: CSV file with filenames and labels. Relative from :obj:`root`
+        sampling_rate: sampling rate in Hz of the data set
+        column_labels: name of CSV column(s) containing the desired labels
+        column_filename: name of CSV column holding the filename
+        sep: CSV delimiter
+        transform: function/transform applied on the signal
+        target_transform: function/transform applied on the target
+
+    Attributes:
+        transform: controls the input transform
+        target_transform: controls the target transform
+        files: controls the audio files of the data set
+        targets: controls the corresponding targets
+        sampling_rate: holds the sampling rate of the returned data
+        original_sampling_rate: holds the sampling rate of the audio files
+            of the data set
+        csv_file: holds the path to the used CSV file
 
     Example:
         >>> data = CsvDataset(root='/data',
@@ -265,9 +276,18 @@ class CsvDataset(PandasDataset):
 
     """
 
-    def __init__(self, root, csv_file, sampling_rate, *, sep=',',
-                 column_labels='label', column_filename='filename',
-                 transform=None, target_transform=None):
+    def __init__(
+            self,
+            root: str,
+            csv_file: str,
+            sampling_rate: int,
+            *,
+            sep: str = ',',
+            column_labels: Union[List[str], str] = 'label',
+            column_filename: str = 'filename',
+            transform: Callable = None,
+            target_transform: Callable = None
+    ):
         self.root = safe_path(root)
         self.csv_file = os.path.join(self.root, csv_file)
 
@@ -294,15 +314,16 @@ class AudioConcatDataset(ConcatDataset):
     compatible with respect to the sampling rate which they
     are processed with.
 
-    * :attr:`sampling_rate` holds the consistent sampling rate of the
-      concatenated data set
-    * :attr:`datasets` holds a list of all audio data sets
-    * :attr:`cumulative_sizes` holds a list of sizes accumulated over all
-      audio data sets, i.e. `[len(data1), len(data1) + len(data2), ...]`
-
     Args:
-        datasets (list of audtorch.AudioDataset): Audio data sets
-            with property `sampling_rate`.
+        datasets: Audio data sets with property :attr:`sampling_rate`
+
+    Attributes:
+        sampling_rate: holds the consistent sampling rate of the
+            concatenated data set
+        datasets: holds a list of all audio data sets
+        cumulative_sizes: holds a list of sizes accumulated over all
+            audio data sets,
+            i.e. ``[len(data1), len(data1) + len(data2), ...]``
 
     Example:
         >>> import sounddevice as sd
@@ -326,7 +347,10 @@ class AudioConcatDataset(ConcatDataset):
 
     """
 
-    def __init__(self, datasets):
+    def __init__(
+            self,
+            datasets: List[AudioDataset]
+    ):
         super().__init__(datasets)
         ensure_same_sampling_rate(datasets)
 
