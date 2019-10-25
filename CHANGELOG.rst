@@ -7,6 +7,12 @@ The format is based on `Keep a Changelog`_,
 and this project adheres to `Semantic Versioning`_.
 
 
+Version 0.4.1 (2019-10-25)
+--------------------------
+
+* Fixed: default axis values for Masking transforms (#59)
+
+
 Version 0.4.0 (2019-10-21)
 --------------------------
 
