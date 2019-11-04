@@ -6,8 +6,14 @@ import resampy
 from tabulate import tabulate
 from torch.utils.data import (Dataset, ConcatDataset)
 
-from .utils import (ensure_same_sampling_rate, files_and_labels_from_df,
-                    load, sampling_rate_after_transform, safe_path)
+from .utils import (
+    ensure_df_columns_contain,
+    ensure_same_sampling_rate,
+    files_and_labels_from_df,
+    load,
+    safe_path,
+    sampling_rate_after_transform,
+)
 
 
 __doctest_skip__ = ['*']
@@ -179,6 +185,10 @@ class PandasDataset(AudioDataset):
             column(s) containing the desired labels. Default: `label`
         column_filename (str, optional): name of column holding the file
             names. Default: `filename`
+        column_start (str, optional): name of column holding start of audio
+            in the corresponding file in seconds. Default: `None`
+        column_end (str, optional): name of column holding end of audio
+            in the corresponding file in seconds. Default: `None`
         transform (callable, optional): function/transform applied on the
             signal. Default: `None`
         target_transform (callable, optional): function/transform applied on
@@ -201,17 +211,42 @@ class PandasDataset(AudioDataset):
 
     """
 
-    def __init__(self, root, df, sampling_rate, *, column_labels='label',
-                 column_filename='filename', transform=None,
-                 target_transform=None):
-        files, labels = \
-            files_and_labels_from_df(df, root=root,
-                                     column_labels=column_labels,
-                                     column_filename=column_filename)
-        super().__init__(root, files, targets=labels,
-                         sampling_rate=sampling_rate, transform=transform,
-                         target_transform=target_transform)
+    def __init__(
+            self,
+            root,
+            df,
+            sampling_rate,
+            *,
+            column_labels='label',
+            column_filename='filename',
+            column_start=None,
+            column_end=None,
+            transform=None,
+            target_transform=None
+    ):
+        files, labels = files_and_labels_from_df(
+            df,
+            root=root,
+            column_labels=column_labels,
+            column_filename=column_filename,
+        )
+        super().__init__(
+            root,
+            files,
+            targets=labels,
+            sampling_rate=sampling_rate,
+            transform=transform,
+            target_transform=target_transform,
+        )
         self.column_labels = column_labels
+        if column_start is not None:
+            ensure_df_columns_contain(df, [column_start])
+            self.offset = df[column_start]
+        if column_end is not None:
+            ensure_df_columns_contain(df, [column_end])
+            start = self.offset
+            end = df[column_end]
+            self.duration = (end - start).where((pd.notnull(end)), None)
 
     def extra_repr(self):
         fmt_str = '    Labels: {}\n'.format(self.column_labels)
