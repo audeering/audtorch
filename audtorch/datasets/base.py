@@ -66,10 +66,10 @@ class AudioDataset(Dataset):
 
     def __init__(
             self,
+            *,
             files,
             targets,
             sampling_rate,
-            *,
             root=None,
             transform=None,
             target_transform=None
@@ -228,9 +228,9 @@ class PandasDataset(AudioDataset):
 
     def __init__(
             self,
+            *,
             df,
             sampling_rate,
-            *,
             root=None,
             column_labels='label',
             column_filename='filename',
@@ -329,9 +329,9 @@ class CsvDataset(PandasDataset):
 
     def __init__(
             self,
+            *,
             csv_file,
             sampling_rate,
-            *,
             root=None,
             sep=',',
             column_labels='label',
@@ -348,8 +348,8 @@ class CsvDataset(PandasDataset):
                                     .format(self.csv_file))
         df = pd.read_csv(self.csv_file, sep)
         super().__init__(
-            df,
-            sampling_rate,
+            df=df,
+            sampling_rate=sampling_rate,
             root=root,
             column_labels=column_labels,
             column_filename=column_filename,
