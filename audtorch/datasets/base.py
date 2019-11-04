@@ -26,6 +26,8 @@ class AudioDataset(Dataset):
     * :attr:`target_transform` controls the target transform
     * :attr:`files` controls the audio files of the data set
     * :attr:`targets` controls the corresponding targets
+    * :attr:`duration` controls audio duration for every file in seconds
+    * :attr:`offset` controls audio offset for every file in seconds
     * :attr:`sampling_rate` holds the sampling rate of the returned data
     * :attr:`original_sampling_rate` holds the sampling rate of the audio files
       of the data set
@@ -65,6 +67,10 @@ class AudioDataset(Dataset):
         self.transform = transform
         self.target_transform = target_transform
 
+        # Initialize empty duration and offset attributes.
+        self.duration = [None] * self.__len__()
+        self.offset = [0] * self.__len__()
+
         assert len(files) == len(targets)
 
         if not self._check_exists():
@@ -74,7 +80,12 @@ class AudioDataset(Dataset):
         return len(self.files)
 
     def __getitem__(self, index):
-        signal, signal_sampling_rate = load(self.files[index])
+
+        signal, signal_sampling_rate = load(
+            self.files[index],
+            duration=self.duration[index],
+            offset=self.offset[index],
+        )
         # Handle empty signals
         if signal.shape[1] == 0:
             warn('Returning previous file.', UserWarning)
