@@ -1,8 +1,8 @@
 import numpy as np
-from torch.utils.data import Sampler
+from torch.utils.data import BatchSampler
 
 
-class BucketSampler(Sampler):
+class BucketSampler(BatchSampler):
     r"""Creates batches from ordered data sets.
 
     This sampler iterates over the data sets of `concat_dataset`
