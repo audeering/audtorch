@@ -287,6 +287,10 @@ class CsvDataset(PandasDataset):
             containing the desired labels. Default: `label`
         column_filename (str, optional): name of CSV column holding the file
             names. Default: `filename`
+        column_start (str, optional): name of column holding start of audio
+            in the corresponding file in seconds. Default: `None`
+        column_end (str, optional): name of column holding end of audio
+            in the corresponding file in seconds. Default: `None`
         sep (str, optional): CSV delimiter. Default: `,`
         transform (callable, optional): function/transform applied on the
             signal. Default: `None`
@@ -311,9 +315,20 @@ class CsvDataset(PandasDataset):
 
     """
 
-    def __init__(self, root, csv_file, sampling_rate, *, sep=',',
-                 column_labels='label', column_filename='filename',
-                 transform=None, target_transform=None):
+    def __init__(
+            self,
+            root,
+            csv_file,
+            sampling_rate,
+            *,
+            sep=',',
+            column_labels='label',
+            column_filename='filename',
+            column_start=None,
+            column_end=None,
+            transform=None,
+            target_transform=None
+    ):
         self.root = safe_path(root)
         self.csv_file = os.path.join(self.root, csv_file)
 
@@ -321,10 +336,17 @@ class CsvDataset(PandasDataset):
             raise FileNotFoundError('CSV file {} not found.'
                                     .format(self.csv_file))
         df = pd.read_csv(self.csv_file, sep)
-        super().__init__(root, df, sampling_rate,
-                         column_labels=column_labels,
-                         column_filename=column_filename, transform=transform,
-                         target_transform=target_transform)
+        super().__init__(
+            root,
+            df,
+            sampling_rate,
+            column_labels=column_labels,
+            column_filename=column_filename,
+            column_start=column_start,
+            column_end=column_end,
+            transform=transform,
+            target_transform=target_transform,
+        )
 
     def extra_repr(self):
         fmt_str = super().extra_repr()
