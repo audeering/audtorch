@@ -7,6 +7,12 @@ The format is based on `Keep a Changelog`_,
 and this project adheres to `Semantic Versioning`_.
 
 
+Version 0.4.2 (2019-11-04)
+--------------------------
+
+* Fixed: critical bug of missing files in wheel package (#60)
+
+
 Version 0.4.1 (2019-10-25)
 --------------------------
 
