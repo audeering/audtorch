@@ -232,7 +232,7 @@ class PandasDataset(AudioDataset):
             df,
             sampling_rate,
             root=None,
-            column_labels='label',
+            column_labels=None,
             column_filename='filename',
             column_start=None,
             column_end=None,
@@ -263,7 +263,8 @@ class PandasDataset(AudioDataset):
             self.duration = (end - start).where((pd.notnull(end)), None)
 
     def extra_repr(self):
-        fmt_str = '    Labels: {}\n'.format(self.column_labels)
+        if self.column_labels is not None:
+            fmt_str = '    Labels: {}\n'.format(self.column_labels)
         return fmt_str
 
 
@@ -334,7 +335,7 @@ class CsvDataset(PandasDataset):
             sampling_rate,
             root=None,
             sep=',',
-            column_labels='label',
+            column_labels=None,
             column_filename='filename',
             column_start=None,
             column_end=None,

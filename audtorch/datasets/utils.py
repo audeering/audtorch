@@ -228,7 +228,7 @@ def ensure_df_columns_contain(df, labels):
 
     """
     ensure_df_not_empty(df)
-    if not set(labels) <= set(df.columns):
+    if labels is not None and not set(labels) <= set(df.columns):
         raise RuntimeError("Dataframe contains only these columns: '{}'"
                            .format(', '.join(df.columns)))
 
@@ -260,7 +260,7 @@ def ensure_df_not_empty(df, labels=None):
 def files_and_labels_from_df(
         df,
         *,
-        column_labels='label',
+        column_labels=None,
         column_filename='filename'
 ):
     r"""Extract list of files and labels from dataframe columns.
@@ -268,7 +268,7 @@ def files_and_labels_from_df(
     Args:
         df (pandas.DataFrame): data frame with filenames and labels
         column_labels (str or list of str, optional): name of data frame
-            column(s) containing the desired labels. Default: `label`
+            column(s) containing the desired labels. Default: `None`
         column_filename (str, optional): name of column holding the file
             names. Default: `filename`
 
@@ -281,22 +281,28 @@ def files_and_labels_from_df(
         >>> import pandas as pd
         >>> df = pd.DataFrame(data=[('speech.wav', 'speech')],
         ...                   columns=['filename', 'label'])
-        >>> files, labels = files_and_labels_from_df(df)
+        >>> files, labels = files_and_labels_from_df(df, column_labels='label')
         >>> os.path.relpath(files[0]), labels[0]
         ('speech.wav', 'speech')
 
     """
     if df is None:
         return [], []
+
+    ensure_df_columns_contain(df, [column_filename])
+    df = df.copy()
+    files = df.pop(column_filename).tolist()
+
+    if column_labels is None:
+        return files, [''] * len(files)
+
     if isinstance(column_labels, str):
         column_labels = [column_labels]
     ensure_df_columns_contain(df, column_labels)
-    df = df[[column_filename] + column_labels]
+    df = df[column_labels]
     # Drop empty entries
     df = df.dropna().reset_index(drop=True)
     ensure_df_not_empty(df, column_labels)
-    # Assign files and labels
-    files = df.pop(column_filename).tolist()
     if len(column_labels) == 1:
         # list of strings
         labels = df.values.T[0].tolist()
