@@ -130,9 +130,14 @@ class SpeechCommands(AudioDataset):
         #     targets.extend([len(include) for _ in range(n_samples)])
         #     files.extend(random.choices(sf, k=n_samples))
 
-        super().__init__(root, files, targets, sampling_rate,
-                         transform=transform,
-                         target_transform=target_transform)
+        super().__init__(
+            files=files,
+            targets=targets,
+            sampling_rate=sampling_rate,
+            root=root,
+            transform=transform,
+            target_transform=target_transform,
+        )
 
     def add_silence(self, n_samples=3000, same_length=True):
         # https://github.com/audeering/audtorch/pull/49#discussion_r317489141

@@ -81,14 +81,22 @@ class MozillaCommonVoice(CsvDataset):
                  label_type='text', transform=None, target_transform=None,
                  download=False):
 
+        self.root = safe_path(root)
+        csv_file = os.path.join(root, csv_file)
+
         if download:
-            self.root = safe_path(root)
             self._download()
 
-        super().__init__(root, csv_file, sampling_rate=48000, sep=',',
-                         column_labels=label_type, column_filename='filename',
-                         transform=transform,
-                         target_transform=target_transform)
+        super().__init__(
+            csv_file=csv_file,
+            sampling_rate=48000,
+            root=root,
+            sep=',',
+            column_labels=label_type,
+            column_filename='filename',
+            transform=transform,
+            target_transform=target_transform,
+        )
 
     def _download(self):
         if self._check_exists():

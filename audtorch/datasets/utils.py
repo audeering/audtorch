@@ -257,14 +257,16 @@ def ensure_df_not_empty(df, labels=None):
         raise RuntimeError(error_message)
 
 
-def files_and_labels_from_df(df, *, root='.', column_labels='label',
-                             column_filename='filename'):
+def files_and_labels_from_df(
+        df,
+        *,
+        column_labels='label',
+        column_filename='filename'
+):
     r"""Extract list of files and labels from dataframe columns.
 
     Args:
-        df (pandas.DataFrame): data frame with filenames and labels. Relative
-            from `root`
-        root (str, optional): root directory of data set. Default: `.`
+        df (pandas.DataFrame): data frame with filenames and labels
         column_labels (str or list of str, optional): name of data frame
             column(s) containing the desired labels. Default: `label`
         column_filename (str, optional): name of column holding the file
@@ -286,7 +288,6 @@ def files_and_labels_from_df(df, *, root='.', column_labels='label',
     """
     if df is None:
         return [], []
-    root = safe_path(root)
     if isinstance(column_labels, str):
         column_labels = [column_labels]
     ensure_df_columns_contain(df, column_labels)
@@ -296,7 +297,6 @@ def files_and_labels_from_df(df, *, root='.', column_labels='label',
     ensure_df_not_empty(df, column_labels)
     # Assign files and labels
     files = df.pop(column_filename).tolist()
-    files = [os.path.join(root, f) for f in files]
     if len(column_labels) == 1:
         # list of strings
         labels = df.values.T[0].tolist()

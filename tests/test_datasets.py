@@ -109,16 +109,14 @@ def test_ensure_df_not_empty(df):
 
 
 @pytest.mark.parametrize('df,expected_files,expected_labels', [
-    (df_ab, ['./0'], [1]),
+    (df_ab, ['0'], [1]),
     (None, [], []),
     pytest.param(df_empty, [], [], marks=xfail(raises=RuntimeError)),
 ])
 def test_files_and_labels_from_df(df, expected_files, expected_labels):
     files, labels = datasets.files_and_labels_from_df(df,
-                                                      root='.',
                                                       column_filename='a',
                                                       column_labels='b')
-    expected_files = [datasets.safe_path(f) for f in expected_files]
     assert files == expected_files
     assert labels == expected_labels
 

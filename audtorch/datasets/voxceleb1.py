@@ -3,7 +3,7 @@ import os
 import pandas as pd
 
 from audtorch.datasets.base import AudioDataset
-from audtorch.datasets.utils import download_url
+from audtorch.datasets.utils import download_url, safe_path
 
 
 __doctest_skip__ = ['*']
@@ -72,25 +72,40 @@ class VoxCeleb1(AudioDataset):
         'http://www.robots.ox.ac.uk/~vgg/data/voxceleb/meta/iden_split.txt')
     _partitions = {'train': 1, 'dev': 2, 'test': 3}
 
-    def __init__(self, root, *, partition='train',
-                 transform=None, target_transform=None):
-        super().__init__(root, files=[], targets=[], transform=transform,
-                         sampling_rate=16000,
-                         target_transform=target_transform)
+    def __init__(
+            self,
+            root,
+            *,
+            partition='train',
+            transform=None,
+            target_transform=None
+    ):
+        self.root = safe_path(root)
 
         filelist = pd.read_csv(
             os.path.join(
                 self.root,
                 download_url(self._iden_file_url, self.root)),
-            sep=' ', header=None)
-        self.files, self.targets = self._get_files_speaker_lists(filelist)
+            sep=' ',
+            header=None,
+        )
+        files, targets = self._get_files_speaker_lists(filelist)
 
         if partition is not None:
             # filter indices based on identification split
             indices = [index for index, x in enumerate(filelist[0])
                        if x == self._partitions[partition]]
-            self.files = [self.files[index] for index in indices]
-            self.targets = [self.targets[index] for index in indices]
+            files = [files[index] for index in indices]
+            targets = [targets[index] for index in indices]
+
+        super().__init__(
+            files=files,
+            targets=targets,
+            sampling_rate=16000,
+            root=root,
+            transform=transform,
+            target_transform=target_transform,
+        )
 
     def _get_files_speaker_lists(self, filelist):
         r"""Extract file names and speaker IDs.
