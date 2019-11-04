@@ -114,11 +114,22 @@ def test_ensure_df_not_empty(df):
     pytest.param(df_empty, [], [], marks=xfail(raises=RuntimeError)),
 ])
 def test_files_and_labels_from_df(df, expected_files, expected_labels):
-    files, labels = datasets.files_and_labels_from_df(df,
-                                                      column_filename='a',
-                                                      column_labels='b')
+    files, labels = datasets.files_and_labels_from_df(
+        df,
+        column_filename='a',
+        column_labels='b',
+    )
     assert files == expected_files
     assert labels == expected_labels
+    _, labels = datasets.files_and_labels_from_df(
+        df,
+        column_filename='a',
+        column_labels=None,
+    )
+    if df is None:
+        assert labels == []
+    else:
+        assert labels == [''] * len(df)
 
 
 @pytest.mark.parametrize('key_values,split_func,kwargs,expected', [
