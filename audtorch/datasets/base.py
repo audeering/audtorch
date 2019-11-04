@@ -39,20 +39,20 @@ class AudioDataset(Dataset):
       of the data set
 
     Args:
-        root (str): root directory of dataset.
         files (list): list of files
         targets (list): list of targets
         sampling_rate (int): sampling rate in Hz of the data set
+        root (str, optional): root directory of dataset. Default: `None`
         transform (callable, optional): function/transform applied on the
             signal. Default: `None`
         target_transform (callable, optional): function/transform applied on
             the target. Default: `None`
 
     Example:
-        >>> data = AudioDataset(root='/data',
-        ...                     files=['speech.wav', 'noise.wav'],
+        >>> data = AudioDataset(files=['speech.wav', 'noise.wav'],
         ...                     targets=['speech', 'noise'],
-        ...                     sampling_rate=8000)
+        ...                     sampling_rate=8000,
+        ...                     root='/data')
         >>> print(data)
         Dataset AudioDataset
             Number of data points: 2
@@ -64,15 +64,26 @@ class AudioDataset(Dataset):
 
     """
 
-    def __init__(self, root, files, targets, sampling_rate, *, transform=None,
-                 target_transform=None):
-        self.root = safe_path(root)
-        self.files = [os.path.join(self.root, f) for f in files]
+    def __init__(
+            self,
+            files,
+            targets,
+            sampling_rate,
+            *,
+            root=None,
+            transform=None,
+            target_transform=None
+    ):
+        if root is not None:
+            self.root = safe_path(root)
+            self.files = [os.path.join(self.root, f) for f in files]
+        else:
+            self.root = root
+            self.files = files
         self.targets = targets
         self.original_sampling_rate = sampling_rate
         self.transform = transform
         self.target_transform = target_transform
-
         # Initialize empty duration and offset attributes.
         self.duration = [None] * self.__len__()
         self.offset = [0] * self.__len__()
@@ -119,7 +130,10 @@ class AudioDataset(Dataset):
         return sampling_rate_after_transform(self)
 
     def _check_exists(self):
-        return os.path.exists(self.root)
+        if self.root is not None:
+            return os.path.exists(self.root)
+        else:
+            return True
 
     def extra_repr(self):
         r"""Set the extra representation of the data set.
@@ -136,7 +150,8 @@ class AudioDataset(Dataset):
     def __repr__(self):
         fmt_str = 'Dataset ' + self.__class__.__name__ + '\n'
         fmt_str += '    Number of data points: {}\n'.format(self.__len__())
-        fmt_str += '    Root Location: {}\n'.format(self.root)
+        if self.root is not None:
+            fmt_str += '    Root Location: {}\n'.format(self.root)
         if self.sampling_rate == self.original_sampling_rate:
             fmt_str += '    Sampling Rate: {}Hz\n'.format(self.sampling_rate)
         else:
@@ -164,8 +179,8 @@ class PandasDataset(AudioDataset):
     a dictionary containing the labels.
 
     The filenames of the corresponding audio files have to be specified with
-    relative path from `root` in the data frame in a column with the name
-    :attr:`col_filename` which defaults to `filename`.
+    absolute path. If they are relative to a folder, you have to use the
+    :obj:`root` argument to specify that folder.
 
     * :attr:`transform` controls the input transform
     * :attr:`target_transform` controls the target transform
@@ -177,10 +192,10 @@ class PandasDataset(AudioDataset):
     * :attr:`column_labels` holds the name of the label columns
 
     Args:
-        root (str): root directory of data set
-        df (pandas.DataFrame): data frame with filenames and labels. Relative
-            from `root`
+        df (pandas.DataFrame): data frame with filenames and labels
         sampling_rate (int): sampling rate in Hz of the data set
+        root (str, optional): root directory added before the files listed
+            in the CSV file. Default: `None`
         column_labels (str or list of str, optional): name of data frame
             column(s) containing the desired labels. Default: `label`
         column_filename (str, optional): name of column holding the file
@@ -207,16 +222,16 @@ class PandasDataset(AudioDataset):
             Label: age
         >>> signal, target = data[0]
         >>> target
-        'age'
+        31
 
     """
 
     def __init__(
             self,
-            root,
             df,
             sampling_rate,
             *,
+            root=None,
             column_labels='label',
             column_filename='filename',
             column_start=None,
@@ -226,15 +241,14 @@ class PandasDataset(AudioDataset):
     ):
         files, labels = files_and_labels_from_df(
             df,
-            root=root,
             column_labels=column_labels,
             column_filename=column_filename,
         )
         super().__init__(
-            root,
-            files,
+            files=files,
             targets=labels,
             sampling_rate=sampling_rate,
+            root=root,
             transform=transform,
             target_transform=target_transform,
         )
@@ -266,8 +280,8 @@ class CsvDataset(PandasDataset):
     set will return a dictionary containing the targets.
 
     The filenames of the corresponding audio files have to be specified with
-    relative path from `root` in the CSV file in a column with the name
-    :attr:`col_filename` which defaults to `filename`.
+    absolute path. If they are relative to a folder, you have to use the
+    :obj:`root` argument to specify that folder.
 
     * :attr:`transform` controls the input transform
     * :attr:`target_transform` controls the target transform
@@ -279,10 +293,10 @@ class CsvDataset(PandasDataset):
     * :attr:`csv_file` holds the path to the used CSV file
 
     Args:
-        root (str): root directory of data set
-        csv_file (str): CSV file with filenames and labels. Relative from
-            `root`
+        csv_file (str): CSV file with filenames and labels
         sampling_rate (int): sampling rate in Hz of the data set
+        root (str, optional): root directory added before the files listed
+            in the CSV file. Default: `None`
         column_labels (str or list of str, optional): name of CSV column(s)
             containing the desired labels. Default: `label`
         column_filename (str, optional): name of CSV column holding the file
@@ -298,29 +312,27 @@ class CsvDataset(PandasDataset):
             the target. Default: `None`
 
     Example:
-        >>> data = CsvDataset(root='/data',
-        ...                   csv_file='train.csv',
+        >>> data = CsvDataset(csv_file='/data/train.csv',
         ...                   sampling_rate=44100,
         ...                   column_labels='age')
         >>> print(data)
         Dataset AudioDataset
             Number of data points: 120
-            Root Location: /data
             Sampling Rate: 44100Hz
             Label: age
-            CSV file: train.csv
+            CSV file: /data/train.csv
         >>> signal, target = data[0]
         >>> target
-        'age'
+        31
 
     """
 
     def __init__(
             self,
-            root,
             csv_file,
             sampling_rate,
             *,
+            root=None,
             sep=',',
             column_labels='label',
             column_filename='filename',
@@ -329,17 +341,16 @@ class CsvDataset(PandasDataset):
             transform=None,
             target_transform=None
     ):
-        self.root = safe_path(root)
-        self.csv_file = os.path.join(self.root, csv_file)
+        self.csv_file = safe_path(csv_file)
 
         if not os.path.isfile(self.csv_file):
             raise FileNotFoundError('CSV file {} not found.'
                                     .format(self.csv_file))
         df = pd.read_csv(self.csv_file, sep)
         super().__init__(
-            root,
             df,
             sampling_rate,
+            root=root,
             column_labels=column_labels,
             column_filename=column_filename,
             column_start=column_start,
@@ -350,8 +361,7 @@ class CsvDataset(PandasDataset):
 
     def extra_repr(self):
         fmt_str = super().extra_repr()
-        fmt_str += ('    CSV file: {}\n'
-                    .format(os.path.basename(self.csv_file)))
+        fmt_str += '    CSV file: {}\n'.format(self.csv_file)
         return fmt_str
 
 

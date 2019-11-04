@@ -40,8 +40,7 @@ class AudioSet(AudioDataset):
       of the data set
 
     Args:
-        root (str, optional): root directory of dataset.
-            Default: `AudioSet.root`
+        root (str): root directory of dataset
         csv_file (str, optional): name of a CSV file located in `root`. Can be
             one of `balanced_train_segments.csv`,
             `unbalanced_train_segments.csv`, `eval_segments.csv`.
@@ -131,9 +130,16 @@ class AudioSet(AudioDataset):
             'Acoustic environment', 'Noise', 'Sound reproduction']
     }
 
-    def __init__(self, root, csv_file='balanced_train_segments.csv',
-                 sampling_rate=16000, include=None, exclude=None,
-                 transform=None, target_transform=None):
+    def __init__(
+            self,
+            root,
+            csv_file='balanced_train_segments.csv',
+            sampling_rate=16000,
+            include=None,
+            exclude=None,
+            transform=None,
+            target_transform=None
+    ):
         root = safe_path(root)
         # Allow only official CSV files as no audio paths are defined otherwise
         assert csv_file in ['eval_segments.csv', 'balanced_train_segments.csv',
@@ -155,12 +161,16 @@ class AudioSet(AudioDataset):
         categories = df['ids'].map(self._convert_ids_to_categories)
 
         audio_folder = os.path.splitext(os.path.basename(csv_file))[0]
-        file_root = os.path.join(root, audio_folder)
-        files = [os.path.join(file_root, f) for f in df['filename']]
+        files = [os.path.join(audio_folder, f) for f in df['filename']]
 
-        super().__init__(root, files, targets=categories, sampling_rate=16000,
-                         transform=transform,
-                         target_transform=target_transform)
+        super().__init__(
+            files=files,
+            targets=categories,
+            sampling_rate=16000,
+            root=root,
+            transform=transform,
+            target_transform=target_transform,
+        )
         self.csv_file = csv_file
         self.include = include
         self.exclude = exclude
