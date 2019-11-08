@@ -555,6 +555,39 @@ class RandomMask(object):
         return '{0}({1})'.format(self.__class__.__name__, options)
 
 
+class EnsureMinimumLength(object):
+    r"""Transform that ensures a minimum length for the input signal.
+
+    Uses ``audtorch.Pad`` to pad an input signal to a required length adding
+    trailing zeros.
+
+    Args:
+        length: required length in samples
+        axis: axis to force length on
+
+    Example:
+        >>> np.random.seed(0)
+        >>> a = np.array([[1, 2], [3, 4]])
+        >>> t = EnsureMinimumLength(3)
+        >>> t(a)
+        array([[1, 2, 0],
+               [3, 4, 0]])
+    """
+    def __init__(self, length: int, axis: int = -1):
+        self.length = length
+        self.axis = axis
+
+    def __call__(self, x):
+        if x.shape[self.axis] >= self.length:
+            return x
+        return F.pad(x, (0, self.length - x.shape[self.axis]), axis=self.axis)
+
+    def __repr__(self):
+        options = ('length={0}, axis={1}'
+                   .format(self.length, self.axis))
+        return '{0}({1})'.format(self.__class__.__name__, options)
+
+
 class MaskSpectrogramTime(RandomMask):
     r"""Randomly masks spectrogram along time axis.
 
