@@ -293,3 +293,19 @@ def test_randomadditivemix(signal1, signal2, ratio, percentage_silence,
     transform = t(signal1)
     functional = F.additive_mix(signal1, signal2, t.ratio)
     assert np.array_equal(transform, functional)
+
+
+@pytest.mark.parametrize('signal,impulse_response,axis,expected_signal', [
+    (A, [1], -1, A),
+    (A, [0], -1, 0 * A),
+    (a11, a11, -1, np.convolve(a11, a11)),
+    (A, a11, -2, np.apply_along_axis(np.convolve, -2, A, a11))
+])
+def test_random_convolutional_mix(signal, impulse_response,
+                                  axis, expected_signal):
+    augmentation_dataset = [[impulse_response]]
+    t = transforms.RandomConvolutionalMix(augmentation_dataset, axis=axis)
+    convolved_signal = t(signal)
+    assert np.array_equal(convolved_signal, expected_signal)
+    expected_length = signal.shape[axis] + len(np.array(impulse_response)) - 1
+    assert convolved_signal.shape[axis] == expected_length
