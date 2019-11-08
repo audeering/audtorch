@@ -1244,7 +1244,7 @@ class RandomConvolutionalMix(object):
         >>> from audtorch import datasets
         >>> np.random.seed(0)
         >>> a = np.array([[1, 2], [3, 4]])
-        >>> noise = datasets.WhiteNoise(1, sampling_rate=2)
+        >>> noise = datasets.WhiteNoise(duration=1, sampling_rate=2, transform=np.squeeze)
         >>> t = RandomConvolutionalMix(noise, normalize=True)
         >>> print(t)
         RandomConvolutionalMix(dataset=WhiteNoise, axis=-1, normalize=True)
@@ -1252,8 +1252,8 @@ class RandomConvolutionalMix(object):
         array([[0.21365151, 0.47576767, 0.09692931],
                [0.64095452, 1.        , 0.19385863]])
 
-    """
-    def __init__(self, dataset, normalize=False, axis=-1):
+    """  # noqa: E501
+    def __init__(self, dataset, *, normalize=False, axis=-1):
         super().__init__()
         self.dataset = dataset
         self.normalize = normalize
