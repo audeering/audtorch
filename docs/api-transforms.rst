@@ -59,6 +59,12 @@ Expand
 .. autoclass:: Expand
     :members:
 
+EnsureMinimumLength
+-------------------
+
+.. autoclass:: EnsureMinimumLength
+    :members:
+
 RandomMask
 ----------
 
