@@ -214,6 +214,20 @@ def test_randompad(input, padding, value, axis):
     assert np.array_equal(t(input), expected_output)
 
 
+@pytest.mark.parametrize('signal,length,axis,expected_signal', [
+    (A, 4, -1, A),
+    (A, 3, -1, A),
+    (a11, 5, -1, np.concatenate((a11, [0]), axis=-1)),
+    (a11, 6, -1, np.concatenate((a11, [0, 0]), axis=-1)),
+    (np.array([a11, a12]), 6, -1, np.concatenate(
+        (np.array([a11, a12]), [[0, 0], [0, 0]]), axis=-1))
+])
+def test_ensure_minimum_length(signal, length, axis, expected_signal):
+    t = transforms.EnsureMinimumLength(length, axis=axis)
+    output_signal = t(signal)
+    assert np.array_equal(output_signal, expected_signal)
+
+
 @pytest.mark.parametrize('input,input_sample_rate,output_sample_rate,axis', [
     (A, 4, 2, -1),
     (np.ones([4, 4, 2]), 4, 2, -2),
