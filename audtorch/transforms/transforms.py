@@ -1245,9 +1245,9 @@ class RandomConvolutionalMix(object):
         >>> np.random.seed(0)
         >>> a = np.array([[1, 2], [3, 4]])
         >>> noise = datasets.WhiteNoise(1, sampling_rate=2)
-        >>> t = ConvolutionalMix(noise, normalize=True)
+        >>> t = RandomConvolutionalMix(noise, normalize=True)
         >>> print(t)
-        ConvolutionalMix(dataset=WhiteNoise, axis=-1, normalize=True)
+        RandomConvolutionalMix(dataset=WhiteNoise, axis=-1, normalize=True)
         >>> t(a)
         array([[0.21365151, 0.47576767, 0.09692931],
                [0.64095452, 1.        , 0.19385863]])

@@ -130,3 +130,9 @@ RandomAdditiveMix
 
 .. autoclass:: RandomAdditiveMix
     :members:
+
+RandomConvolutionalMix
+----------------------
+
+.. autoclass:: RandomConvolutionalMix
+    :members:
