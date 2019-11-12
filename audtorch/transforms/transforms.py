@@ -1215,3 +1215,63 @@ class RandomAdditiveMix(object):
         if self.fix_randomization:
             options += ', fix_randomization=True'
         return '{0}({1})'.format(self.__class__.__name__, options)
+
+
+class RandomConvolutionalMix(object):
+    r"""Convolve the signal with an augmentation data set.
+
+    Randomly pick an impulse response from an augmentation data set and
+    convolve it with the signal. The impulse responses have to be
+    one-dimensional.
+
+    * :attr:`dataset` controls the data set used for augmentation
+    * :attr:`normalize` controls normalisation of convolved signal
+    * :attr:`axis` controls axis of upmix
+
+    Args:
+        dataset (torch.utils.data.Dataset): data set for augmentation
+        normalize (bool, optional): normalize mixture. Default: `False`
+        axis (int, optional): axis of convolution. Default: `-1`
+
+    Shape:
+        - Input: :math:`(*, N, *)`
+        - Output: :math:`(*, N + M - 1, *)`, where :math:`N` is the number of
+          samples of the signal and :math:`M` the number of samples of the
+          impulse response.
+          :math:`*` can be any additional number of dimensions.
+
+    Example:
+        >>> from audtorch import datasets
+        >>> np.random.seed(0)
+        >>> a = np.array([[1, 2], [3, 4]])
+        >>> noise = datasets.WhiteNoise(duration=1, sampling_rate=2, transform=np.squeeze)
+        >>> t = RandomConvolutionalMix(noise, normalize=True)
+        >>> print(t)
+        RandomConvolutionalMix(dataset=WhiteNoise, axis=-1, normalize=True)
+        >>> t(a)
+        array([[0.21365151, 0.47576767, 0.09692931],
+               [0.64095452, 1.        , 0.19385863]])
+
+    """  # noqa: E501
+    def __init__(self, dataset, *, normalize=False, axis=-1):
+        super().__init__()
+        self.dataset = dataset
+        self.normalize = normalize
+        self.axis = axis
+
+    def __call__(self, signal):
+        impulse_response = random.choice(self.dataset)[0]
+        mixture = np.apply_along_axis(np.convolve, self.axis, signal,
+                                      impulse_response)
+
+        if self.normalize:
+            mixture = F.normalize(mixture)
+
+        return mixture
+
+    def __repr__(self):
+        options = ('dataset={0}, axis={1}'
+                   .format(self.dataset.__class__.__name__, self.axis))
+        if self.normalize:
+            options += ', normalize=True'
+        return '{0}({1})'.format(self.__class__.__name__, options)
