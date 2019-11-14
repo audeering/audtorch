@@ -39,6 +39,7 @@ class Musdb18(Dataset):
 
     * :attr:`transform` controls the input transform
     * :attr:`target_transform` controls the target transform
+    * :attr:`joint_transform` controls the transform applied to input and target
     * :attr:`tracks` controls musdb tracks object
     * :attr:`subset` holds the chosen subset
     * :attr:`sampling_rate` holds the sampling rate of the returned data
