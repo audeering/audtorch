@@ -39,9 +39,12 @@ class Musdb18(Dataset):
 
     * :attr:`transform` controls the input transform
     * :attr:`target_transform` controls the target transform
-    * :attr:`joint_transform` controls the transform applied to input and target
+    * :attr:`joint_transform` controls the transform
+      applied to input and target
     * :attr:`tracks` controls musdb tracks object
     * :attr:`subset` holds the chosen subset
+    * :attr:`percentage_silence` controls the amount of
+      inserted accompaniment, silence pairs
     * :attr:`sampling_rate` holds the sampling rate of the returned data
     * :attr:`original_sampling_rate` holds the sampling rate of the audio files
       of the data set
@@ -55,7 +58,8 @@ class Musdb18(Dataset):
         subset (str, optional): if not `None` use only a subset of all tracks.
             Can be `train` or `test`. Default: `None`
         percentage_silence (float, optional): value between `0` and `1` which
-            controls the random insertion of accompaniment, silence pairs.
+            controls the random insertion of accompaniment as input,
+            and silence as target.
             Default: `0`
         transform (callable, optional): function/transform applied on the
             signal. Default: `None`
