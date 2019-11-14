@@ -1,9 +1,6 @@
+import librosa
 import numpy as np
 import torch
-try:
-    import librosa
-except ImportError:
-    librosa = None
 
 from .. import utils
 
