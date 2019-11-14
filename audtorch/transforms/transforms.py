@@ -1,13 +1,10 @@
 import random
 from warnings import warn
 
+import librosa
 import numpy as np
 import resampy
 import torch
-try:
-    import librosa
-except ImportError:
-    librosa = None
 try:
     import scipy
 except ImportError:
