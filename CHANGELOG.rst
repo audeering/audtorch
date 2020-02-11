@@ -9,8 +9,9 @@ and this project adheres to `Semantic Versioning`_.
 Unreleased
 ----------
 
-* Added: `EmoDB` data set
 * Added: `RandomConvolutionalMix` transform
+* Added: `EmoDB` data set
+* Added: introduction tutorial
 
 Version 0.4.2 (2019-11-04)
 --------------------------
