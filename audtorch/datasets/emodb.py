@@ -49,7 +49,6 @@ class EmoDB(AudioDataset):
 
     def __init__(self, root: str, *, transform: Callable = None,
                  target_transform: Callable = None):
-        print(root + '/*.wav')
         files = glob.glob(root + '/*.wav')
         targets = [os.path.basename(x).split('.')[0][-2] for x in files]
         super().__init__(root, files=files, targets=targets,
