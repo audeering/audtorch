@@ -49,12 +49,13 @@ class EmoDB(AudioDataset):
 
     def __init__(self, root: str, *, transform: Callable = None,
                  target_transform: Callable = None):
-        files = glob.glob(root + '/*.wav')
-        targets = [os.path.basename(x).split('.')[0][-2] for x in files]
-        super().__init__(root, files=files, targets=targets,
+        super().__init__(root, files=[], targets=[],
                          transform=transform,
                          sampling_rate=16000,
                          target_transform=target_transform)
+        self.files = glob.glob(self.root + '/*.wav')
+        self.targets = [os.path.basename(x).split('.')[0][-2]
+                        for x in self.files]
 
     def extra_repr(self):
         fmt_str = '    Labels: emotion\n'
