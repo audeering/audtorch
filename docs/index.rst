@@ -29,3 +29,9 @@
     api-utils
     refs
     genindex
+
+.. toctree::
+    :caption: Tutorials
+    :hidden:
+
+    tutorials/introduction
