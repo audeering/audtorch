@@ -12,6 +12,11 @@ AudioSet
 .. autoclass:: AudioSet
     :members:
 
+EmoDB
+-----
+
+.. autoclass:: EmoDB
+    :members:
 
 LibriSpeech
 -----------
