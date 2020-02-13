@@ -199,7 +199,7 @@ class PandasDataset(AudioDataset):
         column_labels (str or list of str, optional): name of data frame
             column(s) containing the desired labels. Default: `label`
         column_filename (str, optional): name of column holding the file
-            names. Default: `filename`
+            names. Default: `file`
         column_start (str, optional): name of column holding start of audio
             in the corresponding file in seconds. Default: `None`
         column_end (str, optional): name of column holding end of audio
@@ -233,7 +233,7 @@ class PandasDataset(AudioDataset):
             sampling_rate,
             root=None,
             column_labels=None,
-            column_filename='filename',
+            column_filename='file',
             column_start=None,
             column_end=None,
             transform=None,
@@ -301,7 +301,7 @@ class CsvDataset(PandasDataset):
         column_labels (str or list of str, optional): name of CSV column(s)
             containing the desired labels. Default: `label`
         column_filename (str, optional): name of CSV column holding the file
-            names. Default: `filename`
+            names. Default: `file`
         column_start (str, optional): name of column holding start of audio
             in the corresponding file in seconds. Default: `None`
         column_end (str, optional): name of column holding end of audio
@@ -336,7 +336,7 @@ class CsvDataset(PandasDataset):
             root=None,
             sep=',',
             column_labels=None,
-            column_filename='filename',
+            column_filename='file',
             column_start=None,
             column_end=None,
             transform=None,
