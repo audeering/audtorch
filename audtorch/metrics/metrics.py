@@ -42,7 +42,12 @@ class PearsonR(object):
         tensor(0.1220)
 
     """
-    def __init__(self, reduction='mean', batch_first=True):
+    def __init__(
+            self,
+            *,
+            reduction='mean',
+            batch_first=True,
+    ):
         self.reduction = reduction
         self.batch_first = batch_first
 
@@ -100,7 +105,12 @@ class ConcordanceCC(object):
         tensor(0.0014)
 
     """
-    def __init__(self, reduction='mean', batch_first=True):
+    def __init__(
+            self,
+            *,
+            reduction='mean',
+            batch_first=True,
+    ):
         self.reduction = reduction
         self.batch_first = batch_first
 

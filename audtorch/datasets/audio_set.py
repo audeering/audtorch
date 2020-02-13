@@ -133,12 +133,13 @@ class AudioSet(AudioDataset):
     def __init__(
             self,
             root,
+            *,
             csv_file='balanced_train_segments.csv',
             sampling_rate=16000,
             include=None,
             exclude=None,
             transform=None,
-            target_transform=None
+            target_transform=None,
     ):
         root = safe_path(root)
         # Allow only official CSV files as no audio paths are defined otherwise
@@ -241,7 +242,12 @@ class AudioSet(AudioDataset):
         categories = [cat for _, cat in sorted(zip(order, categories))]
         return categories
 
-    def _filter_by_categories(self, df, categories, exclude_mode=False):
+    def _filter_by_categories(
+            self,
+            df,
+            categories,
+            exclude_mode=False,
+    ):
         r"""Return data frame containing only specified categories.
 
         Args:

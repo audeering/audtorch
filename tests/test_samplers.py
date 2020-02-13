@@ -103,7 +103,7 @@ def test_buckets_by_boundaries(key_values, bucket_boundaries):
 @pytest.mark.parametrize("data", [data])
 @pytest.mark.parametrize(
     "key_func",
-    [buckets_of_even_size(lengths, num_buckets, False),
+    [buckets_of_even_size(lengths, num_buckets, reverse=False),
      buckets_by_boundaries(lengths, bucket_boundaries)])
 @pytest.mark.parametrize("expected_num_datasets", [num_buckets])
 @pytest.mark.parametrize("batch_sizes", [batch_sizes])

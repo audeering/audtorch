@@ -80,9 +80,17 @@ class SpeechCommands(AudioDataset):
         'full': classes
     }
 
-    def __init__(self, root, train=True, download=False, *,
-                 sampling_rate=16000, include='10cmd',
-                 transform=None, target_transform=None):
+    def __init__(
+            self,
+            root,
+            train=True,
+            download=False,
+            *,
+            sampling_rate=16000,
+            include='10cmd',
+            transform=None,
+            target_transform=None,
+    ):
         self.root = safe_path(root)
         self.same_length = False
         self.silence_label = -1
@@ -139,7 +147,11 @@ class SpeechCommands(AudioDataset):
             target_transform=target_transform,
         )
 
-    def add_silence(self, n_samples=3000, same_length=True):
+    def add_silence(
+            self,
+            n_samples=3000,
+            same_length=True,
+    ):
         # https://github.com/audeering/audtorch/pull/49#discussion_r317489141
         self.same_length = same_length
         self.targets.extend([self.silence_label for _ in range(n_samples)])

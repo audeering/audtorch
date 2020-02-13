@@ -57,8 +57,16 @@ class WhiteNoise(Dataset):
 
     """
 
-    def __init__(self, *, duration=1, sampling_rate=44100, mean=0, stdev=1,
-                 transform=None, target_transform=None):
+    def __init__(
+            self,
+            *,
+            duration=1,
+            sampling_rate=44100,
+            mean=0,
+            stdev=1,
+            transform=None,
+            target_transform=None,
+    ):
         super().__init__()
         self.duration = duration
         self.mean = mean

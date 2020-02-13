@@ -35,7 +35,12 @@ class Compose(object):
 
     """
 
-    def __init__(self, transforms, *, fix_randomization=False):
+    def __init__(
+            self,
+            transforms,
+            *,
+            fix_randomization=False,
+    ):
         self.transforms = transforms
         self.fix_randomization = fix_randomization
 
@@ -94,7 +99,12 @@ class Crop(object):
 
     """
 
-    def __init__(self, idx, *, axis=-1):
+    def __init__(
+            self,
+            idx,
+            *,
+            axis=-1,
+    ):
         super().__init__()
         self.idx = idx
         self.axis = axis
@@ -151,8 +161,14 @@ class RandomCrop(object):
 
     """
 
-    def __init__(self, size, *, method='pad', axis=-1,
-                 fix_randomization=False):
+    def __init__(
+            self,
+            size,
+            *,
+            method='pad',
+            axis=-1,
+            fix_randomization=False,
+    ):
         super().__init__()
         self.size = size
         self.axis = axis
@@ -239,7 +255,13 @@ class Pad(object):
 
     """
 
-    def __init__(self, padding, *, value=0, axis=-1):
+    def __init__(
+            self,
+            padding,
+            *,
+            value=0,
+            axis=-1,
+    ):
         super().__init__()
         self.padding = padding
         self.value = value
@@ -291,7 +313,14 @@ class RandomPad(object):
 
     """
 
-    def __init__(self, padding, *, value=0, axis=-1, fix_randomization=False):
+    def __init__(
+            self,
+            padding,
+            *,
+            value=0,
+            axis=-1,
+            fix_randomization=False,
+    ):
         super().__init__()
         self.padding = padding
         self.value = value
@@ -353,7 +382,12 @@ class Replicate(object):
 
     """
 
-    def __init__(self, repetitions, *, axis=-1):
+    def __init__(
+            self,
+            repetitions,
+            *,
+            axis=-1,
+    ):
         super().__init__()
         self.repetitions = repetitions
         self.axis = axis
@@ -399,8 +433,13 @@ class RandomReplicate(object):
 
     """
 
-    def __init__(self, *, max_repetitions=100, axis=-1,
-                 fix_randomization=False):
+    def __init__(
+            self,
+            *,
+            max_repetitions=100,
+            axis=-1,
+            fix_randomization=False,
+    ):
         super().__init__()
         self.repetitions = None
         self.max_repetitions = max_repetitions
@@ -459,7 +498,13 @@ class Expand(object):
 
     """
 
-    def __init__(self, size, *, method='pad', axis=-1):
+    def __init__(
+            self,
+            size,
+            *,
+            method='pad',
+            axis=-1,
+    ):
         super().__init__()
         self.size = size
         self.method = method
@@ -520,7 +565,13 @@ class RandomMask(object):
         4
 
     """
-    def __init__(self, coverage, max_width, value, axis):
+    def __init__(
+            self,
+            coverage,
+            max_width,
+            value,
+            axis,
+    ):
         self.coverage = coverage
         self.max_width = max_width
         self.value = value
@@ -578,7 +629,13 @@ class MaskSpectrogramTime(RandomMask):
         >>> plt.show()  # doctest: +SKIP
 
     """
-    def __init__(self, coverage, *, max_width=11, value=0):
+    def __init__(
+            self,
+            coverage,
+            *,
+            max_width=11,
+            value=0,
+    ):
         super().__init__(coverage, max_width, value, axis=-1)
 
 
@@ -608,7 +665,13 @@ class MaskSpectrogramFrequency(RandomMask):
         >>> plt.show()  # doctest: +SKIP
 
     """
-    def __init__(self, coverage, *, max_width=8, value=0):
+    def __init__(
+            self,
+            coverage,
+            *,
+            max_width=8,
+            value=0,
+    ):
         super().__init__(coverage, max_width, value, axis=-2)
 
 
@@ -647,7 +710,13 @@ class Downmix(object):
 
     """
 
-    def __init__(self, channels, *, method='mean', axis=-2):
+    def __init__(
+            self,
+            channels,
+            *,
+            method='mean',
+            axis=-2,
+    ):
         super().__init__()
         self.channels = channels
         self.method = method
@@ -701,7 +770,13 @@ class Upmix(object):
 
     """
 
-    def __init__(self, channels, *, method='mean', axis=-2):
+    def __init__(
+            self,
+            channels,
+            *,
+            method='mean',
+            axis=-2,
+    ):
         super().__init__()
         self.channels = channels
         self.method = method
@@ -752,7 +827,13 @@ class Remix(object):
 
     """
 
-    def __init__(self, channels, *, method='mean', axis=-2):
+    def __init__(
+            self,
+            channels,
+            *,
+            method='mean',
+            axis=-2,
+    ):
         super().__init__()
         self.channels = channels
         self.axis = axis
@@ -795,7 +876,11 @@ class Normalize(object):
 
     """
 
-    def __init__(self, *, axis=-1):
+    def __init__(
+            self,
+            *,
+            axis=-1,
+    ):
         super().__init__()
         self.axis = axis
 
@@ -837,7 +922,13 @@ class Standardize(object):
 
     """
 
-    def __init__(self, *, mean=True, std=True, axis=-1):
+    def __init__(
+            self,
+            *,
+            mean=True,
+            std=True,
+            axis=-1,
+    ):
         super().__init__()
         self.axis = axis
         self.mean = mean
@@ -895,8 +986,14 @@ class Resample(object):
 
     """  # noqa: E501
 
-    def __init__(self, input_sampling_rate, output_sampling_rate, *,
-                 method='kaiser_best', axis=-1):
+    def __init__(
+            self,
+            input_sampling_rate,
+            output_sampling_rate,
+            *,
+            method='kaiser_best',
+            axis=-1,
+    ):
         super().__init__()
         self.input_sampling_rate = input_sampling_rate
         self.output_sampling_rate = output_sampling_rate
@@ -967,8 +1064,15 @@ class Spectrogram(object):
 
     """
 
-    def __init__(self, window_size, hop_size, *, fft_size=None,
-                 window='hann', axis=-1):
+    def __init__(
+            self,
+            window_size,
+            hop_size,
+            *,
+            fft_size=None,
+            window='hann',
+            axis=-1,
+    ):
         super().__init__()
         self.window_size = window_size
         self.hop_size = hop_size
@@ -1020,7 +1124,11 @@ class Log(object):
 
     """
 
-    def __init__(self, magnitude_boost=1e-7):
+    def __init__(
+            self,
+            *,
+            magnitude_boost=1e-7,
+    ):
         self.magnitude_boost = magnitude_boost
 
         if self.magnitude_boost < 0:
@@ -1126,10 +1234,19 @@ class RandomAdditiveMix(object):
 
     """  # noqa: E501
 
-    def __init__(self, dataset, *, ratios=[0, 15, 30], normalize=False,
-                 expand_method='pad', crop_method='random',
-                 percentage_silence=0, time_axis=-1, channel_axis=-2,
-                 fix_randomization=False):
+    def __init__(
+            self,
+            dataset,
+            *,
+            ratios=[0, 15, 30],
+            normalize=False,
+            expand_method='pad',
+            crop_method='random',
+            percentage_silence=0,
+            time_axis=-1,
+            channel_axis=-2,
+            fix_randomization=False,
+    ):
         super().__init__()
         self.dataset = dataset
         self.ratios = ratios
@@ -1250,7 +1367,13 @@ class RandomConvolutionalMix(object):
                [0.64095452, 1.        , 0.19385863]])
 
     """  # noqa: E501
-    def __init__(self, dataset, *, normalize=False, axis=-1):
+    def __init__(
+            self,
+            dataset,
+            *,
+            normalize=False,
+            axis=-1,
+    ):
         super().__init__()
         self.dataset = dataset
         self.normalize = normalize
