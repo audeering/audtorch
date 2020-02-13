@@ -192,7 +192,7 @@ class AudioSet(AudioDataset):
         # Insert filename
         df['filename'] = (df['# YTID']
                           + '_'
-                          + ['{:.3f}'.format(x) for x in df['start_seconds']]
+                          + [f'{x:.3f}' for x in df['start_seconds']]
                           + '.wav')
         return df[['filename', 'ids']]
 
@@ -311,9 +311,9 @@ class AudioSet(AudioDataset):
         return id_list
 
     def extra_repr(self):
-        fmt_str = '    CSV file: {}\n'.format(os.path.basename(self.csv_file))
+        fmt_str = f'    CSV file: {os.path.basename(self.csv_file)}\n'
         if self.include:
-            fmt_str += '    Included categories: {}\n'.format(self.include)
+            fmt_str += f'    Included categories: {self.include}\n'
         if self.exclude:
-            fmt_str += '    Excluded categories: {}\n'.format(self.exclude)
+            fmt_str += f'    Excluded categories: {self.exclude}\n'
         return fmt_str

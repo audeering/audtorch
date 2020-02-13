@@ -117,8 +117,8 @@ class BucketSampler(BatchSampler):
 
         if not isinstance(drop_last, bool):
             raise ValueError(
-                    f'drop_last should be a boolean value, but got '
-                    f'drop_last={drop_last}'
+                f'drop_last should be a boolean value, but got {drop_last}'
+            )
 
     def __iter__(self):
         r"""Iterates sequentially over data sets and forms batches

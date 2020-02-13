@@ -199,5 +199,5 @@ class LibriSpeech(PandasDataset):
 
     def extra_repr(self):
         if self.sets is not None:
-            fmt_str = '    Sets: {}\n'.format(", ".join(self.sets))
+            fmt_str = f'    Sets: {", ".join(self.sets)}\n'
         return fmt_str

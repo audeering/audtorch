@@ -118,13 +118,15 @@ class SpeechNoiseMix(Dataset):
 
     def __repr__(self):
         speech_dataset_name = self.speech_dataset.__class__.__name__
-        fmt_str = 'Dataset {}\n'.format(self.__class__.__name__)
-        fmt_str += '    Number of data points: {}\n'.format(self.__len__())
-        fmt_str += '    Speech dataset: {}\n'.format(speech_dataset_name)
-        fmt_str += '    Sampling rate: {}Hz\n'.format(self.sampling_rate)
+        fmt_str = f'Dataset {self.__class__.__name__}\n'
+        fmt_str += f'    Number of data points: {self.__len__()}\n'
+        fmt_str += f'    Speech dataset: {speech_dataset_name}\n'
+        fmt_str += f'    Sampling rate: {self.sampling_rate}Hz\n'
         if self.percentage_silence > 0:
-            fmt_str += ('    Silence augmentation: {:.0f}%\n'
-                        .format(100 * self.percentage_silence))
+            fmt_str += (
+                f'    Silence augmentation: '
+                f'{100 * self.percentage_silence:.0f}%\n'
+            )
         fmt_str += '    Labels: speech signal\n'
         fmt_str += _include_repr('Mixing Transform', self.mix_transform)
         if self.transform:

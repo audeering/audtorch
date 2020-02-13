@@ -100,23 +100,24 @@ class WhiteNoise(Dataset):
         return signal, target
 
     def __repr__(self):
-        fmt_str = 'Dataset ' + self.__class__.__name__ + '\n'
+        fmt_str = f'Dataset {self.__class__.__name__}\n'
         fmt_str += '    Number of data points: Inf\n'
-        fmt_str += '    Signal length: {}s\n'.format(self.duration)
+        fmt_str += f'    Signal length: {self.duration}s\n'
         if self.sampling_rate == self.original_sampling_rate:
-            fmt_str += '    Sampling Rate: {}Hz\n'.format(self.sampling_rate)
+            fmt_str += f'    Sampling Rate: {self.sampling_rate}Hz\n'
         else:
-            fmt_str += ('    Sampling Rate: {}Hz (original: {}Hz)\n'
-                        .format(self.sampling_rate,
-                                self.original_sampling_rate))
+            fmt_str += (
+                f'    Sampling Rate: {self.sampling_rate}Hz '
+                f'(original: {self.original_sampling_rate}Hz)\n'
+            )
         fmt_str += '    Label (str): noise type\n'
         tmp1 = '    Transform: '
         tmp2 = self.transform.__repr__().replace('\n', '\n' + ' ' * len(tmp1))
         if self.transform:
-            fmt_str += '{0}{1}\n'.format(tmp1, tmp2)
+            fmt_str += f'{tmp1}{tmp2}\n'
         tmp1 = '    Target Transform: '
         tmp2 = self.target_transform.__repr__().replace('\n',
                                                         '\n' + ' ' * len(tmp1))
         if self.target_transform:
-            fmt_str += '{0}{1}'.format(tmp1, tmp2)
+            fmt_str += f'{tmp1}{tmp2}'
         return fmt_str

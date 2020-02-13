@@ -1390,8 +1390,9 @@ class RandomConvolutionalMix(object):
         return mixture
 
     def __repr__(self):
-        options = ('dataset={0}, axis={1}'
-                   .format(self.dataset.__class__.__name__, self.axis))
+        options = (
+            f'dataset={self.dataset.__class__.__name__}, axis={self.axis}'
+        )
         if self.normalize:
             options += ', normalize=True'
-        return '{0}({1})'.format(self.__class__.__name__, options)
+        return f'{self.__class__.__name__}({options})'

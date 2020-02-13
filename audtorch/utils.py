@@ -66,8 +66,9 @@ def to_tuple(
     try:
         iter(input)
         if len(input) != tuple_len:
-            raise ValueError('Input expected to be of length {} but was of '
-                             'length {}'.format(tuple_len, len(input)))
+            raise ValueError(
+                f'Input length expected to be {tuple_len} but was {len(input)}'
+            )
         else:
             input = tuple(input)
     except TypeError:
