@@ -1118,6 +1118,7 @@ class Log(object):
         >>> t = Log()
         >>> print(t)
         Log(magnitude_boost=1e-07)
+        >>> np.set_printoptions(precision=7)
         >>> t(spect(a))
         array([[1.1920928e-07, 1.0986123e+00, 1.0986123e+00],
                [1.1920928e-07, 1.0986123e+00, 1.0986123e+00]], dtype=float32)
@@ -1228,6 +1229,7 @@ class RandomAdditiveMix(object):
         >>> t = RandomAdditiveMix(noise, ratios=[3], expand_method='pad')
         >>> print(t)
         RandomAdditiveMix(dataset=WhiteNoise, ratios=[3], ratio=None, percentage_silence=0, expand_method=pad, crop_method=random, time_axis=-1, channel_axis=-2)
+        >>> np.set_printoptions(precision=8)
         >>> t(a)
         array([[3.67392992, 2.60655362],
                [5.67392992, 4.60655362]])
@@ -1362,6 +1364,7 @@ class RandomConvolutionalMix(object):
         >>> t = RandomConvolutionalMix(noise, normalize=True)
         >>> print(t)
         RandomConvolutionalMix(dataset=WhiteNoise, axis=-1, normalize=True)
+        >>> np.set_printoptions(precision=8)
         >>> t(a)
         array([[0.21365151, 0.47576767, 0.09692931],
                [0.64095452, 1.        , 0.19385863]])
