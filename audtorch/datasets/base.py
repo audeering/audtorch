@@ -109,9 +109,11 @@ class AudioDataset(Dataset):
             return self.__getitem__(index - 1)
         # Handle different sampling rate
         if signal_sampling_rate != self.original_sampling_rate:
-            warn('Resample from {} to {}'
-                 .format(signal_sampling_rate, self.original_sampling_rate),
-                 UserWarning)
+            warn(
+                (f'Resample from {signal_sampling_rate} '
+                 f'to {self.original_sampling_rate}'),
+                UserWarning,
+            )
             signal = resampy.resample(signal, signal_sampling_rate,
                                       self.original_sampling_rate, axis=-1)
 
@@ -148,16 +150,17 @@ class AudioDataset(Dataset):
         return ''
 
     def __repr__(self):
-        fmt_str = 'Dataset ' + self.__class__.__name__ + '\n'
-        fmt_str += '    Number of data points: {}\n'.format(self.__len__())
+        fmt_str = f'Dataset {self.__class__.__name__}\n'
+        fmt_str += f'    Number of data points: {self.__len__()}\n'
         if self.root is not None:
-            fmt_str += '    Root Location: {}\n'.format(self.root)
+            fmt_str += f'    Root Location: {self.root}\n'
         if self.sampling_rate == self.original_sampling_rate:
-            fmt_str += '    Sampling Rate: {}Hz\n'.format(self.sampling_rate)
+            fmt_str += f'    Sampling Rate: {self.sampling_rate}Hz\n'
         else:
-            fmt_str += ('    Sampling Rate: {}Hz (original: {}Hz)\n'
-                        .format(self.sampling_rate,
-                                self.original_sampling_rate))
+            fmt_str += (
+                f'    Sampling Rate: {self.sampling_rate}Hz '
+                f'(original: {self.original_sampling_rate}Hz)\n'
+            )
         fmt_str += self.extra_repr()
         if self.transform:
             fmt_str += _include_repr('Transform', self.transform)
@@ -264,7 +267,7 @@ class PandasDataset(AudioDataset):
 
     def extra_repr(self):
         if self.column_labels is not None:
-            fmt_str = '    Labels: {}\n'.format(self.column_labels)
+            fmt_str = f'    Labels: {self.column_labels}\n'
         return fmt_str
 
 
@@ -345,8 +348,7 @@ class CsvDataset(PandasDataset):
         self.csv_file = safe_path(csv_file)
 
         if not os.path.isfile(self.csv_file):
-            raise FileNotFoundError('CSV file {} not found.'
-                                    .format(self.csv_file))
+            raise FileNotFoundError(f'CSV file {self.csv_file} not found.')
         df = pd.read_csv(self.csv_file, sep)
         super().__init__(
             df=df,
@@ -362,7 +364,7 @@ class CsvDataset(PandasDataset):
 
     def extra_repr(self):
         fmt_str = super().extra_repr()
-        fmt_str += '    CSV file: {}\n'.format(self.csv_file)
+        fmt_str += f'    CSV file: {self.csv_file}\n'
         return fmt_str
 
 
@@ -427,8 +429,8 @@ class AudioConcatDataset(ConcatDataset):
 
     def __repr__(self):
         fmt_str = 'Data set ' + self.__class__.__name__ + '\n'
-        fmt_str += '    Number of data points: {}\n'.format(self.__len__())
-        fmt_str += '    Sampling Rate: {}Hz\n'.format(self.sampling_rate)
+        fmt_str += f'    Number of data points: {self.__len__()}\n'
+        fmt_str += f'    Sampling Rate: {self.sampling_rate}Hz\n'
         fmt_str += self.extra_repr()
 
         headers = ['data sets', 'data points',
@@ -468,6 +470,6 @@ def _include_repr(name, obj):
         '    Transform: Pad(padding=2, value=0, axis=-1)\n'
 
     """
-    part1 = '    {}: '.format(name)
+    part1 = f'    {name}: '
     part2 = obj.__repr__().replace('\n', '\n' + ' ' * len(part1))
-    return '{0}{1}\n'.format(part1, part2)
+    return f'{part1}{part2}\n'

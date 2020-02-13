@@ -53,13 +53,13 @@ def load(
                                         offset=offset,
                                         always_2d=True)
     except ValueError:
-        warn('File opening error for: {}'.format(filename), UserWarning)
+        warn(f'File opening error for: {filename}', UserWarning)
     except (IOError, FileNotFoundError):
-        warn('File does not exist: {}'.format(filename), UserWarning)
+        warn(f'File does not exist: {filename}', UserWarning)
     except RuntimeError:
-        warn('Runtime error for file: {}'.format(filename), UserWarning)
+        warn(f'Runtime error for file: {filename}', UserWarning)
     except subprocess.CalledProcessError:
-        warn('ffmpeg conversion failed for: {}'.format(filename), UserWarning)
+        warn(f'ffmpeg conversion failed for: {filename}', UserWarning)
     return signal, sampling_rate
 
 
@@ -159,7 +159,7 @@ def extract_archive(
             extraction. Default: `False`
 
     """
-    print('Extracting {}'.format(filename))
+    print(f'Extracting {filename}')
     if out_path is None:
         out_path = os.path.dirname(filename)
     if filename.endswith('tar.gz'):
@@ -226,14 +226,15 @@ def ensure_same_sampling_rate(
     """
     for dataset in datasets:
         if not hasattr(dataset, 'sampling_rate'):
-            raise RuntimeError("{} doesn't have a `sampling_rate` attribute."
-                               .format(dataset))
+            raise RuntimeError(
+                f"{dataset} doesn't have a `sampling_rate` attribute."
+            )
     for n in range(1, len(datasets)):
         if datasets[0].sampling_rate != datasets[n].sampling_rate:
             error_msg = 'Sampling rates do not match:\n'
             for dataset in datasets:
                 info = dataset.__repr__()
-                error_msg += '{}Hz from {}'.format(dataset.sampling_rate, info)
+                error_msg += f'{dataset.sampling_rate}Hz from {info}'
             raise ValueError(error_msg)
 
 
@@ -257,8 +258,9 @@ def ensure_df_columns_contain(
     """
     ensure_df_not_empty(df)
     if labels is not None and not set(labels) <= set(df.columns):
-        raise RuntimeError("Dataframe contains only these columns: '{}'"
-                           .format(', '.join(df.columns)))
+        raise RuntimeError(
+            f"Dataframe contains only these columns: '{', '.join(df.columns)}'"
+        )
 
 
 def ensure_df_not_empty(
@@ -282,8 +284,7 @@ def ensure_df_not_empty(
     """
     error_message = 'No valid data points found in data set'
     if labels is not None:
-        error_message += (' for the selected labels: {}'
-                          .format(', '.join(labels)))
+        error_message += f" for the selected labels: {', '.join(labels)}"
     if len(df) == 0:
         raise RuntimeError(error_message)
 

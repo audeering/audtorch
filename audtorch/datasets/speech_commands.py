@@ -171,9 +171,11 @@ class SpeechCommands(AudioDataset):
             return self.__getitem__(index - 1)
         # Handle different sampling rate
         if signal_sampling_rate != self.original_sampling_rate:
-            warn('Resample from {} to {}'
-                 .format(signal_sampling_rate, self.original_sampling_rate),
-                 UserWarning)
+            warn(
+                (f'Resample from {signal_sampling_rate} '
+                 f'to {self.original_sampling_rate}'),
+                UserWarning,
+            )
             signal = resampy.resample(signal, signal_sampling_rate,
                                       self.original_sampling_rate, axis=-1)
 

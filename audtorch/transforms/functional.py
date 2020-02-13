@@ -190,7 +190,7 @@ def downmix(
     elif method == 'crop':
         pass
     else:
-        raise TypeError('Method {} not supported.'.format(method))
+        raise TypeError(f'Method {method} not supported.')
 
     signal = crop(signal, (0, channels), axis=axis)
     return signal
@@ -244,7 +244,7 @@ def upmix(
     elif method == 'repeat':
         upmix = crop(signal, -1, axis=axis)
     else:
-        raise TypeError('Method {} not supported.'.format(method))
+        raise TypeError(f'Method {method} not supported.')
 
     upmix = np.repeat(upmix, channels - input_channels, axis=axis)
     return np.concatenate((signal, upmix), axis=axis)
@@ -276,8 +276,10 @@ def additive_mix(
 
     """
     if signal1.shape != signal2.shape:
-        raise ValueError('Shape of signal1 ({}) and signal2 ({}) do not'
-                         ' match'.format(signal1.shape, signal2.shape))
+        raise ValueError(
+            f'Shape of signal1 ({signal1.shape}) '
+            f'and signal2 ({signal2.shape}) do not match'
+        )
     # If one of the signals includes only silence, don't apply SNR
     tol = 1e-7
     if utils.power(signal1) < tol or utils.power(signal2) < tol:
@@ -409,9 +411,10 @@ def stft(
     """
     samples = signal.shape[axis]
     if samples < window_size:
-        raise ValueError('`signal` of length {} needs to be at least '
-                         'as long as the `window_size` of {}'
-                         .format(samples, window_size))
+        raise ValueError(
+            f'`signal` of length {samples} needs to be at least '
+            f'as long as the `window_size` of {window_size}'
+        )
 
     # Pad to ensure same signal length after reconstruction
     # See discussion at https://github.com/librosa/librosa/issues/328
