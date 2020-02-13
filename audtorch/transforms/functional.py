@@ -347,8 +347,8 @@ def stft(signal, window_size, hop_size, *, fft_size=None, window='hann',
     Example:
         >>> a = np.array([1., 2., 3., 4.])
         >>> stft(a, 2, 1)
-        array([[ 1.+0.j,  2.+0.j,  3.+0.j,  4.+0.j,  3.+0.j],
-               [-1.+0.j, -2.+0.j, -3.+0.j, -4.+0.j, -3.+0.j]], dtype=complex64)
+        array([[ 1.-0.j,  2.-0.j,  3.-0.j,  4.-0.j,  3.-0.j],
+               [-1.-0.j, -2.-0.j, -3.-0.j, -4.-0.j, -3.-0.j]], dtype=complex64)
 
     """
     samples = signal.shape[axis]
