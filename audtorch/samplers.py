@@ -79,9 +79,16 @@ class BucketSampler(BatchSampler):
 
     """
 
-    def __init__(self, concat_dataset, batch_sizes, num_batches=None,
-                 permuted_order=False, shuffle_each_bucket=True,
-                 drop_last=False):
+    def __init__(
+            self,
+            concat_dataset,
+            batch_sizes,
+            *,
+            num_batches=None,
+            permuted_order=False,
+            shuffle_each_bucket=True,
+            drop_last=False,
+    ):
         self.datasets = _stack_concatenated_datasets(concat_dataset)
         self.batch_sizes = batch_sizes
         self.num_batches = num_batches
@@ -109,8 +116,9 @@ class BucketSampler(BatchSampler):
                 "`None` permitted for `num_batches`."
 
         if not isinstance(drop_last, bool):
-            raise ValueError("drop_last should be a boolean value, but got "
-                             "drop_last={}".format(drop_last))
+            raise ValueError(
+                    f'drop_last should be a boolean value, but got '
+                    f'drop_last={drop_last}'
 
     def __iter__(self):
         r"""Iterates sequentially over data sets and forms batches
@@ -175,7 +183,10 @@ class BucketSampler(BatchSampler):
         return sampler_size
 
 
-def buckets_by_boundaries(key_values, bucket_boundaries):
+def buckets_by_boundaries(
+        key_values,
+        bucket_boundaries,
+):
     r"""Split samples into buckets based on key values using bucket boundaries.
 
     Note:
@@ -222,7 +233,12 @@ def buckets_by_boundaries(key_values, bucket_boundaries):
     return key_func
 
 
-def buckets_of_even_size(key_values, num_buckets, reverse=False):
+def buckets_of_even_size(
+        key_values,
+        num_buckets,
+        *,
+        reverse=False,
+):
     r"""Split samples into buckets of even size based on key values.
 
     The samples are sorted with either increasing (or decreasing) key value.

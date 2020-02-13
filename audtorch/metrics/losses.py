@@ -54,7 +54,11 @@ class EnergyConservingLoss(nn.L1Loss):
         tensor(2.1352, grad_fn=<AddBackward0>)
 
     """
-    def __init__(self, reduction='mean'):
+    def __init__(
+            self,
+            *,
+            reduction='mean',
+    ):
         super().__init__(None, None, reduction)
 
     def forward(self, y_predicted, y, x):

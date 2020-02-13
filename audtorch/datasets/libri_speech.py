@@ -93,8 +93,16 @@ class LibriSpeech(PandasDataset):
     _transcription = 'transcription'
     _audio_path = 'audio_path'
 
-    def __init__(self, root, *, sets=None, dataframe=None,
-                 transform=None, target_transform=None, download=False):
+    def __init__(
+            self,
+            root,
+            *,
+            sets=None,
+            dataframe=None,
+            transform=None,
+            target_transform=None,
+            download=False,
+    ):
 
         self.root = safe_path(root)
 

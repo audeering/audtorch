@@ -6,7 +6,9 @@ from tqdm import tqdm
 import numpy as np
 
 
-def flatten_list(nested_list):
+def flatten_list(
+        nested_list,
+):
     """Flatten an arbitrarily nested list.
 
     Implemented without  recursion to avoid stack overflows.
@@ -36,7 +38,11 @@ def flatten_list(nested_list):
     return list(_flat_generator(nested_list))
 
 
-def to_tuple(input, *, tuple_len=2):
+def to_tuple(
+        input,
+        *,
+        tuple_len=2,
+):
     r"""Convert to tuple of given length.
 
     This utility function is used to convert single-value arguments to tuples
@@ -69,7 +75,9 @@ def to_tuple(input, *, tuple_len=2):
     return input
 
 
-def energy(signal):
+def energy(
+        signal,
+):
     r"""Energy of input signal.
 
     .. math::
@@ -90,7 +98,9 @@ def energy(signal):
     return np.sum(np.abs(signal) ** 2)
 
 
-def power(signal):
+def power(
+        signal,
+):
     r"""Power of input signal.
 
     .. math::
@@ -111,7 +121,12 @@ def power(signal):
     return np.sum(np.abs(signal) ** 2) / signal.size
 
 
-def run_worker_threads(num_workers, task_fun, params, *, progress_bar=False):
+def run_worker_threads(
+        num_workers,
+        task_fun, params,
+        *,
+        progress_bar=False,
+):
     r"""Run parallel tasks using worker threads.
 
     Args:

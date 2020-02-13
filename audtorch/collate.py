@@ -86,8 +86,14 @@ class Seq2Seq(Collation):
 
     """
 
-    def __init__(self, sequence_dimensions, batch_first=None,
-                 pad_values=[0, 0], sort_sequences=True):
+    def __init__(
+            self,
+            sequence_dimensions,
+            *,
+            batch_first=None,
+            pad_values=[0, 0],
+            sort_sequences=True,
+    ):
 
         self.sequence_dimensions = sequence_dimensions
         self.batch_first = batch_first
@@ -123,8 +129,14 @@ class Seq2Seq(Collation):
         return features, feats_lengths, targets, tgt_lengths
 
 
-def _collate_sequences(sequences, sequence_dimension, pad_value,
-                       batch_first, sort_sequences=True, sorted_indices=[]):
+def _collate_sequences(
+        sequences,
+        sequence_dimension,
+        pad_value,
+        batch_first,
+        sort_sequences=True,
+        sorted_indices=[],
+):
     r"""Collate and pad sequences.
 
     Args:

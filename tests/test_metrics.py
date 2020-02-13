@@ -10,7 +10,7 @@ import audtorch.metrics.functional as F
 
 @pytest.mark.parametrize('reduction', ['none', 'sum', 'mean'])
 def test_energypreservingloss(reduction):
-    loss = metrics.EnergyConservingLoss(reduction)
+    loss = metrics.EnergyConservingLoss(reduction=reduction)
     # Random integers as tensors to avoid precision problems with torch.equal
     input = torch.rand((3, 5), requires_grad=True)
     target = torch.rand((3, 5))

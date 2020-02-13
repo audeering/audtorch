@@ -78,7 +78,7 @@ class VoxCeleb1(AudioDataset):
             *,
             partition='train',
             transform=None,
-            target_transform=None
+            target_transform=None,
     ):
         self.root = safe_path(root)
 

@@ -72,7 +72,7 @@ class AudioDataset(Dataset):
             sampling_rate,
             root=None,
             transform=None,
-            target_transform=None
+            target_transform=None,
     ):
         if root is not None:
             self.root = safe_path(root)
@@ -237,7 +237,7 @@ class PandasDataset(AudioDataset):
             column_start=None,
             column_end=None,
             transform=None,
-            target_transform=None
+            target_transform=None,
     ):
         files, labels = files_and_labels_from_df(
             df,
@@ -340,7 +340,7 @@ class CsvDataset(PandasDataset):
             column_start=None,
             column_end=None,
             transform=None,
-            target_transform=None
+            target_transform=None,
     ):
         self.csv_file = safe_path(csv_file)
 

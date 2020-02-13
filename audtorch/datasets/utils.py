@@ -15,7 +15,12 @@ from ..utils import run_worker_threads
 __doctest_skip__ = ['load']
 
 
-def load(filename, *, duration=None, offset=0):
+def load(
+        filename,
+        *,
+        duration=None,
+        offset=0,
+):
     r"""Load audio file.
 
     If an error occurrs during loading as the file could not be found,
@@ -58,7 +63,13 @@ def load(filename, *, duration=None, offset=0):
     return signal, sampling_rate
 
 
-def download_url(url, root, *, filename=None, md5=None):
+def download_url(
+        url,
+        root,
+        *,
+        filename=None,
+        md5=None,
+):
     r"""Download a file from an url to a specified directory.
 
     Args:
@@ -96,7 +107,12 @@ def download_url(url, root, *, filename=None, md5=None):
     return safe_path(filename)
 
 
-def download_url_list(urls, root, *, num_workers=0):
+def download_url_list(
+        urls,
+        root,
+        *,
+        num_workers=0,
+):
     r"""Download files from a list of URLs to a specified directory.
 
     Args:
@@ -125,7 +141,12 @@ def download_url_list(urls, root, *, num_workers=0):
     return run_worker_threads(num_workers, _task, params)
 
 
-def extract_archive(filename, *, out_path=None, remove_finished=False):
+def extract_archive(
+        filename,
+        *,
+        out_path=None,
+        remove_finished=False,
+):
     r"""Extract archive.
 
     Currently `tar.gz` and `tar` archives are supported.
@@ -153,7 +174,9 @@ def extract_archive(filename, *, out_path=None, remove_finished=False):
         os.unlink(filename)
 
 
-def sampling_rate_after_transform(dataset):
+def sampling_rate_after_transform(
+        dataset,
+):
     r"""Sampling rate of data set after all transforms are applied.
 
     A change of sampling rate by a transform is only recognized, if that
@@ -188,7 +211,9 @@ def sampling_rate_after_transform(dataset):
     return sampling_rate
 
 
-def ensure_same_sampling_rate(datasets):
+def ensure_same_sampling_rate(
+        datasets,
+):
     r"""Raise error if provided data set differ in sampling rate.
 
     All data sets that are checked need to have a `sampling_rate` attribute or
@@ -212,7 +237,10 @@ def ensure_same_sampling_rate(datasets):
             raise ValueError(error_msg)
 
 
-def ensure_df_columns_contain(df, labels):
+def ensure_df_columns_contain(
+        df,
+        labels,
+):
     r"""Raise error if list of labels are not in dataframe columns.
 
     Args:
@@ -233,7 +261,10 @@ def ensure_df_columns_contain(df, labels):
                            .format(', '.join(df.columns)))
 
 
-def ensure_df_not_empty(df, labels=None):
+def ensure_df_not_empty(
+        df,
+        labels=None,
+):
     r"""Raise error if dataframe is empty.
 
     Args:
@@ -261,7 +292,7 @@ def files_and_labels_from_df(
         df,
         *,
         column_labels=None,
-        column_filename='filename'
+        column_filename='filename',
 ):
     r"""Extract list of files and labels from dataframe columns.
 
@@ -322,7 +353,10 @@ def _gen_bar_updater(pbar):
     return bar_update
 
 
-def defined_split(dataset, split_func):
+def defined_split(
+        dataset,
+        split_func,
+):
     r"""Split data set into desired non-overlapping subsets.
 
     Args:
@@ -362,7 +396,9 @@ def defined_split(dataset, split_func):
             for indices in split_indices]
 
 
-def safe_path(path):
+def safe_path(
+        path,
+):
     """Ensure the path is absolute and doesn't include `..` or `~`.
 
     Args:

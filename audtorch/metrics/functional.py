@@ -1,4 +1,10 @@
-def pearsonr(x, y, batch_first=True):
+
+
+def pearsonr(
+        x,
+        y,
+        batch_first=True,
+):
     r"""Computes Pearson Correlation Coefficient across rows.
 
     Pearson Correlation Coefficient (also known as Linear Correlation
@@ -80,7 +86,11 @@ def pearsonr(x, y, batch_first=True):
     return corr
 
 
-def concordance_cc(x, y, batch_first=True):
+def concordance_cc(
+        x,
+        y,
+        batch_first=True,
+):
     r"""Computes Concordance Correlation Coefficient across rows.
 
     Concordance Correlation Coefficient is computed as:
