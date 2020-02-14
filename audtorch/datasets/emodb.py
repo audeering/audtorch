@@ -17,7 +17,7 @@ class EmoDB(AudioDataset):
     http://www.emodb.bilderbar.info/navi.html
 
     EmoDB is a small audio data set collected in an anechoic chamber in the
-    Technical University of Berlin, it contains 5 male and 5 female speakers,
+    Berlin Institute of Technology, it contains 5 male and 5 female speakers,
     consists of 10 unique sentences, and is annotated for 6 emotions plus a
     neutral state. The spoken language is German.
 
