@@ -4,3 +4,4 @@ sphinxcontrib-katex
 sphinxcontrib-bibtex
 nbsphinx
 jupyter
+matplotlib
