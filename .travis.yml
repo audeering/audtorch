@@ -11,6 +11,5 @@ install:
   - pip install -r tests/requirements.txt
 script:
   - python -m pytest
-  - apt-get install pandoc -y
   - python -m sphinx docs/ docs/_build/ -b html -W -D nbsphinx_execute='always'
   - python -m sphinx docs/ docs/_build/ -b linkcheck -W
