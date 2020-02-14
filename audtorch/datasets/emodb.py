@@ -49,7 +49,7 @@ class EmoDB(AudioDataset):
 
     def __init__(self, root: str, *, transform: Callable = None,
                  target_transform: Callable = None):
-        super().__init__(root, files=[], targets=[],
+        super().__init__(root=root, files=[], targets=[],
                          transform=transform,
                          sampling_rate=16000,
                          target_transform=target_transform)
