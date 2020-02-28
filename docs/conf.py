@@ -54,6 +54,7 @@ extensions = [
     'sphinx.ext.napoleon',  # support for Google-style docstrings
     'sphinxcontrib.bibtex',
     'sphinxcontrib.katex',
+    'nbsphinx',
 ]
 
 napoleon_use_ivar = True  # List of class attributes
@@ -65,6 +66,8 @@ intersphinx_mapping = {
     'scipy': ('https://docs.scipy.org/doc/scipy/reference/', None),
     'torch': ('https://pytorch.org/docs/stable/', None),
 }
+
+nbsphinx_execute = 'never'
 
 # HTML --------------------------------------------------------------------
 

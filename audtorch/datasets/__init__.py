@@ -1,5 +1,6 @@
 from .audio_set import *
 from .base import *
+from .emodb import *
 from .libri_speech import *
 from .mixture import *
 from .mozilla_common_voice import *

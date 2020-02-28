@@ -10,6 +10,8 @@ Unreleased
 ----------
 
 * Added: `RandomConvolutionalMix` transform
+* Added: `EmoDB` data set
+* Added: introduction tutorial
 
 Version 0.4.2 (2019-11-04)
 --------------------------
