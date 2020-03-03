@@ -6,12 +6,23 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog`_,
 and this project adheres to `Semantic Versioning`_.
 
-Unreleased
-----------
+
+Version 0.5.0 (2029-03-03)
+--------------------------
 
 * Added: `RandomConvolutionalMix` transform
 * Added: `EmoDB` data set
 * Added: introduction tutorial
+* Added: Python 3.8 support
+* Added: ``column_end`` + ``column_start`` to ``CsvDataset`` and
+  ``PandasDataset``
+* Added: random convolutional mix transform
+* Changed: default filename column in data sets is now ``file``
+* Changed: force keyword only arguments
+* Fixed: ``stft`` functional example
+* Fixed: import of ``librosa``
+* Removed: Python 3.5 support
+
 
 Version 0.4.2 (2019-11-04)
 --------------------------
