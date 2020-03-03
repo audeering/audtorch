@@ -7,6 +7,12 @@ The format is based on `Keep a Changelog`_,
 and this project adheres to `Semantic Versioning`_.
 
 
+Version 0.5.2 (2020-03-03)
+--------------------------
+
+* Fixed: disable automatic execution of notebook
+
+
 Version 0.5.1 (2020-03-03)
 --------------------------
 
