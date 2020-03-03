@@ -67,7 +67,7 @@ intersphinx_mapping = {
     'torch': ('https://pytorch.org/docs/stable/', None),
 }
 
-nbsphinx_execute = 'always'
+nbsphinx_execute = 'never'
 
 # HTML --------------------------------------------------------------------
 

@@ -106,13 +106,13 @@ You can install it and a few other necessary packages with::
 
 To create the HTML pages, use::
 
-    sphinx-build docs/ build/sphinx/html/ -b html -D nbsphinx_execute='never'
+    sphinx-build docs/ build/sphinx/html/ -b html
 
 The generated files will be available in the directory ``build/sphinx/html/``.
 
 It is also possible to automatically check if all links are still valid::
 
-    sphinx-build docs/ build/sphinx/html/ -b linkcheck -D nbsphinx_execute='never'
+    sphinx-build docs/ build/sphinx/html/ -b linkcheck
 
 .. _Sphinx: http://sphinx-doc.org/
 
