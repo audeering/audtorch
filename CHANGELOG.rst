@@ -7,7 +7,14 @@ The format is based on `Keep a Changelog`_,
 and this project adheres to `Semantic Versioning`_.
 
 
-Version 0.5.0 (2029-03-03)
+Version 0.5.1 (2020-03-03)
+--------------------------
+
+* Fixed: execute jupyter notebook on readthedocs
+* Fixed: release date of 5.0.0 in CHANGELOG
+
+
+Version 0.5.0 (2020-03-03)
 --------------------------
 
 * Added: `RandomConvolutionalMix` transform
