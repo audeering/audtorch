@@ -1060,7 +1060,7 @@ class Spectrogram(object):
         Spectrogram(window_size=2, hop_size=2, axis=-1)
         >>> t(a)
         array([[1., 3., 3.],
-               [1., 3., 3.]], dtype=float32)
+               [1., 3., 3.]])
 
     """
 
@@ -1118,11 +1118,10 @@ class Log(object):
         >>> t = Log()
         >>> print(t)
         Log(magnitude_boost=1e-07)
-        >>> np.set_printoptions(precision=7)
+        >>> np.set_printoptions(precision=5)
         >>> t(spect(a))
-        array([[1.1920928e-07, 1.0986123e+00, 1.0986123e+00],
-               [1.1920928e-07, 1.0986123e+00, 1.0986123e+00]], dtype=float32)
-
+        array([[1.00000e-07, 1.09861e+00, 1.09861e+00],
+               [1.00000e-07, 1.09861e+00, 1.09861e+00]])
     """
 
     def __init__(
