@@ -69,6 +69,10 @@ intersphinx_mapping = {
 
 nbsphinx_execute = 'never'
 
+linkcheck_ignore = [
+    'https://doi.org/',  # has timeouts from time to time
+]
+
 # HTML --------------------------------------------------------------------
 
 html_theme = 'sphinx_rtd_theme'
