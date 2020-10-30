@@ -7,6 +7,12 @@ The format is based on `Keep a Changelog`_,
 and this project adheres to `Semantic Versioning`_.
 
 
+Version 0.6.2 (2020-10-30)
+--------------------------
+
+* Fixed: install missing pandoc for publishing documentation
+
+
 Version 0.6.1 (2020-10-30)
 --------------------------
 
