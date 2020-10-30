@@ -7,6 +7,15 @@ The format is based on `Keep a Changelog`_,
 and this project adheres to `Semantic Versioning`_.
 
 
+Version 0.6.3 (2020-10-30)
+--------------------------
+
+* Added: use copy-button Sphinx plugin
+* Added: links to usage and installation to README
+* Changed: use sphinx-audeering-theme
+* Changed: update all documentation links to Github pages
+
+
 Version 0.6.2 (2020-10-30)
 --------------------------
 
