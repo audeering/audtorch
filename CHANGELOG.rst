@@ -116,7 +116,7 @@ Version 0.2.0 (2019-06-28)
 Version 0.1.1 (2019-05-23)
 --------------------------
 
-* Fixed: Broken API documentation on RTD_
+* Fixed: Broken API documentation on readthedocs
 
 
 Version 0.1.0 (2019-05-22)
@@ -127,4 +127,3 @@ Version 0.1.0 (2019-05-22)
 
 .. _Keep a Changelog: https://keepachangelog.com/en/1.0.0/
 .. _Semantic Versioning: https://semver.org/spec/v2.0.0.html
-.. _RTD: https://audtorch.readthedocs.io/
