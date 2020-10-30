@@ -19,9 +19,9 @@ efforts to integrate more audio directly into PyTorch_:
 .. _keunwoochoi/torchaudio-contrib:
     https://github.com/keunwoochoi/torchaudio-contrib
 
-.. |tests| image:: https://api.travis-ci.org/audeering/audtorch.svg?branch=master
-    :target: https://travis-ci.org/audeering/audtorch/
-    :alt: audtorch on TravisCI
+.. |tests| image:: https://github.com/audeering/audtorch/workflows/Test/badge.svg
+    :target: https://github.com/audeering/audtorch/actions?query=workflow%3ATest
+    :alt: Test status
 .. |coverage| image:: https://codecov.io/gh/audeering/audtorch/branch/master/graph/badge.svg?token=PUA9P2UJW1
     :target: https://codecov.io/gh/audeering/audtorch/
     :alt: code coverage
