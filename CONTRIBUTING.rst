@@ -52,7 +52,7 @@ When creating a new pull request, please conside the following points:
 Writing Documentation
 ---------------------
 
-The API documentation of audtorch_ is build automatically from the
+The API documentation of :mod:`audtorch` is build automatically from the
 docstrings_ of its classes and functions.
 
 docstrings_ are written in reStructuredText_ as indicated by the ``r`` at
@@ -87,7 +87,6 @@ documentation under the ``docs/`` folder in the appropriate api file. E.g.
 ``energy()`` is part of the ``utils`` module and the corresponding file in the
 documentation would be ``docs/api-utils.rst``, where it is included.
 
-.. _audtorch: https://audtorch.readthedocs.io/
 .. _docstrings: https://www.python.org/dev/peps/pep-0257/
 .. _reStructuredText:
     http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
