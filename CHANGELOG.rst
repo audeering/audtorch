@@ -7,6 +7,15 @@ The format is based on `Keep a Changelog`_,
 and this project adheres to `Semantic Versioning`_.
 
 
+Version 0.6.0 (2020-10-30)
+--------------------------
+
+* Added: code coverage
+* Added: automatic publishing using Github Actions
+* Changed: use Github Actions for testing
+* Changed: host documentation as Github pages
+* Fixed: use newest librosa version
+
 Version 0.5.2 (2020-03-03)
 --------------------------
 
