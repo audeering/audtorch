@@ -2,7 +2,7 @@
 audtorch
 ========
 
-|tests| |coverage| |docs| |license|
+|tests| |coverage| |docs| |python-versions| |license|
 
 Deep learning with PyTorch_ and audio.
 
@@ -29,6 +29,9 @@ efforts to integrate more audio directly into PyTorch_:
 .. |docs| image:: https://img.shields.io/pypi/v/audtorch?label=docs
     :target: https://audeering.github.io/audtorch/
     :alt: audtorch's documentation
+.. |python-versions| image:: https://img.shields.io/pypi/pyversions/audtorch.svg
+    :target: https://pypi.org/project/audtorch/
+    :alt: audtorch's supported Python versions
 .. |license| image:: https://img.shields.io/badge/license-MIT-green.svg
     :target: https://github.com/audeering/audtorch/blob/master/LICENSE
     :alt: audtorch's MIT license
