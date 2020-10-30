@@ -6,7 +6,7 @@ audtorch
 
 Deep learning with PyTorch_ and audio.
 
-**Documentation:** https://audtorch.readthedocs.io
+Have a look at the installation_ and usage_ instructions as a starting point.
 
 If you are interested in PyTorch_ and audio you should also check out the
 efforts to integrate more audio directly into PyTorch_:
@@ -14,10 +14,11 @@ efforts to integrate more audio directly into PyTorch_:
 * `pytorch/audio`_
 * `keunwoochoi/torchaudio-contrib`_
 
+.. _installation: https://audeering.github.io/audtorch/install.html
+.. _keunwoochoi/torchaudio-contrib: https://github.com/keunwoochoi/torchaudio-contrib
 .. _PyTorch: https://pytorch.org
 .. _pytorch/audio: https://github.com/pytorch/audio
-.. _keunwoochoi/torchaudio-contrib:
-    https://github.com/keunwoochoi/torchaudio-contrib
+.. _usage: https://audeering.github.io/audtorch/usage.html
 
 .. |tests| image:: https://github.com/audeering/audtorch/workflows/Test/badge.svg
     :target: https://github.com/audeering/audtorch/actions?query=workflow%3ATest
