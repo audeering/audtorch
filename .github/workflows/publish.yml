@@ -30,7 +30,10 @@ jobs:
         python -m twine upload dist/*
     # Docuemntation
     - name: Install doc dependencies
-      run: pip install -r docs/requirements.txt
+      run: |
+        sudo apt-get update
+        sudo apt-get install pandoc
+        pip install -r docs/requirements.txt
     - name: Build documentation
       run: python -m sphinx docs/ docs/_build/ -b html
     - name: Deploy documentation to Github pages
