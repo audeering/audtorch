@@ -25,9 +25,9 @@ efforts to integrate more audio directly into PyTorch_:
 .. |coverage| image:: https://codecov.io/gh/audeering/audtorch/branch/master/graph/badge.svg?token=PUA9P2UJW1
     :target: https://codecov.io/gh/audeering/audtorch/
     :alt: code coverage
-.. |docs| image:: https://readthedocs.org/projects/audtorch/badge/
-    :target: https://audtorch.readthedocs.io/
-    :alt: audtorch's documentation on Read the Docs
+.. |docs| image:: https://img.shields.io/pypi/v/audtorch?label=docs
+    :target: https://audeering.github.io/audtorch/
+    :alt: audtorch's documentation
 .. |license| image:: https://img.shields.io/badge/license-MIT-green.svg
     :target: https://github.com/audeering/audtorch/blob/master/LICENSE
     :alt: audtorch's MIT license
