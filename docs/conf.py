@@ -75,9 +75,14 @@ linkcheck_ignore = [
 
 # HTML --------------------------------------------------------------------
 
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'sphinx_audeering_theme'
 html_theme_options = {
     'display_version': True,
+    'footer_links': False,
     'logo_only': False,
 }
+html_context = {
+    'display_github': True,
+}
+
 html_title = title
