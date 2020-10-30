@@ -1,7 +1,7 @@
 Usage
 =====
 
-audtorch_ automates the data iteration process for deep neural
+:mod:`audtorch` automates the data iteration process for deep neural
 network training using PyTorch_. It provides a set of feature extraction
 transforms that can be implemented on-the-fly on the CPU.
 
@@ -25,5 +25,4 @@ Besides data sets and transforms the package provides standard evaluation
 metrics, samplers, and necessary collate functions for training deep neural
 networks for audio tasks.
 
-.. _audtorch: https://audtorch.readthedocs.io
 .. _PyTorch: https://pytorch.org
