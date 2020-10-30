@@ -1,7 +1,7 @@
 Installation
 ============
 
-audtorch_ is supported by Python 3.5 or higher. To install it run
+audtorch_ is supported by Python 3.6 or higher. To install it run
 (preferable in a `virtual environment`_):
 
 .. code-block:: bash
