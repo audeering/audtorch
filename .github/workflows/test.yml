@@ -31,6 +31,12 @@ jobs:
       run: |
         pip install -r tests/requirements.txt
         python -m pytest
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./coverage.xml
+      if: matrix.os == 'ubuntu-latest'
     - name: Test building documentation
       run: |
         sudo apt-get install -y pandoc
