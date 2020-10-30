@@ -1,7 +1,8 @@
+jupyter
+matplotlib
+nbsphinx
 sphinx
 sphinx-audeering-theme >=0.9.0
 sphinxcontrib-katex
 sphinxcontrib-bibtex
-nbsphinx
-jupyter
-matplotlib
+sphinx-copybutton

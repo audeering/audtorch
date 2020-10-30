@@ -52,6 +52,7 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',  # support for Google-style docstrings
+    'sphinx_copybutton',
     'sphinxcontrib.bibtex',
     'sphinxcontrib.katex',
     'nbsphinx',
@@ -66,6 +67,9 @@ intersphinx_mapping = {
     'scipy': ('https://docs.scipy.org/doc/scipy/reference/', None),
     'torch': ('https://pytorch.org/docs/stable/', None),
 }
+
+copybutton_prompt_text = r'>>> |\.\.\. |$ '
+copybutton_prompt_is_regexp = True
 
 nbsphinx_execute = 'never'
 
