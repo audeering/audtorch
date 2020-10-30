@@ -1,0 +1,1379 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>audtorch.datasets &mdash; audtorch Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" type="text/css" />
+  <link rel="stylesheet" href="_static/katex-math.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"></script>
+        <script src="_static/katex_autorenderer.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="audtorch.metrics" href="api-metrics.html" />
+    <link rel="prev" title="audtorch.collate" href="api-collate.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> audtorch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v0.6.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="develop.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/introduction.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api-collate.html">audtorch.collate</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">audtorch.datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#audioset">AudioSet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#emodb">EmoDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#librispeech">LibriSpeech</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mozillacommonvoice">MozillaCommonVoice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#speechcommands">SpeechCommands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#voxceleb1">VoxCeleb1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#whitenoise">WhiteNoise</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#base">Base</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#audiodataset">AudioDataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pandasdataset">PandasDataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#csvdataset">CsvDataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#audioconcatdataset">AudioConcatDataset</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#mixture">Mixture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#speechnoisemix">SpeechNoiseMix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#utils">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#load">load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#download-url">download_url</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#download-url-list">download_url_list</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extract-archive">extract_archive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sampling-rate-after-transform">sampling_rate_after_transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ensure-same-sampling-rate">ensure_same_sampling_rate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ensure-df-columns-contain">ensure_df_columns_contain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ensure-df-not-empty">ensure_df_not_empty</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#files-and-labels-from-df">files_and_labels_from_df</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#defined-split">defined_split</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api-metrics.html">audtorch.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-metrics-functional.html">audtorch.metrics.functional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-samplers.html">audtorch.samplers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-transforms.html">audtorch.transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-transforms-functional.html">audtorch.transforms.functional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-utils.html">audtorch.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="refs.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">audtorch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>audtorch.datasets</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api-datasets.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="audtorch-datasets">
+<h1>audtorch.datasets<a class="headerlink" href="#audtorch-datasets" title="Permalink to this headline">¶</a></h1>
+<p>Audio data sets.</p>
+<span class="target" id="module-audtorch.datasets"></span><div class="section" id="audioset">
+<h2>AudioSet<a class="headerlink" href="#audioset" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.datasets.AudioSet">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">AudioSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.AudioSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>A large-scale dataset of manually annotated audio events.</p>
+<p>Open and publicly available data set of audio events from Google:
+<a class="reference external" href="https://research.google.com/audioset/">https://research.google.com/audioset/</a></p>
+<p>License: CC BY 4.0</p>
+<p>The categories corresponding to an audio signal are returned as a list,
+starting with those included in the top hierarchy of the
+<a class="reference external" href="https://research.google.com/audioset/ontology/">AudioSet ontology</a>, followed by those from the second hierarchy and then
+all other categories in a random order.</p>
+<p>The signals to be returned can be limited by excluding or including only
+certain categories. This is achieved by first including only the desired
+categories, estimating all its parent categories and then applying the
+exclusion.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">transform</span></code> controls the input transform</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">target_transform</span></code> controls the target transform</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">files</span></code> controls the audio files of the data set</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">targets</span></code> controls the corresponding targets</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">sampling_rate</span></code> holds the sampling rate of the returned data</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">original_sampling_rate</span></code> holds the sampling rate of the audio files
+of the data set</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – root directory of dataset</p></li>
+<li><p><strong>csv_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – name of a CSV file located in <cite>root</cite>. Can be
+one of <cite>balanced_train_segments.csv</cite>,
+<cite>unbalanced_train_segments.csv</cite>, <cite>eval_segments.csv</cite>.
+Default: <cite>balanced_train_segments.csv</cite></p></li>
+<li><p><strong>include</strong> (<em>list of str</em><em>, </em><em>optional</em>) – list of categories to include.
+If <cite>None</cite> all categories are included. Default: <cite>None</cite></p></li>
+<li><p><strong>exclude</strong> (<em>list of str</em><em>, </em><em>optional</em>) – list of categories to exclude.
+If <cite>None</cite> no category is excluded. Default: <cite>None</cite></p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied on the
+signal. Default: <cite>None</cite></p></li>
+<li><p><strong>target_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied on
+the target. Default: <cite>None</cite></p></li>
+</ul>
+</dd>
+</dl>
+<p><a class="reference external" href="https://research.google.com/audioset/ontology/">AudioSet ontology</a> categories of the two top hierarchies:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Human sounds            Animal                   Music
+|-Human voice           |-Domestic animals, pets |-Musical instrument
+|-Whistling             |-Livestock, farm        |-Music genre
+|-Respiratory sounds    | animals, working       |-Musical concepts
+|-Human locomotion      | animals                |-Music role
+|-Digestive             \-Wild animals           \-Music mood
+|-Hands
+|-Heart sounds,         Sounds of things         Natural sounds
+| heartbeat             |-Vehicle                |-Wind
+|-Otoacoustic emission  |-Engine                 |-Thunderstorm
+\-Human group actions   |-Domestic sounds,       |-Water
+                        | home sounds            \-Fire
+Source-ambiguous sounds |-Bell
+|-Generic impact sounds |-Alarm                  Channel, environment
+|-Surface contact       |-Mechanisms             and background
+|-Deformable shell      |-Tools                  |-Acoustic environment
+|-Onomatopoeia          |-Explosion              |-Noise
+|-Silence               |-Wood                   \-Sound reproduction
+\-Other sourceless      |-Glass
+                        |-Liquid
+                        |-Miscellaneous sources
+                        \-Specific impact sounds
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Some of the recordings in <cite>AudioSet</cite> were captured with <cite>mono</cite> and
+others with <cite>stereo</cite> input. The user must be careful to handle this,
+e.g. using a transform to adjust number of channels.</p>
+</div>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sounddevice</span> <span class="k">as</span> <span class="nn">sd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">AudioSet</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;/data/AudioSet&#39;</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Thunderstorm&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">Dataset AudioSet</span>
+<span class="go">    Number of data points: 73</span>
+<span class="go">    Root Location: /data/AudioSet</span>
+<span class="go">    Sampling Rate: 16000Hz</span>
+<span class="go">    CSV file: balanced_train_segments.csv</span>
+<span class="go">    Included categories: [&#39;Thunderstorm&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span>
+<span class="go">[&#39;Natural sounds&#39;, &#39;Thunderstorm&#39;, &#39;Water&#39;, &#39;Rain&#39;, &#39;Thunder&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sd</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="emodb">
+<h2>EmoDB<a class="headerlink" href="#emodb" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.datasets.EmoDB">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">EmoDB</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.EmoDB" title="Permalink to this definition">¶</a></dt>
+<dd><p>EmoDB data set.</p>
+<p>Open and publicly available data set of acted emotions:
+<a class="reference external" href="http://www.emodb.bilderbar.info/navi.html">http://www.emodb.bilderbar.info/navi.html</a></p>
+<p>EmoDB is a small audio data set collected in an anechoic chamber in the
+Berlin Institute of Technology, it contains 5 male and 5 female speakers,
+consists of 10 unique sentences, and is annotated for 6 emotions plus a
+neutral state. The spoken language is German.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> – root directory of dataset</p></li>
+<li><p><strong>transform</strong> – function/transform applied on the signal</p></li>
+<li><p><strong>target_transform</strong> – function/transform applied on the target</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>When using the EmoDB data set in your research, please cite
+the following publication: <a class="bibtex reference internal" href="refs.html#burkhardt2005database" id="id1">[BPR+05]</a>.</p></li>
+</ul>
+</div>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sounddevice</span> <span class="k">as</span> <span class="nn">sd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">EmoDB</span><span class="p">(</span><span class="s1">&#39;/data/emodb&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">Dataset EmoDB</span>
+<span class="go">    Number of data points: 465</span>
+<span class="go">    Root Location: /data/emodb</span>
+<span class="go">    Sampling Rate: 16000Hz</span>
+<span class="go">    Labels: emotion</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span>
+<span class="go">&#39;A&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sd</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="librispeech">
+<h2>LibriSpeech<a class="headerlink" href="#librispeech" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.datasets.LibriSpeech">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">LibriSpeech</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.LibriSpeech" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>LibriSpeech</cite> speech data set.</p>
+<p>Open and publicly available data set of voices from OpenSLR:
+<a class="reference external" href="http://www.openslr.org/12/">http://www.openslr.org/12/</a></p>
+<p>License: CC BY 4.0.</p>
+<p><cite>LibriSpeech</cite> contains several hundred hours of English speech
+with corresponding transcriptions in capital letters without punctuation.</p>
+<p>It is split into different subsets according to WER-level achieved when
+performing speech recognition on the speakers. The subsets are:
+<cite>train-clean-100</cite>, <cite>train-clean-360</cite>, <cite>train-other-500</cite> <cite>dev-clean</cite>,
+<cite>dev-other</cite>, <cite>test-clean</cite>, <cite>test-other</cite></p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">root</span></code> holds the data set’s location</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">transform</span></code> controls the input transform</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">target_transform</span></code> controls the target transform</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">files</span></code> controls the audio files of the data set</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">labels</span></code> controls the corresponding labels</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">sampling_rate</span></code> holds the sampling rate of data set</p></li>
+</ul>
+<p>In addition, the following class attributes are available</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">all_sets</span></code> holds the names of the different pre-defined sets</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">urls</span></code> holds the download links of the different sets</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – root directory of data set</p></li>
+<li><p><strong>sets</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – desired sets of <cite>LibriSpeech</cite>.
+Mutually exclusive with <code class="xref py py-attr docutils literal notranslate"><span class="pre">dataframe</span></code>.
+Default: <cite>None</cite></p></li>
+<li><p><strong>dataframe</strong> (<em>pandas.DataFrame</em><em>, </em><em>optional</em>) – pandas data frame containing
+columns <cite>audio_path</cite> (relative to root) and <cite>transcription</cite>.
+It can be used to pre-select files based on meta information,
+e.g. sequence length. Mutually exclusive with <code class="xref py py-attr docutils literal notranslate"><span class="pre">sets</span></code>.
+Default: <cite>None</cite></p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied on
+the signal. Default: <cite>None</cite></p></li>
+<li><p><strong>target_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied on
+the target. Default: <cite>None</cite></p></li>
+<li><p><strong>download</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – download data set to root directory
+if not present. Default: <cite>False</cite></p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sounddevice</span> <span class="k">as</span> <span class="nn">sd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">LibriSpeech</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;/data/LibriSpeech&#39;</span><span class="p">,</span> <span class="n">sets</span><span class="o">=</span><span class="s1">&#39;dev-clean&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">Dataset LibriSpeech</span>
+<span class="go">    Number of data points: 2703</span>
+<span class="go">    Root Location: /data/LibriSpeech</span>
+<span class="go">    Sampling Rate: 16000Hz</span>
+<span class="go">    Sets: dev-clean</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">label</span>
+<span class="go">AS FOR ETCHINGS THEY ARE OF TWO KINDS BRITISH AND FOREIGN</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sd</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="mozillacommonvoice">
+<h2>MozillaCommonVoice<a class="headerlink" href="#mozillacommonvoice" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.datasets.MozillaCommonVoice">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">MozillaCommonVoice</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.MozillaCommonVoice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mozilla Common Voice speech data set.</p>
+<p>Open and publicly available data set of voices from Mozilla:
+<a class="reference external" href="https://voice.mozilla.org/en/datasets">https://voice.mozilla.org/en/datasets</a></p>
+<p>License: CC-0 (public domain)</p>
+<p>Mozilla Common Voice includes the labels <cite>text</cite>, <cite>up_votes</cite>,
+<cite>down_votes</cite>, <cite>age</cite>, <cite>gender</cite>, <cite>accent</cite>, <cite>duration</cite>. You can select one of
+those labels which is returned as a string by the data set as target or you
+can specify a list of the labels and the data set will return a dictionary
+containing those labels. The default label that is returned is <cite>text</cite>.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">root</span></code> holds the data set’s location</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">transform</span></code> controls the input transform</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">target_transform</span></code> controls the target transform</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">files</span></code> controls the audio files of the data set</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">targets</span></code> controls the corresponding targets</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">sampling_rate</span></code> holds the sampling rate of the returned data</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">original_sampling_rate</span></code> holds the sampling rate of the audio files
+of the data set</p></li>
+</ul>
+<p>In addition, the following class attribute is available</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">url</span></code> holds the download link of the data set</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – root directory of data set, where the CSV files are
+located, e.g. <cite>/data/MozillaCommonVoice/cv_corpus_v1</cite></p></li>
+<li><p><strong>csv_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – name of a CSV file from the <cite>root</cite>
+folder. No absolute path is possible. You are most probably
+interested in <cite>cv-valid-train.csv</cite>, <cite>cv-valid-dev.csv</cite>, and
+<cite>cv-valid-test.csv</cite>. Default: <cite>cv-valid-train.csv</cite>.</p></li>
+<li><p><strong>label_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><em>list of str</em><em>, </em><em>optional</em>) – one of <cite>text</cite>, <cite>up_votes</cite>,
+<cite>down_votes</cite>, <cite>age</cite>, <cite>gender</cite>, <cite>accent</cite>, <cite>duration</cite>. Or a list of
+any combination of those. Default: <cite>text</cite></p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied on the
+signal. Default: <cite>None</cite></p></li>
+<li><p><strong>target_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied on
+the target. Default: <cite>None</cite></p></li>
+<li><p><strong>download</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – download data set if not present.
+Default: <cite>False</cite></p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Mozilla Common Voice data set is constantly growing. If you
+choose to download it, it will always grep the latest version. If
+you require reproducibility of your results, make sure to store a
+safe snapshot of the version you used.</p>
+</div>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sounddevice</span> <span class="k">as</span> <span class="nn">sd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">MozillaCommonVoice</span><span class="p">(</span><span class="s1">&#39;/data/MozillaCommonVoice/cv_corpus_v1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">Dataset MozillaCommonVoice</span>
+<span class="go">    Number of data points: 195776</span>
+<span class="go">    Root Location: /data/MozillaCommonVoice/cv_corpus_v1</span>
+<span class="go">    Sampling Rate: 48000Hz</span>
+<span class="go">    Labels: text</span>
+<span class="go">    CSV file: cv-valid-train.csv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span>
+<span class="go">&#39;learn to recognize omens and follow them the old king had said&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sd</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="speechcommands">
+<h2>SpeechCommands<a class="headerlink" href="#speechcommands" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.datasets.SpeechCommands">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">SpeechCommands</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.SpeechCommands" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data set of spoken words designed for keyword spotting tasks.</p>
+<p>Speech Commands V2 publicly available from Google:
+<a class="reference external" href="http://download.tensorflow.org/data/speech_commands_v0.02.tar.gz">http://download.tensorflow.org/data/speech_commands_v0.02.tar.gz</a></p>
+<p>License: CC BY 4.0</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – root directory of data set,
+where the CSV files are located,
+e.g. <cite>/data/speech_commands_v0.02</cite></p></li>
+<li><p><strong>train</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Partition the dataset into the training set.
+<cite>False</cite> returns the test split.
+Default: <cite>False</cite></p></li>
+<li><p><strong>download</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Download the dataset to <cite>root</cite>
+if it’s not already available.
+Default: <cite>False</cite></p></li>
+<li><p><strong>include</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, or </em><em>list of str</em><em>, </em><em>optional</em>) – commands to include
+as ‘recognised’ words.
+Options: <cite>“10cmd”</cite>, <cite>“full”</cite>.
+A custom dataset can be defined using a list of command words.
+For example, <cite>[“stop”,”go”]</cite>.
+Words that are not in the “include” list
+are treated as unknown words.
+Default: <cite>‘10cmd’</cite></p></li>
+<li><p><strong>silence</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – include a ‘silence’ class composed of
+background noise (Note: use randomcrop when training).
+Default: <cite>True</cite></p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied on the
+signal.
+Default: <cite>None</cite></p></li>
+<li><p><strong>target_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied on
+the target.
+Default: <cite>None</cite></p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sounddevice</span> <span class="k">as</span> <span class="nn">sd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">SpeechCommands</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;/data/speech_commands_v0.02&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">Dataset SpeechCommands</span>
+<span class="go">    Number of data points: 97524</span>
+<span class="go">    Root Location: /data/speech_commands_v0.02</span>
+<span class="go">    Sampling Rate: 16000Hz</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span>
+<span class="go">&#39;right&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sd</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="voxceleb1">
+<h2>VoxCeleb1<a class="headerlink" href="#voxceleb1" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.datasets.VoxCeleb1">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">VoxCeleb1</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.VoxCeleb1" title="Permalink to this definition">¶</a></dt>
+<dd><p>VoxCeleb1 data set.</p>
+<p>Open and publicly available data set of voices from University of Oxford:
+<a class="reference external" href="http://www.robots.ox.ac.uk/~vgg/data/voxceleb/vox1.html">http://www.robots.ox.ac.uk/~vgg/data/voxceleb/vox1.html</a></p>
+<p>VoxCeleb1 is a large audio-visual data set consisting of short clips of
+human speech extracted from YouTube interviews with celebrities. It is
+free for commercial and research purposes.</p>
+<p>Licence: CC BY-SA 4.0</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">transform</span></code> controls the input transform</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">target_transform</span></code> controls the target transform</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">files</span></code> controls the audio files of the data set</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">targets</span></code> controls the corresponding targets</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">sampling_rate</span></code> holds the sampling rate of data set</p></li>
+</ul>
+<p>In addition, the following class attributes are available:</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">url</span></code> holds its URL</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – root directory of dataset</p></li>
+<li><p><strong>partition</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – name of the data partition to use.
+Choose one of <cite>train</cite>, <cite>dev</cite>, <cite>test</cite> or <cite>None</cite>. If <cite>None</cite> is given,
+then the whole data set will be returned. Default: <cite>train</cite></p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied on the
+signal. Default: <cite>None</cite></p></li>
+<li><p><strong>target_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied on
+the target. Default: <cite>None</cite></p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>This data set will work only if the identification file is downloaded
+as is from the official homepage. Please open it in your browser and
+copy paste its contents in a file in your computer.</p></li>
+<li><p>To download the data set go to
+<a class="reference external" href="http://www.robots.ox.ac.uk/~vgg/data/voxceleb/">http://www.robots.ox.ac.uk/~vgg/data/voxceleb/</a> and fill in the form
+to request a password. Get the Audio Files that the owners provide.</p></li>
+<li><p>When using the VoxCeleb1 data set in your research, please cite
+the following publication: <a class="bibtex reference internal" href="refs.html#nagrani2017voxceleb" id="id2">[NCZ17]</a>.</p></li>
+</ul>
+</div>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sounddevice</span> <span class="k">as</span> <span class="nn">sd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">VoxCeleb1</span><span class="p">(</span><span class="s1">&#39;/data/voxceleb1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">Dataset VoxCeleb1</span>
+<span class="go">    Number of data points: 138361</span>
+<span class="go">    Root Location: /data/voxceleb1</span>
+<span class="go">    Sampling Rate: 16000Hz</span>
+<span class="go">    Labels: speaker ID</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span>
+<span class="go">&#39;id10003&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sd</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="whitenoise">
+<h2>WhiteNoise<a class="headerlink" href="#whitenoise" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.datasets.WhiteNoise">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">WhiteNoise</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.WhiteNoise" title="Permalink to this definition">¶</a></dt>
+<dd><p>White noise data set.</p>
+<p>The white noise is generated by numpy.random.standard_normal.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">duration</span></code> controls the duration of the noise signal</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">sampling_rate</span></code> holds the sampling rate of the returned data</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">mean</span></code> controls the mean of the underlying distribution</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">stdev</span></code> controls the standard deviation of the underlying
+distribution</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">transform</span></code> controls the input transform</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">target_transform</span></code> controls the target transform</p></li>
+</ul>
+<p>As white noise has not really a sampling rate you can use the following
+attribute to change it instead of resampling:</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">original_sampling_rate</span></code> controls the sampling rate of the data set</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>duration</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – duration of the noise signal in seconds</p></li>
+<li><p><strong>sampling_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – sampling rate in Hz. Default: <cite>44100</cite></p></li>
+<li><p><strong>mean</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>optional</em>) – mean of underlying distribution. Default: <cite>0</cite></p></li>
+<li><p><strong>stdev</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>optional</em>) – standard deviation of underlying distribution.
+Default: <cite>1</cite></p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied on the
+signal. Default: <cite>None</cite></p></li>
+<li><p><strong>target_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied on
+the target. Default: <cite>None</cite></p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Even <cite>WhiteNoise</cite> has an infintely number of entries, its length is
+<cite>1</cite> as repeated calls of the same index return different signals.</p>
+</div>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sounddevice</span> <span class="k">as</span> <span class="nn">sd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">WhiteNoise</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">44100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">Dataset WhiteNoise</span>
+<span class="go">    Number of data points: Inf</span>
+<span class="go">    Signal length: 1s</span>
+<span class="go">    Sampling Rate: 44100Hz</span>
+<span class="go">    Label (str): noise type</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span>
+<span class="go">&#39;white noise&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sd</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="base">
+<h2>Base<a class="headerlink" href="#base" title="Permalink to this headline">¶</a></h2>
+<p>This section contains a mix of generic data sets that are useful for a wide
+variety of cases and can be used as base classes for other data sets.</p>
+<div class="section" id="audiodataset">
+<h3>AudioDataset<a class="headerlink" href="#audiodataset" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt id="audtorch.datasets.AudioDataset">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">AudioDataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.AudioDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Basic audio signal data set.</p>
+<p>This data set can be used if you have a list of files and a list of
+corresponding targets.</p>
+<p>In addition, this class is a great starting point to inherit from if you
+wish to build your own data set.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">transform</span></code> controls the input transform</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">target_transform</span></code> controls the target transform</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">files</span></code> controls the audio files of the data set</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">targets</span></code> controls the corresponding targets</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">duration</span></code> controls audio duration for every file in seconds</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">offset</span></code> controls audio offset for every file in seconds</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">sampling_rate</span></code> holds the sampling rate of the returned data</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">original_sampling_rate</span></code> holds the sampling rate of the audio files
+of the data set</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>files</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of files</p></li>
+<li><p><strong>targets</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of targets</p></li>
+<li><p><strong>sampling_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – sampling rate in Hz of the data set</p></li>
+<li><p><strong>root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – root directory of dataset. Default: <cite>None</cite></p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied on the
+signal. Default: <cite>None</cite></p></li>
+<li><p><strong>target_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied on
+the target. Default: <cite>None</cite></p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">AudioDataset</span><span class="p">(</span><span class="n">files</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;speech.wav&#39;</span><span class="p">,</span> <span class="s1">&#39;noise.wav&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                    <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;speech&#39;</span><span class="p">,</span> <span class="s1">&#39;noise&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">8000</span><span class="p">,</span>
+<span class="gp">... </span>                    <span class="n">root</span><span class="o">=</span><span class="s1">&#39;/data&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">Dataset AudioDataset</span>
+<span class="go">    Number of data points: 2</span>
+<span class="go">    Root Location: /data</span>
+<span class="go">    Sampling Rate: 8000Hz</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span>
+<span class="go">&#39;speech&#39;</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="audtorch.datasets.AudioDataset.extra_repr">
+<code class="sig-name descname">extra_repr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.AudioDataset.extra_repr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the extra representation of the data set.</p>
+<p>To print customized extra information, you should reimplement
+this method in your own data set. Both single-line and multi-line
+strings are acceptable.</p>
+<p>The extra information will be shown after the sampling rate entry.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="pandasdataset">
+<h3>PandasDataset<a class="headerlink" href="#pandasdataset" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt id="audtorch.datasets.PandasDataset">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">PandasDataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.PandasDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data set from pandas.DataFrame.</p>
+<p>Create a data set by accessing the file locations and corresponding labels
+through a pandas.DataFrame.</p>
+<p>You have to specify which labels of the data set you want as target by the
+names of the corresponding columns in the data frame. If you want to select
+one of those columns the label is returned directly in its corresponding
+data type or you can specify a list of columns and the data set will return
+a dictionary containing the labels.</p>
+<p>The filenames of the corresponding audio files have to be specified with
+absolute path. If they are relative to a folder, you have to use the
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">root</span></code> argument to specify that folder.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">transform</span></code> controls the input transform</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">target_transform</span></code> controls the target transform</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">files</span></code> controls the audio files of the data set</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">targets</span></code> controls the corresponding targets</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">sampling_rate</span></code> holds the sampling rate of the returned data</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">original_sampling_rate</span></code> holds the sampling rate of the audio files
+of the data set</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">column_labels</span></code> holds the name of the label columns</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – data frame with filenames and labels</p></li>
+<li><p><strong>sampling_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – sampling rate in Hz of the data set</p></li>
+<li><p><strong>root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – root directory added before the files listed
+in the CSV file. Default: <cite>None</cite></p></li>
+<li><p><strong>column_labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><em>list of str</em><em>, </em><em>optional</em>) – name of data frame
+column(s) containing the desired labels. Default: <cite>label</cite></p></li>
+<li><p><strong>column_filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – name of column holding the file
+names. Default: <cite>file</cite></p></li>
+<li><p><strong>column_start</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – name of column holding start of audio
+in the corresponding file in seconds. Default: <cite>None</cite></p></li>
+<li><p><strong>column_end</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – name of column holding end of audio
+in the corresponding file in seconds. Default: <cite>None</cite></p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied on the
+signal. Default: <cite>None</cite></p></li>
+<li><p><strong>target_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied on
+the target. Default: <cite>None</cite></p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">PandasDataset</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;/data&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                     <span class="n">df</span><span class="o">=</span><span class="n">dataset_dataframe</span><span class="p">,</span>
+<span class="gp">... </span>                     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">44100</span><span class="p">,</span>
+<span class="gp">... </span>                     <span class="n">column_labels</span><span class="o">=</span><span class="s1">&#39;age&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">Dataset AudioDataset</span>
+<span class="go">    Number of data points: 120</span>
+<span class="go">    Root Location: /data</span>
+<span class="go">    Sampling Rate: 44100Hz</span>
+<span class="go">    Label: age</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span>
+<span class="go">31</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="csvdataset">
+<h3>CsvDataset<a class="headerlink" href="#csvdataset" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt id="audtorch.datasets.CsvDataset">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">CsvDataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.CsvDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data set from CSV files.</p>
+<p>Create a data set by reading the file locations and corresponding labels
+from a CSV file.</p>
+<p>You have to specify which labels you want as the target of the data set by
+the names of the corresponding columns in the CSV file. If you want to
+select one of those columns the target is returned directly in its
+corresponding data type or you can specify a list of columns and the data
+set will return a dictionary containing the targets.</p>
+<p>The filenames of the corresponding audio files have to be specified with
+absolute path. If they are relative to a folder, you have to use the
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">root</span></code> argument to specify that folder.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">transform</span></code> controls the input transform</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">target_transform</span></code> controls the target transform</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">files</span></code> controls the audio files of the data set</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">targets</span></code> controls the corresponding targets</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">sampling_rate</span></code> holds the sampling rate of the returned data</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">original_sampling_rate</span></code> holds the sampling rate of the audio files
+of the data set</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">csv_file</span></code> holds the path to the used CSV file</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>csv_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – CSV file with filenames and labels</p></li>
+<li><p><strong>sampling_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – sampling rate in Hz of the data set</p></li>
+<li><p><strong>root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – root directory added before the files listed
+in the CSV file. Default: <cite>None</cite></p></li>
+<li><p><strong>column_labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><em>list of str</em><em>, </em><em>optional</em>) – name of CSV column(s)
+containing the desired labels. Default: <cite>label</cite></p></li>
+<li><p><strong>column_filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – name of CSV column holding the file
+names. Default: <cite>file</cite></p></li>
+<li><p><strong>column_start</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – name of column holding start of audio
+in the corresponding file in seconds. Default: <cite>None</cite></p></li>
+<li><p><strong>column_end</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – name of column holding end of audio
+in the corresponding file in seconds. Default: <cite>None</cite></p></li>
+<li><p><strong>sep</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – CSV delimiter. Default: <cite>,</cite></p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied on the
+signal. Default: <cite>None</cite></p></li>
+<li><p><strong>target_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied on
+the target. Default: <cite>None</cite></p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">CsvDataset</span><span class="p">(</span><span class="n">csv_file</span><span class="o">=</span><span class="s1">&#39;/data/train.csv&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                  <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">44100</span><span class="p">,</span>
+<span class="gp">... </span>                  <span class="n">column_labels</span><span class="o">=</span><span class="s1">&#39;age&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">Dataset AudioDataset</span>
+<span class="go">    Number of data points: 120</span>
+<span class="go">    Sampling Rate: 44100Hz</span>
+<span class="go">    Label: age</span>
+<span class="go">    CSV file: /data/train.csv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span>
+<span class="go">31</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="audioconcatdataset">
+<h3>AudioConcatDataset<a class="headerlink" href="#audioconcatdataset" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt id="audtorch.datasets.AudioConcatDataset">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">AudioConcatDataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.AudioConcatDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Concatenation data set of multiple audio data sets.</p>
+<p>This data set checks that all audio data sets are
+compatible with respect to the sampling rate which they
+are processed with.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">sampling_rate</span></code> holds the consistent sampling rate of the
+concatenated data set</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">datasets</span></code> holds a list of all audio data sets</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">cumulative_sizes</span></code> holds a list of sizes accumulated over all
+audio data sets, i.e. <cite>[len(data1), len(data1) + len(data2), …]</cite></p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>datasets</strong> (<em>list of audtorch.AudioDataset</em>) – Audio data sets
+with property <cite>sampling_rate</cite>.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sounddevice</span> <span class="k">as</span> <span class="nn">sd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">audtorch.datasets</span> <span class="kn">import</span> <span class="n">LibriSpeech</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dev_clean</span> <span class="o">=</span> <span class="n">LibriSpeech</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;/data/LibriSpeech&#39;</span><span class="p">,</span> <span class="n">sets</span><span class="o">=</span><span class="s1">&#39;dev-clean&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dev_other</span> <span class="o">=</span> <span class="n">LibriSpeech</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;/data/LibriSpeech&#39;</span><span class="p">,</span> <span class="n">sets</span><span class="o">=</span><span class="s1">&#39;dev-other&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">AudioConcatDataset</span><span class="p">([</span><span class="n">dev_clean</span><span class="p">,</span> <span class="n">dev_other</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">Data set AudioConcatDataset</span>
+<span class="go">Number of data points: 5567</span>
+<span class="go">Sampling Rate: 16000Hz</span>
+
+<span class="go">data sets      data points  extra</span>
+<span class="go">-----------  -------------  ---------------</span>
+<span class="go">LibriSpeech           2703  Sets: dev-clean</span>
+<span class="go">LibriSpeech           2864  Sets: dev-other</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signal</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">label</span>
+<span class="go">AS FOR ETCHINGS THEY ARE OF TWO KINDS BRITISH AND FOREIGN</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sd</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="audtorch.datasets.AudioConcatDataset.extra_repr">
+<code class="sig-name descname">extra_repr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.AudioConcatDataset.extra_repr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the extra representation of the data set.</p>
+<p>To print customized extra information, you should reimplement
+this method in your own data set. Both single-line and multi-line
+strings are acceptable.</p>
+<p>The extra information will be shown after the sampling rate entry.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="mixture">
+<h2>Mixture<a class="headerlink" href="#mixture" title="Permalink to this headline">¶</a></h2>
+<p>This section contains data sets that are primarily used for mixing different
+data sets.</p>
+<div class="section" id="speechnoisemix">
+<h3>SpeechNoiseMix<a class="headerlink" href="#speechnoisemix" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt id="audtorch.datasets.SpeechNoiseMix">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">SpeechNoiseMix</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.SpeechNoiseMix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mix speech and noise with speech as target.</p>
+<p>Add noise to each speech sample from the provided data by a
+mix transform. Return the mix as input and the speech signal as
+corresponding target. In addition, allow to replace randomly some of the
+mixes by noise as input and silence as output. This helps to train a speech
+enhancement algorithm to deal with background noise only as input signal
+<a class="bibtex reference internal" href="refs.html#rethage2018" id="id3">[RPS18]</a>.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">speech_dataset</span></code> controls the speech data set</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">mix_transform</span></code> controls the transform that adds noise</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">transform</span></code> controls the transform applied on the mix</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">target_transform</span></code> controls the transform applied on the target
+clean speech</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">joint_transform</span></code> controls the transform applied jointly on the
+mixture an the target clean speech</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">percentage_silence</span></code> controls the amount of noise-silent data
+augmentation</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>speech_dataset</strong> (<em>Dataset</em>) – speech data set</p></li>
+<li><p><strong>mix_transform</strong> (<em>callable</em>) – function/transform that can augment a signal
+with noise</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied on the
+speech-noise-mixture (input) only. Default; <cite>None</cite></p></li>
+<li><p><strong>target_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied
+on the speech (target) only. Default: <cite>None</cite></p></li>
+<li><p><strong>joint_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – function/transform applied
+on the mixtue (input) and speech (target) simultaneously. If the
+transform includes randomization it is applied with the same random
+parameter during both calls</p></li>
+<li><p><strong>percentage_silence</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>optional</em>) – value between <cite>0</cite> and <cite>1</cite>, which
+controls the percentage of randomly inserted noise input, silent
+target pairs. Default: <cite>0</cite></p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sounddevice</span> <span class="k">as</span> <span class="nn">sd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">audtorch</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">transforms</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">noise</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">WhiteNoise</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">48000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mix</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">RandomAdditiveMix</span><span class="p">(</span><span class="n">noise</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">normalize</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">speech</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">MozillaCommonVoice</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;/data/MozillaCommonVoice/cv_corpus_v1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">SpeechNoiseMix</span><span class="p">(</span><span class="n">speech</span><span class="p">,</span> <span class="n">mix</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">noisy</span><span class="p">,</span> <span class="n">clean</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sd</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">noisy</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="utils">
+<h2>Utils<a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h2>
+<p>Utility functions for handling audio data sets.</p>
+<div class="section" id="load">
+<h3>load<a class="headerlink" href="#load" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="audtorch.datasets.load">
+<code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">duration</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load audio file.</p>
+<p>If an error occurrs during loading as the file could not be found,
+is empty, or has the wrong format an empty signal is returned and a warning
+shown.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><em>file-like object</em>) – file name of input audio file</p></li>
+<li><p><strong>duration</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>optional</em>) – return only a specified duration in
+seconds. Default: <cite>None</cite></p></li>
+<li><p><strong>offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>optional</em>) – start reading at offset in seconds.
+Default: <cite>0</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>numpy.ndarray</strong>: two-dimensional array with shape
+<cite>(channels, samples)</cite></p></li>
+<li><p><strong>int</strong>: sample rate of the audio file</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;speech.wav&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="download-url">
+<h3>download_url<a class="headerlink" href="#download-url" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="audtorch.datasets.download_url">
+<code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">download_url</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">root</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">md5</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.download_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download a file from an url to a specified directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – URL to download file from</p></li>
+<li><p><strong>root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – directory to place downloaded file in</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – name to save the file under.
+If <cite>None</cite>, use basename of URL. Default: <cite>None</cite></p></li>
+<li><p><strong>md5</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – MD5 checksum of the download.
+If None, do not check. Default: <cite>None</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>path to downloaded file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="download-url-list">
+<h3>download_url_list<a class="headerlink" href="#download-url-list" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="audtorch.datasets.download_url_list">
+<code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">download_url_list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">urls</span></em>, <em class="sig-param"><span class="n">root</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">num_workers</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.download_url_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download files from a list of URLs to a specified directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>urls</strong> (<em>list of str</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – either list of URLs or dictionary
+with URLs as keys and with either filenames or tuples of
+filename and MD5 checksum as values. Uses basename of URL if
+filename is <cite>None</cite>. Performs no check if MD5 checksum is <cite>None</cite></p></li>
+<li><p><strong>root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – directory to place downloaded files in</p></li>
+<li><p><strong>num_workers</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – number of worker threads
+(0 = len(urls)). Default: <cite>0</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="extract-archive">
+<h3>extract_archive<a class="headerlink" href="#extract-archive" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="audtorch.datasets.extract_archive">
+<code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">extract_archive</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">out_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">remove_finished</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.extract_archive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract archive.</p>
+<p>Currently <cite>tar.gz</cite> and <cite>tar</cite> archives are supported.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path to archive</p></li>
+<li><p><strong>out_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – extract archive in this folder.
+Default: folder where archive is located in</p></li>
+<li><p><strong>remove_finished</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – if <cite>True</cite> remove archive after
+extraction. Default: <cite>False</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="sampling-rate-after-transform">
+<h3>sampling_rate_after_transform<a class="headerlink" href="#sampling-rate-after-transform" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="audtorch.datasets.sampling_rate_after_transform">
+<code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">sampling_rate_after_transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dataset</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.sampling_rate_after_transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sampling rate of data set after all transforms are applied.</p>
+<p>A change of sampling rate by a transform is only recognized, if that
+transform has the attribute <code class="xref py py-attr docutils literal notranslate"><span class="pre">output_sampling_rate</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dataset</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/data.html#torch.utils.data.Dataset" title="(in PyTorch vmaster (1.7.0a0+0bc39c0 ))"><em>torch.utils.data.Dataset</em></a>) – data set with <cite>sampling_rate</cite>
+attribute or property</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>sampling rate in Hz after all transforms are applied</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">audtorch</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">transforms</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Resample</span><span class="p">(</span><span class="n">input_sampling_rate</span><span class="o">=</span><span class="mi">16000</span><span class="p">,</span>
+<span class="gp">... </span>                        <span class="n">output_sampling_rate</span><span class="o">=</span><span class="mi">8000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">WhiteNoise</span><span class="p">(</span><span class="n">sampling_rate</span><span class="o">=</span><span class="mi">16000</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sampling_rate_after_transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">8000</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="ensure-same-sampling-rate">
+<h3>ensure_same_sampling_rate<a class="headerlink" href="#ensure-same-sampling-rate" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="audtorch.datasets.ensure_same_sampling_rate">
+<code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">ensure_same_sampling_rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">datasets</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.ensure_same_sampling_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise error if provided data set differ in sampling rate.</p>
+<p>All data sets that are checked need to have a <cite>sampling_rate</cite> attribute or
+property.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>datasets</strong> (<em>list of torch.utils.data.Dataset</em>) – list of at least two audio
+data sets.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="ensure-df-columns-contain">
+<h3>ensure_df_columns_contain<a class="headerlink" href="#ensure-df-columns-contain" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="audtorch.datasets.ensure_df_columns_contain">
+<code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">ensure_df_columns_contain</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">labels</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.ensure_df_columns_contain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise error if list of labels are not in dataframe columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.dataframe</em>) – data frame</p></li>
+<li><p><strong>labels</strong> (<em>list of str</em>) – labels to be expected in <cite>df.columns</cite></p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ensure_df_columns_contain</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">])</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="gr">RuntimeError</span>: <span class="n">Dataframe contains only these columns: &#39;a, b&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="ensure-df-not-empty">
+<h3>ensure_df_not_empty<a class="headerlink" href="#ensure-df-not-empty" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="audtorch.datasets.ensure_df_not_empty">
+<code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">ensure_df_not_empty</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">labels</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.ensure_df_not_empty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise error if dataframe is empty.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.dataframe</em>) – data frame</p></li>
+<li><p><strong>labels</strong> (<em>list of str</em><em>, </em><em>optional</em>) – list of labels used to shrink data
+set. Default: <cite>None</cite></p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ensure_df_not_empty</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="gr">RuntimeError</span>: <span class="n">No valid data points found in data set</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="files-and-labels-from-df">
+<h3>files_and_labels_from_df<a class="headerlink" href="#files-and-labels-from-df" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="audtorch.datasets.files_and_labels_from_df">
+<code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">files_and_labels_from_df</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">column_labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">column_filename</span><span class="o">=</span><span class="default_value">'filename'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.files_and_labels_from_df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract list of files and labels from dataframe columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – data frame with filenames and labels</p></li>
+<li><p><strong>column_labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><em>list of str</em><em>, </em><em>optional</em>) – name of data frame
+column(s) containing the desired labels. Default: <cite>None</cite></p></li>
+<li><p><strong>column_filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – name of column holding the file
+names. Default: <cite>filename</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>list of str: list of files</p></li>
+<li><p>list of str or list of dicts: list of labels</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;speech.wav&#39;</span><span class="p">,</span> <span class="s1">&#39;speech&#39;</span><span class="p">)],</span>
+<span class="gp">... </span>                  <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">files</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">files_and_labels_from_df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">column_labels</span><span class="o">=</span><span class="s1">&#39;label&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">labels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">(&#39;speech.wav&#39;, &#39;speech&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="defined-split">
+<h3>defined_split<a class="headerlink" href="#defined-split" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt id="audtorch.datasets.defined_split">
+<code class="sig-prename descclassname">audtorch.datasets.</code><code class="sig-name descname">defined_split</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dataset</span></em>, <em class="sig-param"><span class="n">split_func</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.datasets.defined_split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split data set into desired non-overlapping subsets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/data.html#torch.utils.data.Dataset" title="(in PyTorch vmaster (1.7.0a0+0bc39c0 ))"><em>torch.utils.data.Dataset</em></a>) – data set to be split</p></li>
+<li><p><strong>split_func</strong> (<em>func</em>) – function mapping from data set index to subset id,
+<span class="math">\(f(\text{index}) = \text{subset\_id}\)</span>.
+The target domain of subset ids does not need to cover the
+complete range <cite>[0, 1, …, (num_subsets - 1)]</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>desired subsets according to <code class="xref py py-attr docutils literal notranslate"><span class="pre">split_func</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(list of Subsets)</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">TensorDataset</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">audtorch.samplers</span> <span class="kn">import</span> <span class="n">buckets_of_even_size</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">TensorDataset</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="p">(</span><span class="mi">100</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">split_func</span> <span class="o">=</span> <span class="n">buckets_of_even_size</span><span class="p">(</span><span class="n">lengths</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subsets</span> <span class="o">=</span> <span class="n">defined_split</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">split_func</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">subset</span><span class="p">)</span> <span class="k">for</span> <span class="n">subset</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">]</span>
+<span class="go">[20, 20, 20, 20, 20]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api-metrics.html" class="btn btn-neutral float-right" title="audtorch.metrics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="api-collate.html" class="btn btn-neutral float-left" title="audtorch.collate" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019 audEERING GmbH
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

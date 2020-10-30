@@ -1,0 +1,367 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>audtorch.collate &mdash; audtorch Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" type="text/css" />
+  <link rel="stylesheet" href="_static/katex-math.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"></script>
+        <script src="_static/katex_autorenderer.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="audtorch.datasets" href="api-datasets.html" />
+    <link rel="prev" title="Introduction" href="tutorials/introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> audtorch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v0.6.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="develop.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/introduction.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">audtorch.collate</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#collation">Collation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#seq2seq">Seq2Seq</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api-datasets.html">audtorch.datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-metrics.html">audtorch.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-metrics-functional.html">audtorch.metrics.functional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-samplers.html">audtorch.samplers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-transforms.html">audtorch.transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-transforms-functional.html">audtorch.transforms.functional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-utils.html">audtorch.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="refs.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">audtorch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>audtorch.collate</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api-collate.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="audtorch-collate">
+<h1>audtorch.collate<a class="headerlink" href="#audtorch-collate" title="Permalink to this headline">¶</a></h1>
+<p>Collate functions manipulate and merge a list
+of samples to form a mini-batch, see <a class="reference external" href="https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader" title="(in PyTorch vmaster (1.7.0a0+0bc39c0 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.data.DataLoader</span></code></a>.
+An example use case is batching sequences of variable-length,
+which requires padding each sample to the maximum length in the batch.</p>
+<span class="target" id="module-audtorch.collate"></span><div class="section" id="collation">
+<h2>Collation<a class="headerlink" href="#collation" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.collate.Collation">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.collate.</code><code class="sig-name descname">Collation</code><a class="headerlink" href="#audtorch.collate.Collation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract interface for collation classes.</p>
+<p>All other collation classes should subclass it. All subclasses should
+override <code class="docutils literal notranslate"><span class="pre">__call__</span></code>, that executes the actual collate function.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="seq2seq">
+<h2>Seq2Seq<a class="headerlink" href="#seq2seq" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.collate.Seq2Seq">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.collate.</code><code class="sig-name descname">Seq2Seq</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sequence_dimensions</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">batch_first</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">pad_values</span><span class="o">=</span><span class="default_value">[0, 0]</span></em>, <em class="sig-param"><span class="n">sort_sequences</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.collate.Seq2Seq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pads mini-batches to longest contained sequence for seq2seq-purposes.</p>
+<p>This class pads features and targets to the largest sequence in the batch.
+Before padding, length information are extracted from them.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The tensors can be sorted in descending order of features’ lengths
+by enabling <code class="xref py py-attr docutils literal notranslate"><span class="pre">sort_sequences</span></code>. Thereby the requirements of
+<a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.utils.rnn.pack_padded_sequence.html#torch.nn.utils.rnn.pack_padded_sequence" title="(in PyTorch vmaster (1.7.0a0+0bc39c0 ))"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch.nn.utils.rnn.pack_padded_sequence()</span></code></a>
+are anticipated, which is used by recurrent layers.</p>
+</div>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">sequence_dimensions</span></code> holds dimension of sequence in features
+and targets</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">batch_first</span></code> controls output shape of features and targets</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">pad_values</span></code> controls values to pad features (targets) with</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">sort_sequences</span></code> controls if sequences are sorted in
+descending order of <cite>features</cite>’ lengths</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sequence_dimensions</strong> (<em>list of ints</em>) – indices representing dimension of
+sequence in feature and target tensors.
+Position <cite>0</cite> represents sequence dimension of <cite>features</cite>,
+position <cite>1</cite> represents sequence dimension of <cite>targets</cite>.
+Negative indexing is permitted</p></li>
+<li><p><strong>batch_first</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em>, </em><em>optional</em>) – determines output shape of
+collate function. If <cite>None</cite>, original shape of
+<cite>features</cite> and <cite>targets</cite> is kept with dimension of <cite>batch size</cite>
+prepended. See Shape for more information.
+Default: <cite>None</cite></p></li>
+<li><p><strong>pad_values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – values to pad shorter sequences with.
+Position <cite>0</cite> represents value of <cite>features</cite>,
+position <cite>1</cite> represents value of <cite>targets</cite>. Default: <cite>[0, 0]</cite></p></li>
+<li><p><strong>sort_sequences</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – option whether to sort sequences
+in descending order of <cite>features</cite>’ lengths. Default: <cite>True</cite></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((*, S, *)\)</span>, where <span class="math">\(*\)</span> can be any number
+of further dimensions except <span class="math">\(N\)</span> which is the batch size,
+and where <span class="math">\(S\)</span> is the sequence dimension.</p></li>
+<li><p>Output:</p>
+<ul>
+<li><p><cite>features</cite>:</p>
+<ul>
+<li><p><span class="math">\((N, *, S, *)\)</span> if <code class="xref py py-attr docutils literal notranslate"><span class="pre">batch_first</span></code> is <cite>None</cite>,
+i.e. the original input shape with <span class="math">\(N\)</span> prepended
+which is the batch size</p></li>
+<li><p><span class="math">\((N, S, *, *)\)</span> if <code class="xref py py-attr docutils literal notranslate"><span class="pre">batch_first</span></code> is <cite>True</cite></p></li>
+<li><p><span class="math">\((S, N, *, *)\)</span> if <code class="xref py py-attr docutils literal notranslate"><span class="pre">batch_first</span></code> is <cite>False</cite></p></li>
+</ul>
+</li>
+<li><p><cite>feats_lengths</cite>: <span class="math">\((N,)\)</span></p></li>
+<li><p><cite>targets</cite>: analogous to <cite>features</cite></p></li>
+<li><p><cite>tgt_lengths</cite>: analogous to <cite>feats_lengths</cite></p></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># data format: FS = (feature dimension, sequence dimension)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batch</span> <span class="o">=</span> <span class="p">[[</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">161</span><span class="p">,</span> <span class="mi">108</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">)],</span>
+<span class="gp">... </span>         <span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">161</span><span class="p">,</span> <span class="mi">223</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">12</span><span class="p">)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">collate_fn</span> <span class="o">=</span> <span class="n">Seq2Seq</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">features</span> <span class="o">=</span> <span class="n">collate_fn</span><span class="p">(</span><span class="n">batch</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="go">[2, 161, 223]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api-datasets.html" class="btn btn-neutral float-right" title="audtorch.datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="tutorials/introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019 audEERING GmbH
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

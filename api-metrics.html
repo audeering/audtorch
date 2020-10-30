@@ -1,0 +1,436 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>audtorch.metrics &mdash; audtorch Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" type="text/css" />
+  <link rel="stylesheet" href="_static/katex-math.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"></script>
+        <script src="_static/katex_autorenderer.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="audtorch.metrics.functional" href="api-metrics-functional.html" />
+    <link rel="prev" title="audtorch.datasets" href="api-datasets.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> audtorch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v0.6.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="develop.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/introduction.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api-collate.html">audtorch.collate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-datasets.html">audtorch.datasets</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">audtorch.metrics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#energyconservingloss">EnergyConservingLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pearsonr">PearsonR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#concordancecc">ConcordanceCC</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api-metrics-functional.html">audtorch.metrics.functional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-samplers.html">audtorch.samplers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-transforms.html">audtorch.transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-transforms-functional.html">audtorch.transforms.functional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-utils.html">audtorch.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="refs.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">audtorch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>audtorch.metrics</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api-metrics.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-audtorch.metrics">
+<span id="audtorch-metrics"></span><h1>audtorch.metrics<a class="headerlink" href="#module-audtorch.metrics" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="energyconservingloss">
+<h2>EnergyConservingLoss<a class="headerlink" href="#energyconservingloss" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.metrics.EnergyConservingLoss">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.metrics.</code><code class="sig-name descname">EnergyConservingLoss</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.metrics.EnergyConservingLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Energy conserving loss.</p>
+<p>A two term loss that enforces energy conservation after
+<a class="bibtex reference internal" href="refs.html#rethage2018" id="id1">[RPS18]</a>.</p>
+<p>The loss can be described as:</p>
+<div class="math">
+\[\ell(x, y, m) = L = \{l_1,\dots,l_N\}^\top, \quad
+l_n = |x_n - y_n| + |b_n - \hat{b_n}|,
+
+\]</div>
+<p>where <span class="math">\(N\)</span> is the batch size. If reduction is not <code class="docutils literal notranslate"><span class="pre">'none'</span></code>, then:</p>
+<div class="math">
+\[\ell(x, y, m) =
+\begin{cases}
+    \operatorname{mean}(L), & \text{if reduction} = \text{'mean';}\\
+    \operatorname{sum}(L),  & \text{if reduction} = \text{'sum'.}
+\end{cases}
+
+\]</div>
+<p><span class="math">\(x\)</span> is the input signal (estimated target), <span class="math">\(y\)</span> the target
+signal, <span class="math">\(m\)</span> the mixture signal, <span class="math">\(b\)</span> the background signal given
+by <span class="math">\(b = m - y\)</span>, and <span class="math">\(\hat{b}\)</span> the estimated background signal
+given by <span class="math">\(\hat{b} = m - x\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>reduction</strong> (<em>string</em><em>, </em><em>optional</em>) – specifies the reduction to apply to the
+output: ‘none’ | ‘mean’ | ‘sum’.
+‘none’: no reduction will be applied, ‘mean’: the sum of the output
+will be divided by the number of elements in the output, ‘sum’: the
+output will be summed.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((N, *)\)</span> where <cite>*</cite> means, any number of additional
+dimensions</p></li>
+<li><p>Target: <span class="math">\((N, *)\)</span>, same shape as the input</p></li>
+<li><p>Mixture: <span class="math">\((N, *)\)</span>, same shape as the input</p></li>
+<li><p>Output: scalar. If reduction is <code class="docutils literal notranslate"><span class="pre">'none'</span></code>, then <span class="math">\((N, *)\)</span>, same
+shape as the input</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span> <span class="o">=</span> <span class="n">EnergyConservingLoss</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mixture</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">mixture</span><span class="p">)</span>
+<span class="go">tensor(2.1352, grad_fn=&lt;AddBackward0&gt;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="pearsonr">
+<h2>PearsonR<a class="headerlink" href="#pearsonr" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.metrics.PearsonR">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.metrics.</code><code class="sig-name descname">PearsonR</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">reduction</span><span class="o">=</span><span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">batch_first</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.metrics.PearsonR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes Pearson Correlation Coefficient.</p>
+<p>Pearson Correlation Coefficient (also known as Linear Correlation
+Coefficient or Pearson’s <span class="math">\(\rho\)</span>) is computed as:</p>
+<div class="math">
+\[\rho = \frac {E[(X-\mu_X)(Y-\mu_Y)]} {\sigma_X\sigma_Y}\]</div>
+<p>If inputs are vectors, computes Pearson’s <span class="math">\(\rho\)</span> between the two
+of them. If inputs are multi-dimensional arrays, computes Pearson’s
+<span class="math">\(\rho\)</span> along the first or last input dimension according to the
+<cite>batch_first</cite> argument, returns a <strong>torch.Tensor</strong> as output,
+and optionally reduces it according to the <cite>reduction</cite> argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reduction</strong> (<em>string</em><em>, </em><em>optional</em>) – specifies the reduction to apply to the
+output: ‘none’ | ‘mean’ | ‘sum’.
+‘none’: no reduction will be applied, ‘mean’: the sum of the output
+will be divided by the number of elements in the output, ‘sum’: the
+output will be summed. Default: ‘mean’</p></li>
+<li><p><strong>batch_first</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – controls if batch dimension is first.
+Default: <cite>True</cite></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((N, *)\)</span> where <cite>*</cite> means, any number of additional
+dimensions</p></li>
+<li><p>Target: <span class="math">\((N, *)\)</span>, same shape as the input</p></li>
+<li><p>Output: scalar. If reduction is <code class="docutils literal notranslate"><span class="pre">'none'</span></code>, then <span class="math">\((N, 1)\)</span></p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metric</span> <span class="o">=</span> <span class="n">PearsonR</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metric</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+<span class="go">tensor(0.1220)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="concordancecc">
+<h2>ConcordanceCC<a class="headerlink" href="#concordancecc" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.metrics.ConcordanceCC">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.metrics.</code><code class="sig-name descname">ConcordanceCC</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">reduction</span><span class="o">=</span><span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">batch_first</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.metrics.ConcordanceCC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes Concordance Correlation Coefficient (CCC).</p>
+<p>CCC is computed as:</p>
+<div class="math">
+\[\rho_c = \frac {2\rho\sigma_X\sigma_Y} {\sigma_X\sigma_X +
+\sigma_Y\sigma_Y + (\mu_X - \mu_Y)^2}\]</div>
+<p>where <span class="math">\(\rho\)</span> is Pearson Correlation Coefficient, <span class="math">\(\sigma_X\)</span>,
+<span class="math">\(\sigma_Y\)</span> are the standard deviation, and <span class="math">\(\mu_X\)</span>,
+<span class="math">\(\mu_Y\)</span> the mean values of <span class="math">\(X\)</span> and <span class="math">\(Y\)</span> accordingly.</p>
+<p>If inputs are vectors, computes CCC between the two of them. If inputs
+are multi-dimensional arrays, computes CCC along the first or last input
+dimension according to the <cite>batch_first</cite> argument, returns a
+<strong>torch.Tensor</strong> as output, and optionally reduces it according to the
+<cite>reduction</cite> argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reduction</strong> (<em>string</em><em>, </em><em>optional</em>) – specifies the reduction to apply to the
+output: ‘none’ | ‘mean’ | ‘sum’.
+‘none’: no reduction will be applied, ‘mean’: the sum of the output
+will be divided by the number of elements in the output, ‘sum’: the
+output will be summed. Default: ‘mean’</p></li>
+<li><p><strong>batch_first</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – controls if batch dimension is first.
+Default: <cite>True</cite></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((N, *)\)</span> where <cite>*</cite> means, any number of additional
+dimensions</p></li>
+<li><p>Target: <span class="math">\((N, *)\)</span>, same shape as the input</p></li>
+<li><p>Output: scalar. If reduction is <code class="docutils literal notranslate"><span class="pre">'none'</span></code>, then <span class="math">\((N, 1)\)</span></p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metric</span> <span class="o">=</span> <span class="n">ConcordanceCC</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metric</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+<span class="go">tensor(0.0014)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api-metrics-functional.html" class="btn btn-neutral float-right" title="audtorch.metrics.functional" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="api-datasets.html" class="btn btn-neutral float-left" title="audtorch.datasets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019 audEERING GmbH
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

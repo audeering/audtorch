@@ -1,0 +1,422 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>audtorch.metrics.functional &mdash; audtorch Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" type="text/css" />
+  <link rel="stylesheet" href="_static/katex-math.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"></script>
+        <script src="_static/katex_autorenderer.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="audtorch.samplers" href="api-samplers.html" />
+    <link rel="prev" title="audtorch.metrics" href="api-metrics.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> audtorch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v0.6.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="develop.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/introduction.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api-collate.html">audtorch.collate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-datasets.html">audtorch.datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-metrics.html">audtorch.metrics</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">audtorch.metrics.functional</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pearsonr">pearsonr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#concordance-cc">concordance_cc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api-samplers.html">audtorch.samplers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-transforms.html">audtorch.transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-transforms-functional.html">audtorch.transforms.functional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-utils.html">audtorch.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="refs.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">audtorch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>audtorch.metrics.functional</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api-metrics-functional.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="audtorch-metrics-functional">
+<h1>audtorch.metrics.functional<a class="headerlink" href="#audtorch-metrics-functional" title="Permalink to this headline">¶</a></h1>
+<p>The goal of the metrics functionals is to provide functions that work
+independent on the dimensions of the input signal and can be used easily to
+create additional metrics and losses.</p>
+<span class="target" id="module-audtorch.metrics.functional"></span><div class="section" id="pearsonr">
+<h2>pearsonr<a class="headerlink" href="#pearsonr" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="audtorch.metrics.functional.pearsonr">
+<code class="sig-prename descclassname">audtorch.metrics.functional.</code><code class="sig-name descname">pearsonr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">batch_first</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.metrics.functional.pearsonr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes Pearson Correlation Coefficient across rows.</p>
+<p>Pearson Correlation Coefficient (also known as Linear Correlation
+Coefficient or Pearson’s <span class="math">\(\rho\)</span>) is computed as:</p>
+<div class="math">
+\[\rho = \frac {E[(X-\mu_X)(Y-\mu_Y)]} {\sigma_X\sigma_Y}\]</div>
+<p>If inputs are matrices, then then we assume that we are given a
+mini-batch of sequences, and the correlation coefficient is
+computed for each sequence independently and returned as a vector. If
+<cite>batch_fist</cite> is <cite>True</cite>, then we assume that every row represents a
+sequence in the mini-batch, otherwise we assume that batch information
+is in the columns.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not account for the multi-dimensional case. This function has
+been tested only for the 2D case, either in <cite>batch_first==True</cite> or in
+<cite>batch_first==False</cite> mode. In the multi-dimensional case,
+it is possible that the values returned will be meaningless.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+0bc39c0 ))"><em>torch.Tensor</em></a>) – input tensor</p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+0bc39c0 ))"><em>torch.Tensor</em></a>) – target tensor</p></li>
+<li><p><strong>batch_first</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – controls if batch dimension is first.
+Default: <cite>True</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>correlation coefficient between <cite>x</cite> and <cite>y</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+0bc39c0 ))">torch.Tensor</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><span class="math">\(\sigma_X\)</span> is computed using <strong>PyTorch</strong> builtin
+<strong>Tensor.std()</strong>, which by default uses Bessel correction:</p>
+<div class="math">
+\[\sigma_X=\displaystyle\frac{1}{N-1}\sum_{i=1}^N({x_i}-\bar{x})^2\]</div>
+<p>We therefore account for this correction in the computation of the
+covariance by multiplying it with <span class="math">\(\frac{1}{N-1}\)</span>.</p>
+</div>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((N, M)\)</span> for correlation between matrices,
+or <span class="math">\((M)\)</span> for correlation between vectors</p></li>
+<li><p>Target: <span class="math">\((N, M)\)</span> or <span class="math">\((M)\)</span>. Must be identical to input</p></li>
+<li><p>Output: <span class="math">\((N, 1)\)</span> for correlation between matrices,
+or <span class="math">\((1)\)</span> for correlation between vectors</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">pearsonr</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Pearson Correlation between input and target is </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]))</span>
+<span class="go">Pearson Correlation between input and target is tensor([ 0.2991, -0.8471,  0.9138])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="concordance-cc">
+<h2>concordance_cc<a class="headerlink" href="#concordance-cc" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="audtorch.metrics.functional.concordance_cc">
+<code class="sig-prename descclassname">audtorch.metrics.functional.</code><code class="sig-name descname">concordance_cc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">batch_first</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.metrics.functional.concordance_cc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes Concordance Correlation Coefficient across rows.</p>
+<p>Concordance Correlation Coefficient is computed as:</p>
+<div class="math">
+\[\rho_c = \frac {2\rho\sigma_X\sigma_Y} {\sigma_X\sigma_X +
+\sigma_Y\sigma_Y + (\mu_X - \mu_Y)^2}\]</div>
+<p>where <span class="math">\(\rho\)</span> is Pearson Correlation Coefficient, <span class="math">\(\sigma_X\)</span>,
+<span class="math">\(\sigma_Y\)</span> are the standard deviation, and <span class="math">\(\mu_X\)</span>,
+<span class="math">\(\mu_Y\)</span> the mean values of <span class="math">\(X\)</span> and <span class="math">\(Y\)</span> accordingly.</p>
+<p>If inputs are matrices, then then we assume that we are given a
+mini-batch of sequences, and the concordance correlation coefficient is
+computed for each sequence independently and returned as a vector. If
+<cite>batch_fist</cite> is <cite>True</cite>, then we assume that every row represents a
+sequence in the mini-batch, otherwise we assume that batch information
+is in the columns.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not account for the multi-dimensional case. This function has
+been tested only for the 2D case, either in <cite>batch_first==True</cite> or in
+<cite>batch_first==False</cite> mode. In the multi-dimensional case,
+it is possible that the values returned will be meaningless.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><span class="math">\(\sigma_X\)</span> is computed using <strong>PyTorch</strong> builtin
+<strong>Tensor.std()</strong>, which by default uses Bessel correction:</p>
+<div class="math">
+\[\sigma_X=\displaystyle\frac{1}{N-1}\sum_{i=1}^N({x_i}-\bar{x})^2\]</div>
+<p>We therefore account for this correction in the computation of the
+concordance correlation coefficient by multiplying all standard
+deviations with <span class="math">\(\frac{N-1}{N}\)</span>. This is equivalent to
+multiplying only <span class="math">\((\mu_X - \mu_Y)^2\)</span> with <span class="math">\(\frac{N}{
+N-1}\)</span>. We choose that option for numerical stability.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+0bc39c0 ))"><em>torch.Tensor</em></a>) – input tensor</p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+0bc39c0 ))"><em>torch.Tensor</em></a>) – target tensor</p></li>
+<li><p><strong>batch_first</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – controls if batch dimension is first.
+Default: <cite>True</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>concordance correlation coefficient between <cite>x</cite> and <cite>y</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+0bc39c0 ))">torch.Tensor</a></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((N, M)\)</span> for correlation between matrices,
+or <span class="math">\((M)\)</span> for correlation between vectors</p></li>
+<li><p>Target: <span class="math">\((N, M)\)</span> or <span class="math">\((M)\)</span>. Must be identical to input</p></li>
+<li><p>Output: <span class="math">\((N, 1)\)</span> for correlation between matrices,
+or <span class="math">\((1)\)</span> for correlation between vectors</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">concordance_cc</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Concordance Correlation between input and target is </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]))</span>
+<span class="go">Concordance Correlation between input and target is tensor([ 0.2605, -0.7862,  0.5298])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api-samplers.html" class="btn btn-neutral float-right" title="audtorch.samplers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="api-metrics.html" class="btn btn-neutral float-left" title="audtorch.metrics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019 audEERING GmbH
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

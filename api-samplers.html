@@ -1,0 +1,446 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>audtorch.samplers &mdash; audtorch Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" type="text/css" />
+  <link rel="stylesheet" href="_static/katex-math.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"></script>
+        <script src="_static/katex_autorenderer.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="audtorch.transforms" href="api-transforms.html" />
+    <link rel="prev" title="audtorch.metrics.functional" href="api-metrics-functional.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> audtorch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v0.6.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="develop.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/introduction.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api-collate.html">audtorch.collate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-datasets.html">audtorch.datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-metrics.html">audtorch.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-metrics-functional.html">audtorch.metrics.functional</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">audtorch.samplers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#bucketsampler">BucketSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#buckets-by-boundaries">buckets_by_boundaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#buckets-of-even-size">buckets_of_even_size</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api-transforms.html">audtorch.transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-transforms-functional.html">audtorch.transforms.functional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-utils.html">audtorch.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="refs.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">audtorch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>audtorch.samplers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api-samplers.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-audtorch.samplers">
+<span id="audtorch-samplers"></span><h1>audtorch.samplers<a class="headerlink" href="#module-audtorch.samplers" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="bucketsampler">
+<h2>BucketSampler<a class="headerlink" href="#bucketsampler" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.samplers.BucketSampler">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.samplers.</code><code class="sig-name descname">BucketSampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.samplers.BucketSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates batches from ordered data sets.</p>
+<p>This sampler iterates over the data sets of <cite>concat_dataset</cite>
+and samples sequentially from them.
+Samples of each batch deliberately originate solely from the same data set.
+Only when the current data set is exhausted, the next data set
+is sampled from. In other words,
+samples from different buckets are never mixed.</p>
+<p>In each epoch <cite>num_batches</cite> batches of size <cite>batch_sizes</cite>
+are extracted from each data set.
+If the requested number of batches cannot be extracted from a data set,
+only its available batches are queued.
+By default, the data sets (and thus their batches) are iterated over
+in increasing order of their data set id.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The information in <code class="xref py py-attr docutils literal notranslate"><span class="pre">batch_sizes</span></code> and <code class="xref py py-attr docutils literal notranslate"><span class="pre">num_batches</span></code>
+refer to <code class="xref py py-attr docutils literal notranslate"><span class="pre">datasets</span></code> at the same index
+independently of <code class="xref py py-attr docutils literal notranslate"><span class="pre">permuted_order</span></code>.</p>
+</div>
+<p>Simple Use Case: “Train on data with increasing sequence length”</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 60%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>bucket_id:</p></td>
+<td><p>[0,     1,      2,     …  end  ]</p></td>
+</tr>
+<tr class="row-even"><td><p>batch_sizes:</p></td>
+<td><p>[32,    16,     8,     …  2    ]</p></td>
+</tr>
+<tr class="row-odd"><td><p>num_batches:</p></td>
+<td><p>[None,  None,   None,  …  None ]</p></td>
+</tr>
+</tbody>
+</table>
+<p>Result:
+“Extract all batches (<cite>None</cite>) from all data sets,
+all of different batch size, and queue them
+in increasing order of their data set id”</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">batch_sizes</span></code> controls batch size for each data set</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">num_batches</span></code> controls number of batches to extract
+from each data set</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">permuted_order</span></code> controls if order in which data sets are iterated
+over is permuted or in which specific order iteration is permuted</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">shuffle_each_bucket</span></code> controls if each data set is shuffled</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">drop_last</span></code> controls whether to drop last samples of a bucket
+which cannot form a mini-batch</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>concat_dataset</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/data.html#torch.utils.data.ConcatDataset" title="(in PyTorch vmaster (1.7.0a0+0bc39c0 ))"><em>torch.utils.data.ConcatDataset</em></a>) – ordered concatenated
+data set</p></li>
+<li><p><strong>batch_sizes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – batch sizes per data set. Permissible values are
+unsigned integers</p></li>
+<li><p><strong>num_batches</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em>, </em><em>optional</em>) – number of batches per data set.
+Permissible values are non-negative integers and None.
+If None, then as many batches are extracted as data set provides.
+Default: <cite>None</cite></p></li>
+<li><p><strong>permuted_order</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – option whether to permute the
+order of data set ids in which the respective data set’s batches
+are queued. If True (False), data set ids are (not) shuffled.
+Besides, a customized list of permuted data set ids can be
+specified. Default: <cite>False</cite></p></li>
+<li><p><strong>shuffle_each_bucket</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – option whether to shuffle samples
+in each data set. Recommended to set to True. Default: <cite>True</cite></p></li>
+<li><p><strong>drop_last</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – controls whether the last samples of a
+bucket which cannot form a mini-batch should be dropped.
+Default: <cite>False</cite></p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="p">(</span><span class="n">TensorDataset</span><span class="p">,</span> <span class="n">ConcatDataset</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">audtorch.datasets.utils</span> <span class="kn">import</span> <span class="n">defined_split</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">TensorDataset</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">890</span><span class="p">,</span> <span class="p">(</span><span class="mi">100</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">split_func</span> <span class="o">=</span> <span class="n">buckets_of_even_size</span><span class="p">(</span><span class="n">lengths</span><span class="p">,</span> <span class="n">num_buckets</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subsets</span> <span class="o">=</span> <span class="n">defined_split</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">split_func</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">concat_dataset</span> <span class="o">=</span> <span class="n">ConcatDataset</span><span class="p">(</span><span class="n">subsets</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batch_sampler</span> <span class="o">=</span> <span class="n">BucketSampler</span><span class="p">(</span><span class="n">concat_dataset</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">[</span><span class="mi">16</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="buckets-by-boundaries">
+<h2>buckets_by_boundaries<a class="headerlink" href="#buckets-by-boundaries" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="audtorch.samplers.buckets_by_boundaries">
+<code class="sig-prename descclassname">audtorch.samplers.</code><code class="sig-name descname">buckets_by_boundaries</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key_values</span></em>, <em class="sig-param"><span class="n">bucket_boundaries</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.samplers.buckets_by_boundaries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split samples into buckets based on key values using bucket boundaries.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A sample is sorted into bucket <span class="math">\(i\)</span> if for their key value
+holds:</p>
+<blockquote>
+<div><p><span class="math">\(b_{i-1} &lt;= \text{key value} &lt; b_i\)</span>,
+where <span class="math">\(b_i\)</span> is <cite>bucket boundary</cite> at index <span class="math">\(i\)</span></p>
+</div></blockquote>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key_values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – contains key values, e.g. sequence lengths</p></li>
+<li><p><strong>bucket_boundaries</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – contains boundaries of buckets in
+ascending order. The list should neither contain a lower or
+upper boundary, e.g. not numpy.iinfo.min or numpy.iinfo.max.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Key function to use for splitting: <span class="math">\(f(\text{item}) = \text{bucket\_id}\)</span></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>func</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lengths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">288</span><span class="p">,</span> <span class="mi">258</span><span class="p">,</span> <span class="mi">156</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">13</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">boundaries</span> <span class="o">=</span> <span class="p">[</span><span class="mi">80</span><span class="p">,</span> <span class="mi">150</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">split_func</span> <span class="o">=</span> <span class="n">buckets_by_boundaries</span><span class="p">(</span><span class="n">lengths</span><span class="p">,</span> <span class="n">boundaries</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">split_func</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lengths</span><span class="p">))]</span>
+<span class="go">[2, 2, 2, 1, 0, 0]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="buckets-of-even-size">
+<h2>buckets_of_even_size<a class="headerlink" href="#buckets-of-even-size" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="audtorch.samplers.buckets_of_even_size">
+<code class="sig-prename descclassname">audtorch.samplers.</code><code class="sig-name descname">buckets_of_even_size</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key_values</span></em>, <em class="sig-param"><span class="n">num_buckets</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">reverse</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.samplers.buckets_of_even_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split samples into buckets of even size based on key values.</p>
+<p>The samples are sorted with either increasing (or decreasing) key value.
+If number of samples cannot be distributed evenly to buckets,
+the first buckets are filled up with one remainder each.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key_values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – contains key values, e.g. sequence lengths</p></li>
+<li><p><strong>num_buckets</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of buckets to form. Permitted are
+positive integers</p></li>
+<li><p><strong>reverse</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, then sort in descending order.
+Default: <cite>False</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Key function to use for splitting: <span class="math">\(f(\text{item}) = \text{bucket\_id}\)</span></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>func</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lengths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">288</span><span class="p">,</span> <span class="mi">258</span><span class="p">,</span> <span class="mi">156</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">112</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="mi">13</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">num_buckets</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">split_func</span> <span class="o">=</span> <span class="n">buckets_of_even_size</span><span class="p">(</span><span class="n">lengths</span><span class="p">,</span> <span class="n">num_buckets</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">split_func</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lengths</span><span class="p">))]</span>
+<span class="go">[3, 2, 2, 0, 1, 1, 0]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api-transforms.html" class="btn btn-neutral float-right" title="audtorch.transforms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="api-metrics-functional.html" class="btn btn-neutral float-left" title="audtorch.metrics.functional" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019 audEERING GmbH
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,383 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Contributing &mdash; audtorch Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" type="text/css" />
+  <link rel="stylesheet" href="_static/katex-math.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"></script>
+        <script src="_static/katex_autorenderer.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="Usage" href="usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> audtorch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v0.6.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#development-installation">Development Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pull-requests">Pull requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#writing-documentation">Writing Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-documentation">Building Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-new-release">Creating a New Release</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/introduction.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api-collate.html">audtorch.collate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-datasets.html">audtorch.datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-metrics.html">audtorch.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-metrics-functional.html">audtorch.metrics.functional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-samplers.html">audtorch.samplers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-transforms.html">audtorch.transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-transforms-functional.html">audtorch.transforms.functional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-utils.html">audtorch.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="refs.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">audtorch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Contributing</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/develop.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="contributing">
+<h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h1>
+<p>Everyone is invited to contribute to this project. Feel free to create a
+<a class="reference external" href="https://github.com/audeering/audtorch/compare/">pull request</a>.
+If you find errors, omissions, inconsistencies or other things that need
+improvement, please create an <a class="reference external" href="https://github.com/audeering/audtorch/issues/new/">issue</a>.</p>
+<div class="section" id="development-installation">
+<h2>Development Installation<a class="headerlink" href="#development-installation" title="Permalink to this headline">¶</a></h2>
+<p>Instead of pip-installing the latest release from <a class="reference external" href="https://pypi.org/project/audtorch/">PyPI</a>, you should get the
+newest development version from <a class="reference external" href="https://github.com/audeering/audtorch/">Github</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">audeering</span><span class="o">/</span><span class="n">audtorch</span><span class="o">/</span>
+<span class="n">cd</span> <span class="n">audtorch</span>
+<span class="c1"># Create virtual environment, e.g.</span>
+<span class="c1"># virtualenv --python=python3 _env</span>
+<span class="c1"># source _env/bin/activate</span>
+<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">develop</span>
+</pre></div>
+</div>
+<p>This way, your installation always stays up-to-date, even if you pull new
+changes from the <a class="reference external" href="https://github.com/audeering/audtorch/">Github</a> repository.</p>
+<p>If you prefer, you can also replace the last command with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pull-requests">
+<h2>Pull requests<a class="headerlink" href="#pull-requests" title="Permalink to this headline">¶</a></h2>
+<p>When creating a new pull request, please conside the following points:</p>
+<ul class="simple">
+<li><p>Focus on a single topic as it is easier to review short pull requests</p></li>
+<li><p>Ensure your code is readable and <a class="reference external" href="https://www.python.org/dev/peps/pep-0008/">PEP 8</a> compatible</p></li>
+<li><p>Provide a test for proposed new functionality</p></li>
+<li><p>Add a docstring, see the <cite>Writing Documentation</cite> remarks below</p></li>
+<li><p>Choose a <a class="reference external" href="https://chris.beams.io/posts/git-commit/">meaningful commit messages</a></p></li>
+</ul>
+</div>
+<div class="section" id="writing-documentation">
+<h2>Writing Documentation<a class="headerlink" href="#writing-documentation" title="Permalink to this headline">¶</a></h2>
+<p>The API documentation of <a class="reference external" href="https://audtorch.readthedocs.io/">audtorch</a> is build automatically from the
+<a class="reference external" href="https://www.python.org/dev/peps/pep-0257/">docstrings</a> of its classes and functions.</p>
+<p><a class="reference external" href="https://www.python.org/dev/peps/pep-0257/">docstrings</a> are written in <a class="reference external" href="http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html">reStructuredText</a> as indicated by the <code class="docutils literal notranslate"><span class="pre">r</span></code> at
+its beginning and they are written using the <a class="reference external" href="https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html">Google docstring convention</a>
+with the following additions:</p>
+<ul class="simple">
+<li><p>Start argument description in lower case and end the last sentence without a
+punctation.</p></li>
+<li><p>If the argument is optional, its default value has to be indicated.</p></li>
+<li><p>Description of attributes start as well in lower case and stop without
+punctuation.</p></li>
+<li><p>Attributes that can influence the behavior of the class should be described by
+the word <code class="docutils literal notranslate"><span class="pre">controls</span></code>.</p></li>
+<li><p>Attributes that are supposed to be read only and provide only information
+should be described by the word <code class="docutils literal notranslate"><span class="pre">holds</span></code>.</p></li>
+<li><p>Have a special section for class attributes.</p></li>
+<li><p>Python variables should be set in single back tics in the description of the
+docstring, e.g. <code class="docutils literal notranslate"><span class="pre">`True`</span></code>. Only for some explicit statements like a list
+of variables it might be look better to write them as code, e.g.
+<code class="docutils literal notranslate"><span class="pre">`'mean'`</span></code>.</p></li>
+</ul>
+<p>The important part of the <a class="reference external" href="https://www.python.org/dev/peps/pep-0257/">docstrings</a> is the first line which holds a short
+summary of the functionality, that should not be longer than one line, written
+in imperative, and stops with a point. It is also considered good practice to
+include an usage example.</p>
+<p><a class="reference external" href="http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html">reStructuredText</a> allows for easy inclusion of math in LaTeX syntax that will
+be dynamically rendered in the browser.</p>
+<p>After you are happy with your docstring, you have to include it into the main
+documentation under the <code class="docutils literal notranslate"><span class="pre">docs/</span></code> folder in the appropriate api file. E.g.
+<code class="docutils literal notranslate"><span class="pre">energy()</span></code> is part of the <code class="docutils literal notranslate"><span class="pre">utils</span></code> module and the corresponding file in the
+documentation would be <code class="docutils literal notranslate"><span class="pre">docs/api-utils.rst</span></code>, where it is included.</p>
+</div>
+<div class="section" id="building-documentation">
+<h2>Building Documentation<a class="headerlink" href="#building-documentation" title="Permalink to this headline">¶</a></h2>
+<p>If you make changes to the documentation, you can re-create the HTML pages
+using <a class="reference external" href="http://sphinx-doc.org/">Sphinx</a>.
+You can install it and a few other necessary packages with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">doc</span><span class="o">/</span><span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>To create the HTML pages, use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sphinx</span><span class="o">-</span><span class="n">build</span> <span class="n">docs</span><span class="o">/</span> <span class="n">build</span><span class="o">/</span><span class="n">sphinx</span><span class="o">/</span><span class="n">html</span><span class="o">/</span> <span class="o">-</span><span class="n">b</span> <span class="n">html</span>
+</pre></div>
+</div>
+<p>The generated files will be available in the directory <code class="docutils literal notranslate"><span class="pre">build/sphinx/html/</span></code>.</p>
+<p>It is also possible to automatically check if all links are still valid:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sphinx</span><span class="o">-</span><span class="n">build</span> <span class="n">docs</span><span class="o">/</span> <span class="n">build</span><span class="o">/</span><span class="n">sphinx</span><span class="o">/</span><span class="n">html</span><span class="o">/</span> <span class="o">-</span><span class="n">b</span> <span class="n">linkcheck</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-tests">
+<h2>Running Tests<a class="headerlink" href="#running-tests" title="Permalink to this headline">¶</a></h2>
+<p>You’ll need <a class="reference external" href="https://pytest.org/">pytest</a> and a few dependencies for that.
+It can be installed with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">tests</span><span class="o">/</span><span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>To execute the tests, simply run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pytest</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-a-new-release">
+<h2>Creating a New Release<a class="headerlink" href="#creating-a-new-release" title="Permalink to this headline">¶</a></h2>
+<p>New releases are made using the following steps:</p>
+<ol class="arabic simple">
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">CHANGELOG.rst</span></code></p></li>
+<li><p>Commit those changes as “Release X.Y.Z”</p></li>
+<li><p>Create an (annotated) tag with <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">tag</span> <span class="pre">-a</span> <span class="pre">X.Y.Z</span></code></p></li>
+<li><p>Push the commit and the tag to Github</p></li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="usage.html" class="btn btn-neutral float-left" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019 audEERING GmbH
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,1359 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>audtorch.transforms &mdash; audtorch Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" type="text/css" />
+  <link rel="stylesheet" href="_static/katex-math.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"></script>
+        <script src="_static/katex_autorenderer.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="audtorch.transforms.functional" href="api-transforms-functional.html" />
+    <link rel="prev" title="audtorch.samplers" href="api-samplers.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> audtorch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v0.6.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="develop.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/introduction.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api-collate.html">audtorch.collate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-datasets.html">audtorch.datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-metrics.html">audtorch.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-metrics-functional.html">audtorch.metrics.functional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-samplers.html">audtorch.samplers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">audtorch.transforms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#compose">Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#crop">Crop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#randomcrop">RandomCrop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pad">Pad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#randompad">RandomPad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#replicate">Replicate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#randomreplicate">RandomReplicate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#expand">Expand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#randommask">RandomMask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#maskspectrogramtime">MaskSpectrogramTime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#maskspectrogramfrequency">MaskSpectrogramFrequency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#downmix">Downmix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#upmix">Upmix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#remix">Remix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#normalize">Normalize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#standardize">Standardize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resample">Resample</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spectrogram">Spectrogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#log">Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#randomadditivemix">RandomAdditiveMix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#randomconvolutionalmix">RandomConvolutionalMix</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api-transforms-functional.html">audtorch.transforms.functional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-utils.html">audtorch.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="refs.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">audtorch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>audtorch.transforms</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api-transforms.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="audtorch-transforms">
+<h1>audtorch.transforms<a class="headerlink" href="#audtorch-transforms" title="Permalink to this headline">¶</a></h1>
+<p>The transforms can be provided to <a class="reference internal" href="api-datasets.html#module-audtorch.datasets" title="audtorch.datasets"><code class="xref py py-class docutils literal notranslate"><span class="pre">audtorch.datasets</span></code></a> as an argument
+and work on the data before it will be returned.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All of the transforms work currently only with <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.19)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.array</span></code></a> as
+inputs, not <a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.7.0a0+0bc39c0 ))"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code></a>.</p>
+</div>
+<span class="target" id="module-audtorch.transforms"></span><div class="section" id="compose">
+<h2>Compose<a class="headerlink" href="#compose" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.Compose">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">Compose</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transforms</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">fix_randomization</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.Compose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compose several transforms together.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>transforms</strong> (<em>list of object</em>) – list of transforms to compose</p></li>
+<li><p><strong>fix_randomization</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – controls randomization of
+underlying transforms. Default: <cite>False</cite></p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Compose</span><span class="p">([</span><span class="n">Crop</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">Pad</span><span class="p">(</span><span class="mi">1</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="go">Compose(</span>
+<span class="go">    Crop(idx=-1, axis=-1)</span>
+<span class="go">    Pad(padding=1, value=0, axis=-1)</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">array([[0, 2, 0],</span>
+<span class="go">       [0, 4, 0]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="crop">
+<h2>Crop<a class="headerlink" href="#crop" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.Crop">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">Crop</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">idx</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.Crop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crop along an axis.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">idx</span></code> controls the index for cropping</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">axis</span></code> controls axis of cropping</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>idx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a>) – first (and last) index to return</p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – axis along to crop. Default: <cite>-1</cite></p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Indexing from the end with <cite>-1</cite>, <cite>-2</cite>, … is allowed. But you cannot
+use <cite>-1</cite> in the second part of the tuple to specify the last entry.
+Instead you have to write <cite>(-2, signal.shape[axis])</cite> to get the last
+two entries of <cite>axis</cite>, or simply <cite>-1</cite> if you only want to get the last
+entry.</p>
+</div>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((*, N_\text{in}, *)\)</span></p></li>
+<li><p>Output: <span class="math">\((*, N_\text{out}, *)\)</span>, where <span class="math">\(N_\text{in}\)</span> is
+the input length of the axis to crop and <span class="math">\(N_\text{out}\)</span> is the
+output length, which is <span class="math">\(1\)</span> for an integer as <cite>idx</cite> and
+<span class="math">\(\text{idx[1]} - \text{idx[0]}\)</span> for a tuple with positive
+entries as <cite>idx</cite>.
+<span class="math">\(*\)</span> can be any additional number of dimensions.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Crop</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="go">Crop(idx=1, axis=1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">array([[2],</span>
+<span class="go">       [4]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="randomcrop">
+<h2>RandomCrop<a class="headerlink" href="#randomcrop" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.RandomCrop">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">RandomCrop</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">size</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'pad'</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">fix_randomization</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.RandomCrop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Random crop of specified width along an axis.</p>
+<p>If the signal is too short it is padded by trailing zeros first or
+replicated to fit specified size.</p>
+<p>If the signal is shorter than the desired length, it can be expanded by
+one of these methods:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'pad'</span></code> expand the signal by adding trailing zeros</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'replicate'</span></code> first replicate the signal so that it matches or
+exceeds the specified size</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">size</span></code> controls the size of output signal</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">method</span></code> holds expansion method</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">axis</span></code> controls axis of cropping</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">fix_randomization</span></code> controls the randomness</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – desired width of spectrogram in samples</p></li>
+<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – expansion method. Default: <cite>pad</cite></p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – axis along to crop. Default: <cite>-1</cite></p></li>
+<li><p><strong>fix_randomization</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – fix random selection between
+different calls of transform. Default: <cite>False</cite></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((*, N_\text{in}, *)\)</span></p></li>
+<li><p>Output: <span class="math">\((*, N_\text{out}, *)\)</span>, where <span class="math">\(N_\text{in}\)</span> is
+the input length of the axis to crop and <span class="math">\(N_\text{out}\)</span> is the
+output length as given by <cite>size</cite>.
+<span class="math">\(*\)</span> can be any additional number of dimensions.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">RandomCrop</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="go">RandomCrop(size=2, method=pad, axis=-1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">array([[2, 3],</span>
+<span class="go">       [6, 7]])</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="audtorch.transforms.RandomCrop.random_index">
+<em class="property">static </em><code class="sig-name descname">random_index</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_size</span></em>, <em class="sig-param"><span class="n">output_size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.RandomCrop.random_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Random index for crop.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – input signal size</p></li>
+<li><p><strong>output_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – expected output size</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>random index for cropping</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="pad">
+<h2>Pad<a class="headerlink" href="#pad" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.Pad">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">Pad</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">padding</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">value</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.Pad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pad along an axis.</p>
+<p>If padding is an integer it pads equally on the left and right of the
+signal. If padding is a tuple with two entries it uses the first for the
+left side and the second for the right side.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">padding</span></code> controls the padding to be applied</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">value</span></code> controls the value used for padding</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">axis</span></code> controls the axis of padding</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>padding</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a>) – padding to apply on the left and right</p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>optional</em>) – value to pad with. Default: <cite>0</cite></p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – axis along to pad. Default: <cite>-1</cite></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((*, N_\text{in}, *)\)</span></p></li>
+<li><p>Output: <span class="math">\((*, N_\text{out}, *)\)</span>, where <span class="math">\(N_\text{in}\)</span> is
+the input length of the axis to pad and <span class="math">\(N_\text{out} =
+N_\text{in} + \sum \text{padding}\)</span> is the output length.
+<span class="math">\(*\)</span> can be any additional number of dimensions.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Pad</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="go">Pad(padding=(0, 1), value=0, axis=-1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">array([[1, 2, 0],</span>
+<span class="go">       [3, 4, 0]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="randompad">
+<h2>RandomPad<a class="headerlink" href="#randompad" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.RandomPad">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">RandomPad</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">padding</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">value</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">fix_randomization</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.RandomPad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Random pad along an axis.</p>
+<p>It splits the padding value randomly between the left and right of the
+signal along the specified axis.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">padding</span></code> controls the size of padding to be applied</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">value</span></code> controls the value used for padding</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">axis</span></code> controls the axis of padding</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">fix_randomization</span></code> controls the randomness</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>padding</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – padding to apply randomly split on the left and right</p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>optional</em>) – value to pad with. Default: <cite>0</cite></p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – axis along to pad. Default: <cite>-1</cite></p></li>
+<li><p><strong>fix_randomization</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – fix random selection between
+different calls of transform. Default: <cite>False</cite></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((*, N_\text{in}, *)\)</span></p></li>
+<li><p>Output: <span class="math">\((*, N_\text{out}, *)\)</span>, where <span class="math">\(N_\text{in}\)</span> is
+the input length of the axis to pad and <span class="math">\(N_\text{out} =
+N_\text{in} + \sum \text{padding}\)</span> is the output length.
+<span class="math">\(*\)</span> can be any additional number of dimensions.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">RandomPad</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="go">RandomPad(padding=1, value=0, axis=-1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">array([[0, 1, 2],</span>
+<span class="go">       [0, 3, 4]])</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="audtorch.transforms.RandomPad.random_split">
+<em class="property">static </em><code class="sig-name descname">random_split</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">number</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.RandomPad.random_split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split number randomly into two which sum up to number.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>number</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – input number to be split</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>randomly splitted number</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="replicate">
+<h2>Replicate<a class="headerlink" href="#replicate" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.Replicate">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">Replicate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">repetitions</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.Replicate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replicate along an axis.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">repetitions</span></code> controls number of signal replications</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">axis</span></code> controls the axis of replication</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repetitions</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a>) – number of times to replicate signal</p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – axis along which to replicate. Default: <cite>-1</cite></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((*, N_\text{in}, *)\)</span></p></li>
+<li><p>Output: <span class="math">\((*, N_\text{out}, *)\)</span>, where <span class="math">\(N_\text{in}\)</span> is
+the input length of the axis to replicate and <span class="math">\(N_\text{out} =
+N_\text{in} \cdot \text{repetitions}\)</span> is the output length.
+<span class="math">\(*\)</span> can be any additional number of dimensions.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Replicate</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="go">Replicate(repetitions=3, axis=-1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">array([[1, 2, 3, 1, 2, 3, 1, 2, 3]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="randomreplicate">
+<h2>RandomReplicate<a class="headerlink" href="#randomreplicate" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.RandomReplicate">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">RandomReplicate</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">max_repetitions</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">fix_randomization</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.RandomReplicate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replicate by a random number of times along an axis.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">repetitions</span></code> holds number of times to replicate signal</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">axis</span></code> controls the axis of replication</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">fix_randomization</span></code> controls the randomness</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>max_repetitions</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – controls the maximum number of times
+a signal is allowed to be replicated. Default: <cite>100</cite></p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – axis along which to pad. Default: <cite>-1</cite></p></li>
+<li><p><strong>fix_randomization</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – fix random selection between
+different calls of transform. Default: <cite>False</cite></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((*, N_\text{in}, *)\)</span></p></li>
+<li><p>Output: <span class="math">\((*, N_\text{out}, *)\)</span>, where <span class="math">\(N_\text{in}\)</span> is
+the input length of the axis to pad and <span class="math">\(N_\text{out} =
+N_\text{in} \cdot \text{repetitions}\)</span> is the output length.
+<span class="math">\(*\)</span> can be any additional number of dimensions.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">RandomReplicate</span><span class="p">(</span><span class="n">max_repetitions</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="go">RandomReplicate(max_repetitions=3, repetitions=None, axis=-1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">array([1, 2, 3, 1, 2, 3, 1, 2, 3])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="expand">
+<h2>Expand<a class="headerlink" href="#expand" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.Expand">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">Expand</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">size</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'pad'</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.Expand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expand signal.</p>
+<p>Ensures that the signal matches the desired output size by padding or
+replicating it.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">size</span></code> controls the size of output signal</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">method</span></code> controls whether to replicate signal or pad it</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">axis</span></code> controls axis of expansion</p></li>
+</ul>
+<p>The expansion is done by one of these methods:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'pad'</span></code> expand the signal by adding trailing zeros</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'replicate'</span></code> replicate the signal to match the specified size.
+If result exceeds specified size after replication, the signal will
+then be cropped</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – desired length of output signal in samples</p></li>
+<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – expansion method. Default: <cite>pad</cite></p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – axis along to crop. Default: <cite>-1</cite></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((*, N_\text{in}, *)\)</span></p></li>
+<li><p>Output: <span class="math">\((*, N_\text{out}, *)\)</span>, where <span class="math">\(N_\text{in}\)</span> is
+the input length of the axis to expand and <span class="math">\(N_\text{out}\)</span> is
+the output length as given by <cite>size</cite>.
+<span class="math">\(*\)</span> can be any additional number of dimensions.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Expand</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="go">Expand(size=6, method=pad, axis=-1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">array([[1, 2, 3, 0, 0, 0]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="randommask">
+<h2>RandomMask<a class="headerlink" href="#randommask" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.RandomMask">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">RandomMask</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">coverage</span></em>, <em class="sig-param"><span class="n">max_width</span></em>, <em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">axis</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.RandomMask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Randomly masks signal along axis.</p>
+<p>The signal is masked by multiple blocks (i.e. consecutive units) size of
+which is uniformly sampled given an upper limit on the block size.
+The algorithm for a single block is as follows:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><span class="math">\(\text{width} ~ U[0, {\text{maximum\_width}}]\)</span></p></li>
+<li><p><span class="math">\(\text{start} ~ U[0, {\text{signal\_size}} - \text{width})\)</span></p></li>
+</ol>
+</div></blockquote>
+<p>The number of blocks is approximated by the specified <cite>coverage</cite> of the
+masking and the average size of a block.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">coverage</span></code> controls how large the proportion of masking is
+relative to the signal size</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">max_width</span></code> controls the maximum size of a masked block</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">value</span></code> controls the value to mask the signal with</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">axis</span></code> controls the axis to mask the signal along</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>coverage</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – proportion of signal to mask</p></li>
+<li><p><strong>max_width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – maximum block size. The unit depends on the signal
+and axis. See <cite>MaskSpectrogramTime</cite> and <cite>MaskSpectrogramFrequency</cite></p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – mask value</p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – axis to mask signal along</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span><span class="o">.</span><span class="n">uniform_</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">RandomMask</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">max_width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="go">RandomMask(coverage=0.1, max_width=1, value=0, axis=2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">((</span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">nonzero</span><span class="p">())</span>  <span class="c1"># number of 0 elements</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="maskspectrogramtime">
+<h2>MaskSpectrogramTime<a class="headerlink" href="#maskspectrogramtime" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.MaskSpectrogramTime">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">MaskSpectrogramTime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">coverage</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">max_width</span><span class="o">=</span><span class="default_value">11</span></em>, <em class="sig-param"><span class="n">value</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.MaskSpectrogramTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Randomly masks spectrogram along time axis.</p>
+<p>See <a class="reference internal" href="#audtorch.transforms.RandomMask" title="audtorch.transforms.RandomMask"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomMask</span></code></a> for more details.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The time axis is derived from <cite>Spectrogram</cite>’s output shape.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>coverage</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – proportion of signal to mask</p></li>
+<li><p><strong>max_width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – maximum block size in number of samples. The default
+value corresponds to a time span of 0.1 seconds of a signal
+with <cite>sr=16000</cite> and stft-specifications of <cite>window_size=320</cite> and
+<cite>hop_size=160</cite>. Default: <cite>11</cite></p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – mask value</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">librosa.display</span> <span class="kn">import</span> <span class="n">specshow</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">65000</span><span class="p">)</span><span class="o">.</span><span class="n">uniform_</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Compose</span><span class="p">([</span><span class="n">Spectrogram</span><span class="p">(</span><span class="mi">320</span><span class="p">,</span> <span class="mi">160</span><span class="p">),</span> <span class="n">MaskSpectrogramTime</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">magnitude</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">specshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">magnitude</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-4</span><span class="p">))</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>  
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="maskspectrogramfrequency">
+<h2>MaskSpectrogramFrequency<a class="headerlink" href="#maskspectrogramfrequency" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.MaskSpectrogramFrequency">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">MaskSpectrogramFrequency</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">coverage</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">max_width</span><span class="o">=</span><span class="default_value">8</span></em>, <em class="sig-param"><span class="n">value</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.MaskSpectrogramFrequency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Randomly masks spectrogram along frequency axis.</p>
+<p>See <a class="reference internal" href="#audtorch.transforms.RandomMask" title="audtorch.transforms.RandomMask"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomMask</span></code></a> for more details.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The frequency axis is derived from <cite>Spectrogram</cite>’s output shape.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>coverage</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – proportion of signal to mask</p></li>
+<li><p><strong>max_width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – maximum block size in number of
+frequency bins. The default value corresponds to approximately
+5% of all frequency bins with stft-specifications of
+<cite>window_size=320</cite> and <cite>hop_size=160</cite>. Default: <cite>8</cite></p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – mask value</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">librosa.display</span> <span class="kn">import</span> <span class="n">specshow</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">65000</span><span class="p">)</span><span class="o">.</span><span class="n">uniform_</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Compose</span><span class="p">([</span><span class="n">Spectrogram</span><span class="p">(</span><span class="mi">320</span><span class="p">,</span> <span class="mi">160</span><span class="p">),</span> <span class="n">MaskSpectrogramFrequency</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">magnitude</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">specshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">magnitude</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-4</span><span class="p">))</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>  
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="downmix">
+<h2>Downmix<a class="headerlink" href="#downmix" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.Downmix">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">Downmix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">channels</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">- 2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.Downmix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downmix to the provided number of channels.</p>
+<p>The downmix is done by one of these methods:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'mean'</span></code> replace last desired channel by mean across itself and
+all remaining channels</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'crop'</span></code> drop all remaining channels</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">channels</span></code> controls the number of desired channels</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">method</span></code> controls downmixing method</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">axis</span></code> controls axis of downmix</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of desired channels</p></li>
+<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – downmix method. Default: <cite>‘mean’</cite></p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – axis to downmix. Default: <cite>-2</cite></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((*, C_\text{in}, *)\)</span></p></li>
+<li><p>Output: <span class="math">\((*, C_\text{out}, *)\)</span>, where <span class="math">\(C_\text{in}\)</span> is
+the number of input channels and <span class="math">\(C_\text{out}\)</span> is the number
+of output channels as given by <cite>channels</cite>. <span class="math">\(*\)</span> can be any
+additional number of dimensions.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Downmix</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="go">Downmix(channels=1, method=mean, axis=0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">array([[2, 3]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="upmix">
+<h2>Upmix<a class="headerlink" href="#upmix" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.Upmix">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">Upmix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">channels</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">- 2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.Upmix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upmix to the provided number of channels.</p>
+<p>The upmix is achieved by adding the same signal in the additional channels.
+This signal is calculated by one of the following methods:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'mean'</span></code> mean across all input channels</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'zero'</span></code> zeros</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'repeat'</span></code> last input channel</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">channels</span></code> controls the number of desired channels</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">method</span></code> controls downmixing method</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">axis</span></code> controls axis of upmix</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of desired channels</p></li>
+<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – upmix method. Default: <cite>‘mean’</cite></p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – axis to upmix. Default: <cite>-2</cite></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((*, C_\text{in}, *)\)</span></p></li>
+<li><p>Output: <span class="math">\((*, C_\text{out}, *)\)</span>, where <span class="math">\(C_\text{in}\)</span> is
+the number of input channels and <span class="math">\(C_\text{out}\)</span> is the number
+of output channels as given by <cite>channels</cite>.
+<span class="math">\(*\)</span> can be any additional number of dimensions.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Upmix</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="go">Upmix(channels=3, method=mean, axis=0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">array([[1., 2.],</span>
+<span class="go">       [3., 4.],</span>
+<span class="go">       [2., 3.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="remix">
+<h2>Remix<a class="headerlink" href="#remix" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.Remix">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">Remix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">channels</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">- 2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.Remix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remix to the provided number of channels.</p>
+<p>The remix is achieved by repeating the mean of all other channels or by
+replacing the last desired channel by the mean across all channels.</p>
+<p>It is internally achieved by running <a class="reference internal" href="#audtorch.transforms.Upmix" title="audtorch.transforms.Upmix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Upmix</span></code></a> or <a class="reference internal" href="#audtorch.transforms.Downmix" title="audtorch.transforms.Downmix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Downmix</span></code></a>
+with method <cite>mean</cite>.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">channels</span></code> controls the number of desired channels</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">axis</span></code> controls axis of upmix</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of desired channels</p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – axis to upmix. Default: <cite>-2</cite></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((*, C_\text{in}, *)\)</span></p></li>
+<li><p>Output: <span class="math">\((*, C_\text{out}, *)\)</span>, where <span class="math">\(C_\text{in}\)</span> is
+the number of input channels and <span class="math">\(C_\text{out}\)</span> is the number
+of output channels as given by <cite>channels</cite>.
+<span class="math">\(*\)</span> can be any additional number of dimensions.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Remix</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="go">Remix(channels=3, axis=0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">array([[1., 2.],</span>
+<span class="go">       [3., 4.],</span>
+<span class="go">       [2., 3.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="normalize">
+<h2>Normalize<a class="headerlink" href="#normalize" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.Normalize">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">Normalize</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.Normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalize signal.</p>
+<p>Ensure the maximum of the absolute value of the signal is 1.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">axis</span></code> controls axis for normalization</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – axis for normalization. Default: <cite>-1</cite></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((*)\)</span></p></li>
+<li><p>Output: <span class="math">\((*)\)</span>, where <span class="math">\(*\)</span> can be any number of dimensions.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Normalize</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="go">Normalize(axis=-1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">array([0.25, 0.5 , 0.75, 1.  ])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="standardize">
+<h2>Standardize<a class="headerlink" href="#standardize" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.Standardize">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">Standardize</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">mean</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">std</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.Standardize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Standardize signal.</p>
+<p>Ensure the signal has a mean value of 0 and a variance of 1.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">mean</span></code> controls whether mean centering will be applied</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">std</span></code> controls whether standard deviation normalization will be
+applied</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">axis</span></code> controls axis for standardization</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mean</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – apply mean centering. Default: <cite>True</cite></p></li>
+<li><p><strong>std</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – normalize by standard deviation. Default: <cite>True</cite></p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – standardize only along the given axis.
+Default: <cite>-1</cite></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((*)\)</span></p></li>
+<li><p>Output: <span class="math">\((*)\)</span>, where <span class="math">\(*\)</span> can be any number of dimensions.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Standardize</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="go">Standardize(axis=-1, mean=True, std=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">array([-1.34164079, -0.4472136 ,  0.4472136 ,  1.34164079])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="resample">
+<h2>Resample<a class="headerlink" href="#resample" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.Resample">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">Resample</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_sampling_rate</span></em>, <em class="sig-param"><span class="n">output_sampling_rate</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'kaiser_best'</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.Resample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resample to new sampling rate.</p>
+<p>The signal is resampled by one of the following methods.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'kaiser_best'</span></code> as implemented by resampy</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'kaiser_fast'</span></code> as implemented by resampy</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'scipy'</span></code> uses scipy for resampling</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">input_sampling_rate</span></code> controls input sample rate in Hz</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">output_sampling_rate</span></code> controls output sample rate in Hz</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">method</span></code> controls the resample method</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">axis</span></code> controls axis for resampling</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_sampling_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – input sample rate in Hz</p></li>
+<li><p><strong>output_sampling_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – output sample rate in Hz</p></li>
+<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – resample method. Default: <cite>kaiser_best</cite></p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – axis for resampling. Default: <cite>-1</cite></p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the default method <cite>kaiser_best</cite> is too slow for your purposes,
+you should try <cite>scipy</cite> instead. <cite>scipy</cite> is the fastest method, but
+might crash for very long signals.</p>
+</div>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((*)\)</span></p></li>
+<li><p>Output: <span class="math">\((*)\)</span>, where <span class="math">\(*\)</span> can be any number of dimensions.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Resample</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="go">Resample(input_sampling_rate=4, output_sampling_rate=2, method=kaiser_best, axis=-1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">array([0, 2])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="spectrogram">
+<h2>Spectrogram<a class="headerlink" href="#spectrogram" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.Spectrogram">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">Spectrogram</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window_size</span></em>, <em class="sig-param"><span class="n">hop_size</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">fft_size</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">window</span><span class="o">=</span><span class="default_value">'hann'</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.Spectrogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spectrogram of an audio signal.</p>
+<p>The spectrogram is calculated by librosa and its magnitude is returned as
+real valued matrix.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">window_size</span></code> controls FFT window size in samples</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">hop_size</span></code> controls STFT window hop size in samples</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">fft_size</span></code> controls number of frequency bins in STFT</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">window</span></code> controls window function of spectrogram computation</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">axis</span></code> controls axis of spectrogram computation</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">phase</span></code> holds the phase of the spectrogram</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>window_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – size of STFT window in samples</p></li>
+<li><p><strong>hop_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – size of STFT window hop in samples</p></li>
+<li><p><strong>fft_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – number of frequency bins in STFT. If <cite>None</cite>,
+then it defaults to <cite>window_size</cite>. Default: <cite>None</cite></p></li>
+<li><p><strong>window</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em>, </em><em>number</em><em>, </em><em>function</em><em>, or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.19)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – type
+of STFT window. Default: <cite>hann</cite></p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – axis of STFT calculation. Default: <cite>-1</cite></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((*, N_\text{in}, *)\)</span></p></li>
+<li><p>Output: <span class="math">\((*, N_f, N_t, *)\)</span>, where <span class="math">\(N_\text{in}\)</span> is
+the number of input samples and
+<span class="math">\(N_f = {\text{window\_size} \over 2} + 1\)</span> is the number of
+output samples along the frequency axis of the spectrogram, and
+<span class="math">\(N_t = \lceil {1 \over \text{hop\_size}} (N_\text{in} +
+{\text{window\_size} \over 2}) \rceil\)</span> is the number of output
+samples along the time axis of the spectrogram.
+<span class="math">\(*\)</span> can be any additional number of dimensions.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Spectrogram</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="go">Spectrogram(window_size=2, hop_size=2, axis=-1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">array([[1., 3., 3.],</span>
+<span class="go">       [1., 3., 3.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="log">
+<h2>Log<a class="headerlink" href="#log" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.Log">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">Log</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">magnitude_boost</span><span class="o">=</span><span class="default_value">1e-07</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.Log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithmic transform of an input signal.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">magnitude_boost</span></code> controls the non-negative value added to the
+magnitude of the signal before applying the logarithmus</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>magnitude_boost</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>optional</em>) – positive value added to the
+magnitude of the signal before applying the logarithmus. Default:
+<cite>1e-7</cite></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((*)\)</span></p></li>
+<li><p>Output: <span class="math">\((*)\)</span>, where <span class="math">\(*\)</span> can be any additional number of
+dimensions.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spect</span> <span class="o">=</span> <span class="n">Spectrogram</span><span class="p">(</span><span class="n">window_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">hop_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Log</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="go">Log(magnitude_boost=1e-07)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">(</span><span class="n">spect</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+<span class="go">array([[1.00000e-07, 1.09861e+00, 1.09861e+00],</span>
+<span class="go">       [1.00000e-07, 1.09861e+00, 1.09861e+00]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="randomadditivemix">
+<h2>RandomAdditiveMix<a class="headerlink" href="#randomadditivemix" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.RandomAdditiveMix">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">RandomAdditiveMix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dataset</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">ratios</span><span class="o">=</span><span class="default_value">[0, 15, 30]</span></em>, <em class="sig-param"><span class="n">normalize</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">expand_method</span><span class="o">=</span><span class="default_value">'pad'</span></em>, <em class="sig-param"><span class="n">crop_method</span><span class="o">=</span><span class="default_value">'random'</span></em>, <em class="sig-param"><span class="n">percentage_silence</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">time_axis</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">channel_axis</span><span class="o">=</span><span class="default_value">- 2</span></em>, <em class="sig-param"><span class="n">fix_randomization</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.RandomAdditiveMix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mix two signals additively by a randomly picked ratio.</p>
+<p>Randomly pick a signal from an augmentation data set and mix it with the
+actual signal by a signal-to-noise ratio in dB randomly selected from a
+list of possible ratios.</p>
+<p>The signal from the augmentation data set is expanded, cropped,
+or has its number of channels adjusted by a downmix or upmix using
+<a class="reference internal" href="#audtorch.transforms.Remix" title="audtorch.transforms.Remix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Remix</span></code></a> if necessary.</p>
+<p>The signal can be expanded by:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'multiple'</span></code> loading multiple files from the
+augmentation data set and concatenating them along the time axis</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'pad'</span></code> expand the signal by adding trailing zeros</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'replicate'</span></code> replicate the signal to match the specified size.
+If result exceeds specified size after replication, the signal will
+then be cropped</p></li>
+</ul>
+</div></blockquote>
+<p>The signal can be cropped by:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'start'</span></code> crop signal from the beginning of the file all
+the way to the necessary length</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'random'</span></code> starts at a random offset from the beginning of the file</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">dataset</span></code> controls the data set used for augmentation</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">ratio</span></code> controls the ratio in dB between mixed signals</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">ratios</span></code> controls the ratios to be randomly picked from</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">normalize</span></code> controls if the mixed signal is normalized</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">expand_method</span></code> controls if the signal from the augmented data
+set is automatically expanded according to an expansion rule.
+Default: <cite>pad</cite></p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">crop_method</span></code> controls how the signal is cropped. Is only
+relevant if the augmentation signal is longer than the input one,
+or if <cite>expand_method</cite> is set to <cite>multiple</cite>. Default: <cite>random</cite></p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">percentage_silence</span></code> controls the percentage of the input data
+that will be mixed with silence. Should be between <cite>0</cite> and <cite>1</cite>.
+Default: <cite>1</cite></p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">time_axis</span></code> controls time axis for automatic signal adjustment</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">channel_axis</span></code> controls channel axis for automatic signal
+adjustment</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">fix_randomization</span></code> controls the randomness of the ratio selection</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="xref py py-attr docutils literal notranslate"><span class="pre">fix_randomization</span></code> covers only the selection of the ratio. The
+selection of a signal from the augmentation data set and its signal
+length adjustment will always be random.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/data.html#torch.utils.data.Dataset" title="(in PyTorch vmaster (1.7.0a0+0bc39c0 ))"><em>torch.utils.data.Dataset</em></a>) – data set for augmentation</p></li>
+<li><p><strong>ratios</strong> (<em>list of int</em><em>, </em><em>optional</em>) – mix ratios in dB to randomly pick from
+(e.g. SNRs). Default: <cite>[0, 15, 30]</cite></p></li>
+<li><p><strong>normalize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – normalize mixture. Default: <cite>False</cite></p></li>
+<li><p><strong>expand_method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – controls the adjustment of
+the length data set that is added to the original data set.
+Default: <cite>pad</cite></p></li>
+<li><p><strong>crop_method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – controls the crop transform that will be
+called on the mix signal if it is longer than the input signal.
+Default: <cite>random</cite></p></li>
+<li><p><strong>percentage_silence</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>optional</em>) – controls the percentage of
+input data that should be augmented with silence. Default: <cite>0</cite></p></li>
+<li><p><strong>time_axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – length axis of both data sets. Default: <cite>-1</cite></p></li>
+<li><p><strong>channel_axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – channels axis of both data sets.
+Default: <cite>-2</cite></p></li>
+<li><p><strong>fix_randomization</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – freeze random selection between
+different calls of transform. Default: <cite>False</cite></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((*, C, N, *)\)</span></p></li>
+<li><p>Output: <span class="math">\((*, C, N, *)\)</span>, where <span class="math">\(C\)</span> is the number of
+channels and <span class="math">\(N\)</span> is the number of samples. They don’t have to
+be placed in the order shown here, but the order is preserved during
+transformation.
+<span class="math">\(*\)</span> can be any additional number of dimensions.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">audtorch</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">noise</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">WhiteNoise</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">RandomAdditiveMix</span><span class="p">(</span><span class="n">noise</span><span class="p">,</span> <span class="n">ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">expand_method</span><span class="o">=</span><span class="s1">&#39;pad&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="go">RandomAdditiveMix(dataset=WhiteNoise, ratios=[3], ratio=None, percentage_silence=0, expand_method=pad, crop_method=random, time_axis=-1, channel_axis=-2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">array([[3.67392992, 2.60655362],</span>
+<span class="go">       [5.67392992, 4.60655362]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="randomconvolutionalmix">
+<h2>RandomConvolutionalMix<a class="headerlink" href="#randomconvolutionalmix" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="audtorch.transforms.RandomConvolutionalMix">
+<em class="property">class </em><code class="sig-prename descclassname">audtorch.transforms.</code><code class="sig-name descname">RandomConvolutionalMix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dataset</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">normalize</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#audtorch.transforms.RandomConvolutionalMix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convolve the signal with an augmentation data set.</p>
+<p>Randomly pick an impulse response from an augmentation data set and
+convolve it with the signal. The impulse responses have to be
+one-dimensional.</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">dataset</span></code> controls the data set used for augmentation</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">normalize</span></code> controls normalisation of convolved signal</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">axis</span></code> controls axis of upmix</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/data.html#torch.utils.data.Dataset" title="(in PyTorch vmaster (1.7.0a0+0bc39c0 ))"><em>torch.utils.data.Dataset</em></a>) – data set for augmentation</p></li>
+<li><p><strong>normalize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – normalize mixture. Default: <cite>False</cite></p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – axis of convolution. Default: <cite>-1</cite></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Shape:</dt><dd><ul class="simple">
+<li><p>Input: <span class="math">\((*, N, *)\)</span></p></li>
+<li><p>Output: <span class="math">\((*, N + M - 1, *)\)</span>, where <span class="math">\(N\)</span> is the number of
+samples of the signal and <span class="math">\(M\)</span> the number of samples of the
+impulse response.
+<span class="math">\(*\)</span> can be any additional number of dimensions.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">audtorch</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">noise</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">WhiteNoise</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">RandomConvolutionalMix</span><span class="p">(</span><span class="n">noise</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="go">RandomConvolutionalMix(dataset=WhiteNoise, axis=-1, normalize=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">array([[0.21365151, 0.47576767, 0.09692931],</span>
+<span class="go">       [0.64095452, 1.        , 0.19385863]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api-transforms-functional.html" class="btn btn-neutral float-right" title="audtorch.transforms.functional" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="api-samplers.html" class="btn btn-neutral float-left" title="audtorch.samplers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019 audEERING GmbH
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
