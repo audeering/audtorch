@@ -2,7 +2,7 @@
 audtorch
 ========
 
-|tests| |docs| |license|
+|tests| |coverage| |docs| |license|
 
 Deep learning with PyTorch_ and audio.
 
@@ -22,6 +22,9 @@ efforts to integrate more audio directly into PyTorch_:
 .. |tests| image:: https://api.travis-ci.org/audeering/audtorch.svg?branch=master
     :target: https://travis-ci.org/audeering/audtorch/
     :alt: audtorch on TravisCI
+.. |coverage| image:: https://codecov.io/gh/audeering/audtorch/branch/master/graph/badge.svg?token=PUA9P2UJW1
+    :target: https://codecov.io/gh/audeering/audtorch/
+    :alt: code coverage
 .. |docs| image:: https://readthedocs.org/projects/audtorch/badge/
     :target: https://audtorch.readthedocs.io/
     :alt: audtorch's documentation on Read the Docs
