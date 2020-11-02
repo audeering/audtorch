@@ -7,6 +7,12 @@ The format is based on `Keep a Changelog`_,
 and this project adheres to `Semantic Versioning`_.
 
 
+Version 0.6.4 (2020-11-02)
+--------------------------
+
+* Fixed: link to documentation on Github pages in Python package
+
+
 Version 0.6.3 (2020-10-30)
 --------------------------
 
