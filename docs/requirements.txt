@@ -4,5 +4,5 @@ nbsphinx
 sphinx
 sphinx-audeering-theme >=0.9.0
 sphinxcontrib-katex
-sphinxcontrib-bibtex
+sphinxcontrib-bibtex >=2.1.0
 sphinx-copybutton
