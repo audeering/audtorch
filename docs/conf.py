@@ -76,6 +76,7 @@ nbsphinx_execute = 'never'
 linkcheck_ignore = [
     'https://doi.org/',  # has timeouts from time to time
 ]
+bibtex_bibfiles = ['refs.bib']
 
 # HTML --------------------------------------------------------------------
 
