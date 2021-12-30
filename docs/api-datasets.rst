@@ -6,6 +6,12 @@ Audio data sets.
 .. automodule:: audtorch.datasets
 
 
+AudFormat
+---------
+
+.. autoclass:: AudFormat
+    :members:
+
 AudioSet
 --------
 

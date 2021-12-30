@@ -1,3 +1,4 @@
+audformat
 pytest
 pytest-cov
 pytest-flake8
