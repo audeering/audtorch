@@ -1,3 +1,4 @@
+from .audformat import *
 from .audio_set import *
 from .base import *
 from .emodb import *

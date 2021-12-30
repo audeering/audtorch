@@ -1,9 +1,12 @@
+import os
+
 import pytest
 import numpy as np
 import pandas as pd
 import torch
 from torch.utils.data import TensorDataset
 
+import audformat.testing
 from audtorch import (datasets, samplers, transforms)
 
 
@@ -142,3 +145,74 @@ def test_defined_split(key_values, split_func, kwargs, expected):
     subsets = datasets.defined_split(data, split_func)
 
     assert expected == [len(subset) for subset in subsets]
+
+
+cwd = os.path.abspath(os.path.dirname(__file__))
+db_root = os.path.join(cwd, 'wav')
+db = audformat.testing.create_db()
+db.save(db_root)
+audformat.testing.create_audio_files(db, root=db_root, file_duration='1s')
+db.map_files(lambda x: os.path.join(db_root, x))
+
+
+@pytest.mark.parametrize('table', [('files'), ('segments')])
+def test_unified_format(table):
+    dataset = datasets.AudFormat(
+        df=db[table].get(),
+        sampling_rate=16000
+    )
+    assert len(dataset) == len(db['files'].get())
+
+    for x, y in dataset:
+        assert y == ''
+
+
+@pytest.mark.filterwarnings("error")
+def test_unified_format_with_mixed_table_type():
+    mixed = db['segments'].get()
+    mixed.reset_index(inplace=True)
+
+    num_indices = np.random.randint(1, len(mixed))
+    indices = np.random.choice(
+        range(len(mixed)), size=num_indices, replace=False)
+    mixed.loc[indices, 'start'] = pd.Timedelta(0)
+    mixed.loc[indices, 'end'] = pd.NaT
+    mixed.set_index(['file', 'start', 'end'], inplace=True)
+
+    dataset = datasets.AudFormat(
+        df=mixed,
+        sampling_rate=16000
+    )
+    assert len(dataset) == len(db['files'].get())
+
+    start = mixed.index.get_level_values('start')
+    end = mixed.index.get_level_values('end')
+    duration = (end - start).total_seconds().values
+    duration = [None if np.isnan(d) else d for d in duration]
+    assert dataset._duration == duration
+
+
+@pytest.mark.parametrize('table,column',
+                         [('files', 'int'), ('segments', 'int')])
+def test_unified_format_with_series(table, column):
+    series = db[table].get()[column].dropna()
+
+    dataset = datasets.AudFormat(
+        df=series,  # series
+        sampling_rate=16000,
+        column_labels=None
+    )
+    assert len(dataset) == len(series)
+
+    for index, (x, y) in enumerate(dataset):
+        assert y == series[index]
+
+
+def test_unified_format_only_nat():
+    df = db['files'].get()
+    df = audformat.utils.to_segmented_index(df)
+    dataset = datasets.AudFormat(
+        df=df,
+        sampling_rate=16000
+    )
+    assert dataset._duration == [None] * len(df)
